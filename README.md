@@ -14,3 +14,5 @@ Registro de diagnósticos y tratamientos: Los psicólogos podrán registrar diag
 Manejo de pagos: El sistema va a poder mostrar información personalizada de los pagos a realizar por QR
 
 Informes y análisis: Se van a poder generar informes y análisis sobre los casos atendidos.
+
+LEIDOOO.
