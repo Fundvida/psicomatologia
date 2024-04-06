@@ -16,17 +16,42 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'password',
+    // ];
     protected $fillable = [
+        'email_verified_at',
         'name',
+        'apellidos',
         'email',
         'password',
-    ];
+        'role',
+        //'current_team_id',
+        'canal_comunicacion',
+        'contador_bloqueos',
+        'bloqueo_permanente',
+        'fecha_nacimiento',
+        'ocupacion',
+        'ci',
+        'codigo_pais_telefono',
+        'telefono',
+        'pregunta_seguridad_a',
+        'pregunta_seguridad_b',
+        'respuesta_seguridad_a',
+        'respuesta_seguridad_b',
+      ];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
+
+     protected $appends = ['profile_photo_url'];
+
     protected $hidden = [
         'password',
         'remember_token',

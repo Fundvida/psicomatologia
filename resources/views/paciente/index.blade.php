@@ -4,6 +4,6 @@
 
 @section('content')
 
-    <h1 class="text-5xl">administrador</h1>
+    <h1 class="text-5xl">Paciente</h1>
 
 @endsection

@@ -16,14 +16,24 @@ class SessionsController extends Controller {
         
         if(auth()->attempt(request(['email', 'password'])) == false) {
             return back()->withErrors([
-                'message' => 'The email or password is incorrect, please try again',
+                'message' => 'Credenciales incorrectas intente de nuevo.',
             ]);
 
         } else {
 
             if(auth()->user()->role == 'admin') {
                 return redirect()->route('admin.index');
-            } else {
+            } 
+            if(auth()->user()->role == 'paciente') {
+                return redirect()->route('paciente.index');
+            } 
+            if(auth()->user()->role == 'tutor') {
+                return redirect()->route('tutor.index');
+            } 
+            if(auth()->user()->role == 'psicologo') {
+                return redirect()->route('psicologo.index');
+            } 
+            else {
                 return redirect()->to('/');
             }
         }
