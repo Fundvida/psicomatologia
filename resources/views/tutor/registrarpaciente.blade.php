@@ -1,0 +1,105 @@
+@extends('layouts.app')
+
+@section('title', 'Login')
+
+@section('content')
+
+    <h1 class="text-5xl text-center mt-5">Registrar</h1>
+    <form class="flex flex-col pb-5">
+        <div class=" flex flex-row w-full justify-center pt-10">
+            <div class="flex flex-col w-200">
+                <div class="mx-10 mb-4">
+                    <label for="tipo_usuario" class="block text-gray-700 text-sm font-bold mb-2">Tipo de usuario</label>
+                    <div class="flex flex-row">
+                        <div class="mr-4">
+                            <input type="radio" id="tipo_paciente" name="tipo_paciente" value="correo" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" checked />
+                            <label for="correo" class="ml-2 text-gray-700 text-sm">Paciente</label>
+                        </div>
+                        <div class="mr-4">
+                            <input type="radio" id="tipo_tutor" name="tipo_tutor" value="whatsapp" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
+                            <label for="whatsapp" class="ml-2 text-gray-700 text-sm">Tutor</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <label for="fecha_na" class="block text-gray-700 text-sm font-bold mb-2">Fecha de nacimiento</label>
+                    <input type="date" name="fecha_na" class="w-full p-2 border border-gray-300 rounded"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded"placeholder="ocupación" required/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="confirmar contraseña"/>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="flex flex-row mx-10 mb-4">
+                    <div class="w-1/2 mr-4">
+                    <label for="codigo_pais" class="block text-gray-700 text-sm font-bold mb-2">Código de país</label>
+                    <select id="codigo_pais" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="">Cod. pais</option>
+                        <option value="591">+591 (Bolivia)</option>
+                        <option value="1">+1 (Estados Unidos)</option>
+                        <option value="52">+52 (México)</option>
+                        <option value="34">+34 (España)</option>
+                    </select>
+                    </div>
+                    <div class="w-3/4">
+                    <label for="numero_telefono" class="block text-gray-700 text-sm font-bold mb-2">Número de teléfono</label>
+                    <input type="tel" id="numero_telefono" class="w-full p-2 border border-gray-300 rounded" />
+                    </div>
+                </div>
+                <div class="mx-10 mb-4">
+                    <label for="metodo_confirmacion" class="block text-gray-700 text-sm font-bold mb-2">Método de confirmación</label>
+                    <div class="flex flex-row">
+                    <div class="mr-4">
+                        <input type="radio" id="correo" name="metodo_confirmacion" value="correo" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" checked />
+                        <label for="correo" class="ml-2 text-gray-700 text-sm">Correo electrónico</label>
+                    </div>
+                    <div class="mr-4">
+                        <input type="radio" id="whatsapp" name="metodo_confirmacion" value="whatsapp" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
+                        <label for="whatsapp" class="ml-2 text-gray-700 text-sm">WhatsApp</label>
+                    </div>
+                    <div class="mr-4">
+                        <input type="radio" id="telegram" name="metodo_confirmacion" value="telegram" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
+                        <label for="telegram" class="ml-2 text-gray-700 text-sm">Telegram</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="sms" name="metodo_confirmacion" value="sms" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
+                        <label for="sms" class="ml-2 text-gray-700 text-sm">SMS</label>
+                    </div>
+                    </div>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 1"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 2"/>
+                </div>
+                <div class="mx-10 mb-4">
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 3"/>
+                </div>
+                <div class="mx-10 mb-4">
+                <label for="foto" class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
+                    <input type="file" id="foto" name="foto" accept="image/*" class="w-full p-2 border border-gray-300 rounded"/>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row justify-center">
+            <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-4">Cancelar</button>
+            <button type="submit" class="mt-2">Guardar</button>
+            </div>
+    </form>
+@endsection

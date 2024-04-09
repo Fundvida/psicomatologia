@@ -31,6 +31,7 @@ Route::get('/logout', [SessionsController::class, 'destroy'])
     ->name('login.destroy');
 
 
+
 Route::get('/admin', [AdminController::class, 'index'])
     ->middleware('auth.admin')
     ->name('admin.index');
@@ -46,3 +47,11 @@ Route::get('/tutor', [TutorController::class, 'index'])
 Route::get('/psicologo', [PsicologoController::class, 'index'])
     ->middleware('auth.psicologo')
     ->name('psicologo.index');
+
+Route::get('/registrarpsicologo', [AdminController::class, 'registrarPsicologo'])
+    ->middleware('auth.admin')
+    ->name('registrarpsicologo.index');
+
+Route::get('/registrarpaciente', [TutorController::class, 'registrarPaciente'])
+    ->middleware('auth.tutor')
+    ->name('registrarpaciente.index');

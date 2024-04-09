@@ -14,7 +14,7 @@ rounded-lg shadow-lg">
 
     <input type="email" class="border border-gray-200 rounded-md bg-gray-200 w-full
     text-lg placeholder-gray-900 p-2 my-2 focus:bg-white" placeholder="Email"
-    id="email" name="email">
+    id="email" name="email" autocomplete="off">
 
     <input type="password" class="border border-gray-200 rounded-md bg-gray-200 w-full
     text-lg placeholder-gray-900 p-2 my-2 focus:bg-white" placeholder="Password"

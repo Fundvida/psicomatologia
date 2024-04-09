@@ -10,4 +10,9 @@ class AdminController extends Controller {
 
         return view('admin.index');
     }
+
+    public function registrarPsicologo() {
+
+        return view('admin.registrarPsicologo');
+    }
 }
