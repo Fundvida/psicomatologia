@@ -5,44 +5,47 @@
 @section('content')
 
     <h1 class="text-5xl text-center">Registro de psicologo</h1>
-    <form class="flex flex-col pb-5">
+    
+    <form class="flex flex-col pb-5" action="{{ route('psicologo.store') }}" method="POST">
+        @csrf
+
         <div class=" flex flex-row w-full justify-center pt-10">
             <div class="flex flex-col max-w-lg">
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres"/>
+                <input type="text" name="nombre" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres"/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos"/>
+                <input type="text" name="apellido" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos"/>
             </div>
             <div class="mx-10 mb-4">
                 <label for="fecha_na" class="block text-gray-700 text-sm font-bold mb-2">Fecha de nacimiento</label>
-                <input type="date" name="fecha_na" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha de naciemiento"/>
+                <input type="date" name="fecha_na" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha de nacimiento"/>
             </div>
             <div class="mx-10 mb-4">
             <label for="fecha_titulo" class="block text-gray-700 text-sm font-bold mb-2">Fecha funcion titulo provisión</label>
                 <input type="date" name="fecha_titulo" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha funcion titulo provision" required/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded"placeholder="universidad" required/>
+                <input type="text" name="universidad" class="w-full p-2 border border-gray-300 rounded"placeholder="universidad" required/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="ciudad de residencia" required/>
+                <input type="text" name="c_recidencia" class="w-full p-2 border border-gray-300 rounded" placeholder="ciudad de residencia" required/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="departamento de residencia" required/>
+                <input type="text" name="d_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="departamento de residencia" required/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="pais de residencia" required/>
+                <input type="text" name="p_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="pais de residencia" required/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
+                <input type="text" name="ci" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
+                <input type="text" name="password" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
             </div>
-            <div class="mx-10 mb-4">
+            <!-- <div class="mx-10 mb-4">
                 <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="confirmar contraseña"/>
-            </div>
+            </div> -->
             </div>
             <div class="flex flex-col">
             <div class="mx-10 mb-4">
@@ -51,7 +54,7 @@
             </div>
             <div class="mx-10 mb-4">
                 <label for="descripcion_cv" class="block text-gray-700 text-sm font-bold mb-2">Descripción CV</label>
-                <textarea id="descripcion_cv" class="w-full p-2 border border-gray-300 rounded" rows="4" maxlength="500" required>
+                <textarea id="descripcion_cv" name="descripcion_cv" class="w-full p-2 border border-gray-300 rounded" rows="4" maxlength="500" required>
 
                 </textarea>
             </div>
@@ -70,7 +73,7 @@
                 </div>
                 <div class="w-3/4">
                 <label for="numero_telefono" class="block text-gray-700 text-sm font-bold mb-2">Número de teléfono</label>
-                <input type="tel" id="numero_telefono" class="w-full p-2 border border-gray-300 rounded" />
+                <input type="tel" id="numero_telefono" name="numero_telefono" class="w-full p-2 border border-gray-300 rounded" />
                 </div>
             </div>
             <div class="mx-10 mb-4">
