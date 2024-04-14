@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Psicologo;
+use App\Models\User;
 
 class AdminController extends Controller {
     
@@ -12,15 +13,34 @@ class AdminController extends Controller {
         return view('admin.index');
     }
 
-    public function registrarPsicologo() {
-        return view('admin.registrarPsicologo');
+    public function mntPsicologo() {
+        $psicologos = Psicologo::all();
+        //return $psicologos;
+
+        return view('admin.mntPsicologo');
     }
 
     public function store(Request $request) {
-        $psicologo = new Psicologo();
+        $user = new User();
+        $user->name                 = $request->nombre;
+        $user->apellidos            = $request->apellido;
+        $user->email                = $request->email;
+        $user->password             = $request->password;
+        $user->role                 = "psicologo";
+        $user->contador_bloqueos    = 0;
+        $user->fecha_nacimiento     = $request->fecha_na;
+        $user->ci                   = $request->ci;
+        $user->codigo_pais_telefono = $request->codigo_pais;
+        $user->telefono             = $request->numero_telefono;
+        $user->pregunta_seguridad_a = $request->preg_uno;
+        $user->pregunta_seguridad_b= $request->preg_dos;
+        $user->assignRole('psicologo');
 
-        $psicologo->user_id                 = 1;
-        $psicologo->estado                  = "1";
+        $user->save();
+
+        $psicologo = new Psicologo();
+        $psicologo->user_id                 = $user->id; // Recuperamos el ultimo id creado
+        $psicologo->estado                  = "ACTIVO";
         $psicologo->fecha_funcion_titulo    = $request->fecha_titulo;
         $psicologo->universidad             = $request->universidad;
         $psicologo->ciudad_residencia       = $request->c_recidencia;

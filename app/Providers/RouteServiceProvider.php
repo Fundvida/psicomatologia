@@ -51,6 +51,7 @@ class RouteServiceProvider extends ServiceProvider
                     require base_path('routes/web/common.php');
                     require base_path('routes/web/paciente.php');
                     require base_path('routes/web/tutor.php');
+                    require base_path('routes/web/psicologo.php');
                 });
         });
     }

@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Login')
+@section('title', 'Mantenimiento Psicologo')
 
 @section('content')
 
     <h1 class="text-5xl text-center">Registro de psicologo</h1>
+    <div class="flex justify-center mt-5">
+    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#ModalCreate">Nuevo</a>
+    </div>
     
-    <form class="flex flex-col pb-5" action="{{ route('psicologo.store') }}" method="POST">
+    <!-- <form class="flex flex-col pb-5" action="{{ route('psicologo.store') }}" method="POST">
         @csrf
 
         <div class=" flex flex-row w-full justify-center pt-10">
@@ -40,14 +43,15 @@
             <div class="mx-10 mb-4">
                 <input type="text" name="ci" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
             </div>
+
+            </div>
+            <div class="flex flex-col">
+            <div class="mx-10 mb-4">
+                <input type="email" name="email" class="w-full p-2 border border-gray-300 rounded" placeholder="Correo Electrónico"/>
+            </div>
             <div class="mx-10 mb-4">
                 <input type="text" name="password" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
             </div>
-            <!-- <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="confirmar contraseña"/>
-            </div> -->
-            </div>
-            <div class="flex flex-col">
             <div class="mx-10 mb-4">
                 <label for="input_cv" class="block text-gray-700 text-sm font-bold mb-2">Adjuntar CV</label>
                 <input type="file" name="input_cv" class="w-full p-2 border border-gray-300 rounded" placeholder="Adjuntar CV"/>
@@ -62,18 +66,18 @@
             <div class="flex flex-col">
             <div class="flex flex-row mx-10 mb-4">
                 <div class="w-1/2 mr-4">
-                <label for="codigo_pais" class="block text-gray-700 text-sm font-bold mb-2">Código de país</label>
-                <select id="codigo_pais" class="w-full p-2 border border-gray-300 rounded">
-                    <option value="">Cod. pais</option>
-                    <option value="591">+591 (Bolivia)</option>
-                    <option value="1">+1 (Estados Unidos)</option>
-                    <option value="52">+52 (México)</option>
-                    <option value="34">+34 (España)</option>
-                </select>
+                    <label for="codigo_pais" class="block text-gray-700 text-sm font-bold mb-2">Código de país</label>
+                    <select id="codigo_pais" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="">Cod. pais</option>
+                        <option value="591">+591 (Bolivia)</option>
+                        <option value="1">+1 (Estados Unidos)</option>
+                        <option value="52">+52 (México)</option>
+                        <option value="34">+34 (España)</option>
+                    </select>
                 </div>
                 <div class="w-3/4">
-                <label for="numero_telefono" class="block text-gray-700 text-sm font-bold mb-2">Número de teléfono</label>
-                <input type="tel" id="numero_telefono" name="numero_telefono" class="w-full p-2 border border-gray-300 rounded" />
+                    <label for="numero_telefono" class="block text-gray-700 text-sm font-bold mb-2">Número de teléfono</label>
+                    <input type="tel" id="numero_telefono" name="numero_telefono" class="w-full p-2 border border-gray-300 rounded" />
                 </div>
             </div>
             <div class="mx-10 mb-4">
@@ -98,13 +102,10 @@
                 </div>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 1"/>
+                <input type="text" name="preg_uno" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 1"/>
             </div>
             <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 2"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 3"/>
+                <input type="text" name="preg_dos" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 2"/>
             </div>
             <div class="mx-10 mb-4">
             <label for="foto" class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
@@ -116,5 +117,6 @@
             <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-4">Cancelar</button>
             <button type="submit" class="mt-2">Guardar</button>
             </div>
-    </form>
+    </form> -->
+    @include('admin.modal.create-psicologo')
 @endsection
