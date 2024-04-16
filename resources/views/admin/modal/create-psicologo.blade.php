@@ -12,38 +12,38 @@
 
                 <form class="flex flex-col pb-5" action="{{ route('psicologo.store') }}" method="POST">
                     @csrf
-                    <input type="text" id="psicologo-id" name="psicologo_id" value="">
+                    <input type="hidden" id="psicologo_id" name="psicologo_id" value="">
 
                     <div class=" flex flex-row w-full justify-center pt-10">
                         <div class="flex flex-col max-w-lg">
                         <div class="mx-10 mb-4">
-                            <input type="text" name="nombre" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres"/>
+                            <input type="text" id="nombre"name="nombre" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres"/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="apellido" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos"/>
+                            <input type="text" id="apellido"name="apellido" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos"/>
                         </div>
                         <div class="mx-10 mb-4">
                             <label for="fecha_na" class="block text-gray-700 text-sm font-bold mb-2">Fecha de nacimiento</label>
-                            <input type="date" name="fecha_na" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha de nacimiento"/>
+                            <input type="date" id="fecha_na"name="fecha_na" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha de nacimiento"/>
                         </div>
                         <div class="mx-10 mb-4">
                         <label for="fecha_titulo" class="block text-gray-700 text-sm font-bold mb-2">Fecha funcion titulo provisión</label>
-                            <input type="date" name="fecha_titulo" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha funcion titulo provision" required/>
+                            <input type="date" id="fecha_titulo"name="fecha_titulo" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha funcion titulo provision" required/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="universidad" class="w-full p-2 border border-gray-300 rounded"placeholder="universidad" required/>
+                            <input type="text" id="universidad"name="universidad" class="w-full p-2 border border-gray-300 rounded"placeholder="universidad" required/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="c_recidencia" class="w-full p-2 border border-gray-300 rounded" placeholder="ciudad de residencia" required/>
+                            <input type="text" id="c_recidencia"name="c_recidencia" class="w-full p-2 border border-gray-300 rounded" placeholder="ciudad de residencia" required/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="d_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="departamento de residencia" required/>
+                            <input type="text" id="d_residencia"name="d_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="departamento de residencia" required/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="p_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="pais de residencia" required/>
+                            <input type="text" id="p_residencia"name="p_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="pais de residencia" required/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="ci" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
+                            <input type="text" id="ci"name="ci" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
                         </div>
                         <!-- <div class="mx-10 mb-4">
                             <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="confirmar contraseña"/>
@@ -51,10 +51,10 @@
                         </div>
                         <div class="flex flex-col">
                         <div class="mx-10 mb-4">
-                            <input type="email" name="email" class="w-full p-2 border border-gray-300 rounded" placeholder="Correo Electrónico"/>
+                            <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded" placeholder="Correo Electrónico"/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="password" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
+                            <input type="text" id="password" name="password" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
                         </div>
                         <div class="mx-10 mb-4">
                             <label for="input_cv" class="block text-gray-700 text-sm font-bold mb-2">Adjuntar CV</label>
@@ -106,10 +106,10 @@
                             </div>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="preg_uno" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 1"/>
+                            <input type="text" name="preg_uno" id="preg_uno" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 1"/>
                         </div>
                         <div class="mx-10 mb-4">
-                            <input type="text" name="preg_dos" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 2"/>
+                            <input type="text" name="preg_dos" id="preg_dos" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 2"/>
                         </div>
                         <div class="mx-10 mb-4">
                         <label for="foto" class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
@@ -118,7 +118,7 @@
                         </div>
                     </div>
                     <div class="flex flex-row justify-center">
-                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="submit" id="btn_registrar" class="btn btn-success">Registrar</button>
                         </div>
                 </form>
             </div>

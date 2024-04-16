@@ -1,37 +1,67 @@
-@extends('layouts.app')
-
-@section('title', 'Login')
-
-@section('content')
-
-<div class="block mx-auto my-12 p-8 bg-white w-1/3 border border-gray-200 
-rounded-lg shadow-lg">
-
-  <h1 class="text-3xl text-center font-bold">Login</h1>
-
-  <form class="mt-4" method="POST" action="">
-    @csrf
-
-    <input type="email" class="border border-gray-200 rounded-md bg-gray-200 w-full
-    text-lg placeholder-gray-900 p-2 my-2 focus:bg-white" placeholder="Email"
-    id="email" name="email" autocomplete="off">
-
-    <input type="password" class="border border-gray-200 rounded-md bg-gray-200 w-full
-    text-lg placeholder-gray-900 p-2 my-2 focus:bg-white" placeholder="Password"
-    id="password" name="password">
-    
-    @error('message')        
-      <p class="border border-red-500 rounded-md bg-red-100 w-full
-      text-red-600 p-2 my-2">* {{ $message }}</p>
-    @enderror
-
-    <button type="submit" class="rounded-md bg-indigo-500 w-full text-lg
-    text-white font-semibold p-2 my-3 hover:bg-indigo-600">Iniciar Sesión</button>
-
-
-  </form>
-
-
-</div>
-
-@endsection
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inicio Sesion</title>
+    <link rel="stylesheet" href="{{ asset('./assets/css/app.css') }}">
+    <!-- Agrega estilos CSS personalizados si es necesario -->
+    <style>
+        .logo-gav {
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            width: 270px; /* Ajusta el ancho según sea necesario */
+            height: auto;
+        }
+        .logo-fun {
+            position: absolute;
+            top: 38px;
+            left: -35px;
+            width: 190px; /* Ajusta el ancho según sea necesario */
+            height:auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="screen">
+            <div class="screen__content">
+                <!-- Agrega el logo aquí -->
+                <div class="logo-container">
+                <img src="{{ asset('assets/img/logo gav.png') }}" alt="Logo" class="logo-gav">
+                </div>
+                <form method="POST" action="">
+                    @csrf
+                    <div class="login__field">
+                        <i class="login__icon fas fa-user"></i>
+                        <input type="email" class="login__input" placeholder="Email" name="email" autocomplete="off">
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon fas fa-lock"></i>
+                        <input type="password" class="login__input" placeholder="Password" id="password" name="password">
+                    </div>
+                    <input type="submit" class="button login__submit" value="Iniciar Sesión">
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </input>
+                </form>
+                <div class="social-login">
+                    <img src="{{ asset('assets/img/logof.png') }}" alt="Logo" class="logo-fun">
+                    <div class="social-icons">
+                        <a href="#" class="social-login__icon fab fa-instagram"></a>
+                        <a href="#" class="social-login__icon fab fa-facebook"></a>
+                        <a href="#" class="social-login__icon fab fa-twitter"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

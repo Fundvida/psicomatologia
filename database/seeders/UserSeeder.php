@@ -70,6 +70,5 @@ class UserSeeder extends Seeder
         ])->assignRole('administrador');
         User::factory()->create();
         
-
     }
 }

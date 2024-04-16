@@ -46,7 +46,7 @@ class FundacionEducarA extends Migration
             $table->string('pais_residencia');
             //los archivos del cv se guardan en la tabla archivos
             $table->string('descripcion_cv')->nullable();
-            $table->binary('foto')->nullable();
+            //$table->binary('foto')->nullable();
         });
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();

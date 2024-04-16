@@ -80,4 +80,10 @@ class User extends Authenticatable
     // {
     //     return $this->role === $role;
     // }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        // Devolver una URL predeterminada o estática
+        return 'https://ejemplo.com/ruta/a/la/foto.jpg';
+    }
 }
