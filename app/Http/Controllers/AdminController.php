@@ -16,8 +16,7 @@ class AdminController extends Controller {
     public function mntPsicologo() {
         $psicologos = Psicologo::all();
         //return $psicologos;
-
-        return view('admin.mntPsicologo');
+        return view('admin.mntPsicologo', compact('psicologos'));
     }
 
     public function store(Request $request) {
@@ -49,5 +48,10 @@ class AdminController extends Controller {
 
         $psicologo->save();
         return redirect()->route('admin.index');
+    }
+
+    public function edit($id){
+        $psicologo = Psicologo::findOrFail($id);
+        return $psicologo;
     }
 }

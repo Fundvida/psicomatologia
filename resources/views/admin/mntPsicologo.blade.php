@@ -4,119 +4,87 @@
 
 @section('content')
 
-    <h1 class="text-5xl text-center">Registro de psicologo</h1>
     <div class="flex justify-center mt-5">
-    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#ModalCreate">Nuevo</a>
+        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#ModalCreate">Nuevo</a>
     </div>
-    
-    <!-- <form class="flex flex-col pb-5" action="{{ route('psicologo.store') }}" method="POST">
-        @csrf
+    <div class="container">
+        <h4>Registro de Psicologos</h4>
+        <div class="row">
+            <div class="col-xl-12">
+                <form action="">
+                    <div class="form-row">
+                        <div class="col-sm-4 my-1">
+                            <input type="text" class="form-control" name="texto">
+                        </div>
+                        <div class="col-auto my-1">
+                            <input type="submit" class="btn btn-primary" value="Buscar">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xl-12">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>CI</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Telefono</th>
+                                <th>Email</th>
+                                <th>Departamento de residencia</th>
+                                <th>Ciudad de residencia</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($psicologos as $psicologo)
+                            <tr>
+                                <td>{{ $psicologo->user->ci }}</td>
+                                <!-- <td>{{ $psicologo->id }}</td> -->
+                                <td>{{ $psicologo->user->name }}</td>
+                                <td>{{ $psicologo->user->apellidos }}</td>
+                                <td>{{ $psicologo->user->telefono }}</td>
+                                <td>{{ $psicologo->user->email }}</td>
+                                <td>{{ $psicologo->departamento_residencia }}</td>
+                                <td>{{ $psicologo->ciudad_residencia }}</td>
+                                <td>
+                                    <span class="btn btn-primary">
+                                        <a onclick="editar({{ $psicologo->id }})" data-toggle="modal" data-target="#ModalCreate" id="editPsicologo"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/></svg></a>
+                                    </span>
+                                    <span class="btn btn-danger">
+                                        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg></a>
+                                    </span>
+                                </td>
 
-        <div class=" flex flex-row w-full justify-center pt-10">
-            <div class="flex flex-col max-w-lg">
-            <div class="mx-10 mb-4">
-                <input type="text" name="nombre" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="apellido" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <label for="fecha_na" class="block text-gray-700 text-sm font-bold mb-2">Fecha de nacimiento</label>
-                <input type="date" name="fecha_na" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha de nacimiento"/>
-            </div>
-            <div class="mx-10 mb-4">
-            <label for="fecha_titulo" class="block text-gray-700 text-sm font-bold mb-2">Fecha funcion titulo provisión</label>
-                <input type="date" name="fecha_titulo" class="w-full p-2 border border-gray-300 rounded" placeholder="fecha funcion titulo provision" required/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="universidad" class="w-full p-2 border border-gray-300 rounded"placeholder="universidad" required/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="c_recidencia" class="w-full p-2 border border-gray-300 rounded" placeholder="ciudad de residencia" required/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="d_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="departamento de residencia" required/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="p_residencia" class="w-full p-2 border border-gray-300 rounded" placeholder="pais de residencia" required/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="ci" class="w-full p-2 border border-gray-300 rounded" placeholder="carnet de identidad"/>
-            </div>
-
-            </div>
-            <div class="flex flex-col">
-            <div class="mx-10 mb-4">
-                <input type="email" name="email" class="w-full p-2 border border-gray-300 rounded" placeholder="Correo Electrónico"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="password" class="w-full p-2 border border-gray-300 rounded" placeholder="contraseña"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <label for="input_cv" class="block text-gray-700 text-sm font-bold mb-2">Adjuntar CV</label>
-                <input type="file" name="input_cv" class="w-full p-2 border border-gray-300 rounded" placeholder="Adjuntar CV"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <label for="descripcion_cv" class="block text-gray-700 text-sm font-bold mb-2">Descripción CV</label>
-                <textarea id="descripcion_cv" name="descripcion_cv" class="w-full p-2 border border-gray-300 rounded" rows="4" maxlength="500" required>
-
-                </textarea>
-            </div>
-            </div>
-            <div class="flex flex-col">
-            <div class="flex flex-row mx-10 mb-4">
-                <div class="w-1/2 mr-4">
-                    <label for="codigo_pais" class="block text-gray-700 text-sm font-bold mb-2">Código de país</label>
-                    <select id="codigo_pais" class="w-full p-2 border border-gray-300 rounded">
-                        <option value="">Cod. pais</option>
-                        <option value="591">+591 (Bolivia)</option>
-                        <option value="1">+1 (Estados Unidos)</option>
-                        <option value="52">+52 (México)</option>
-                        <option value="34">+34 (España)</option>
-                    </select>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <div class="w-3/4">
-                    <label for="numero_telefono" class="block text-gray-700 text-sm font-bold mb-2">Número de teléfono</label>
-                    <input type="tel" id="numero_telefono" name="numero_telefono" class="w-full p-2 border border-gray-300 rounded" />
-                </div>
-            </div>
-            <div class="mx-10 mb-4">
-                <label for="metodo_confirmacion" class="block text-gray-700 text-sm font-bold mb-2">Método de confirmación</label>
-                <div class="flex flex-row">
-                <div class="mr-4">
-                    <input type="radio" id="correo" name="metodo_confirmacion" value="correo" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" checked />
-                    <label for="correo" class="ml-2 text-gray-700 text-sm">Correo electrónico</label>
-                </div>
-                <div class="mr-4">
-                    <input type="radio" id="whatsapp" name="metodo_confirmacion" value="whatsapp" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
-                    <label for="whatsapp" class="ml-2 text-gray-700 text-sm">WhatsApp</label>
-                </div>
-                <div class="mr-4">
-                    <input type="radio" id="telegram" name="metodo_confirmacion" value="telegram" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
-                    <label for="telegram" class="ml-2 text-gray-700 text-sm">Telegram</label>
-                </div>
-                <div>
-                    <input type="radio" id="sms" name="metodo_confirmacion" value="sms" class="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"/>
-                    <label for="sms" class="ml-2 text-gray-700 text-sm">SMS</label>
-                </div>
-                </div>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="preg_uno" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 1"/>
-            </div>
-            <div class="mx-10 mb-4">
-                <input type="text" name="preg_dos" class="w-full p-2 border border-gray-300 rounded" placeholder="Pregunta de seguridad 2"/>
-            </div>
-            <div class="mx-10 mb-4">
-            <label for="foto" class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
-                <input type="file" id="foto" name="foto" accept="image/*" class="w-full p-2 border border-gray-300 rounded"/>
-            </div>
             </div>
         </div>
-        <div class="flex flex-row justify-center">
-            <button type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-4">Cancelar</button>
-            <button type="submit" class="mt-2">Guardar</button>
-            </div>
-    </form> -->
+    </div>
     @include('admin.modal.create-psicologo')
+    <script>
+        function editar(psicologoId) {
+        // Abre el modal
+        $('#ModalCreate').modal('show');
+        console.log(psicologoId);
+        // $.ajax({
+        //     url: '/psicologo/' + psicologoId + '/edit',
+        //     type: 'GET',
+        //     success: function(response) {
+        //     // Llena los campos del formulario del modal con los detalles del psicólogo
+        //     $('#nombre').val(response.nombre);
+        //     $('#edad').val(response.edad);
+        //     $('#especialidad').val(response.especialidad);
+        //     // Otros campos del formulario
+        //     },
+        //     error: function(xhr, status, error) {
+        //     // Manejar errores
+        //     }
+        // });
+        }
+    </script>
 @endsection

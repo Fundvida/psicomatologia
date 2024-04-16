@@ -12,6 +12,7 @@
 
                 <form class="flex flex-col pb-5" action="{{ route('psicologo.store') }}" method="POST">
                     @csrf
+                    <input type="text" id="psicologo-id" name="psicologo_id" value="">
 
                     <div class=" flex flex-row w-full justify-center pt-10">
                         <div class="flex flex-col max-w-lg">
@@ -120,12 +121,6 @@
                         <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                 </form>
-                <!-- <div class="mx-10 mb-4">
-                    <input type="text" name="nombre" class="w-full p-2 border border-gray-300 rounded" placeholder="nombres" autocomplete="off"/>
-                </div>
-                <div class="mx-10 mb-4">
-                    <input type="text" name="apellido" class="w-full p-2 border border-gray-300 rounded" placeholder="apellidos" autocomplete="off"/>
-                </div> -->
             </div>
         </div>
         </div>

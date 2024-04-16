@@ -8,6 +8,8 @@ Route::group(['prefix'=>'admin', 'namespace'=>'admin', 'middleware'=>'auth.admin
 
     Route::get('/mntPsicologo', [AdminController::class, 'mntPsicologo'])->name('mntPsicologo.index');
     Route::post('/mntPsicologo', [AdminController::class, 'store'])->name('psicologo.store');
+    Route::get('/psicologo/{id}/edit', [AdminController::class, 'edit'])->name('psicologo.edit');
+
 
 });
 
