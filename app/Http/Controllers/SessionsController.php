@@ -21,20 +21,38 @@ class SessionsController extends Controller {
 
         } else {
 
-            if(auth()->user()->role == 'admin') {
+            // if(auth()->user()->role == 'admin') {
+            //     return redirect()->route('admin.index');
+            // } 
+            // if(auth()->user()->role == 'paciente') {
+            //     return redirect()->route('paciente.index');
+            // } 
+            // if(auth()->user()->role == 'tutor') {
+            //     return redirect()->route('tutor.index');
+            // } 
+            // if(auth()->user()->role == 'psicologo') {
+            //     return redirect()->route('psicologo.index');
+            // } 
+            // else {
+            //     return redirect()->to('/login');
+            // }
+            $user = auth()->user();
+            if($user->role == 'admin') {
                 return redirect()->route('admin.index');
-            } 
-            if(auth()->user()->role == 'paciente') {
+            } elseif($user->role == 'paciente') {
                 return redirect()->route('paciente.index');
-            } 
-            if(auth()->user()->role == 'tutor') {
+            } elseif($user->role == 'tutor') {
                 return redirect()->route('tutor.index');
-            } 
-            if(auth()->user()->role == 'psicologo') {
-                return redirect()->route('psicologo.index');
-            } 
-            else {
-                return redirect()->to('/');
+            } elseif($user->role == 'psicologo') {
+                $psicologo = $user->psicologo;
+                
+                if ($psicologo && $psicologo->estado == 'ACTIVO') {
+                    return redirect()->route('psicologo.index');
+                } else {
+                    return redirect()->to('/login');
+                }
+            } else {
+                return redirect()->to('/login');
             }
         }
     }

@@ -29,15 +29,18 @@
       <div class="container-fluid">
         <div class="mx-auto" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-            </li>
             @if (auth()->user()->hasRole('tutor'))
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ route('admin.index') }}">Inicio</a>
+              </li>
               <li class="nav-item">
                 <a href="{{ route('registrarpaciente.index') }}" class="nav-link text-black" href="#">Registrar paciente</a>
               </li>
             @endif
             @if (auth()->user()->hasRole('administrador'))
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ route('admin.index') }}">Inicio</a>
+              </li>
               <li class="nav-item">
                 <a href="{{ route('mntPsicologo.index') }}" class="nav-link" href="#">Registrar psicologo</a>
               </li>
