@@ -45,6 +45,17 @@
                 <a href="{{ route('mntPsicologo.index') }}" class="nav-link" href="#">Registrar psicologo</a>
               </li>
             @endif
+            @if (auth()->user()->hasRole('psicologo'))
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Pacientes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#reservaModal">Agregar horarios</a>
+              </li>
+            @endif
             <li class="nav-item">
               <a href="{{ route('login.destroy') }}" class="nav-link active" aria-current="page">Cerrar Sesión</a>
             </li>

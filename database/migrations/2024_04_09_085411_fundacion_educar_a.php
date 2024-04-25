@@ -110,8 +110,11 @@ class FundacionEducarA extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('psicologo_id');
-            $table->timestamp('fecha_hora_inicio')->nullable();
-            $table->timestamp('fecha_hora_fin')->nullable();
+            $table->time('hora_inicio_maniana')->nullable();
+            $table->time('hora_fin_maniana')->nullable();
+            $table->time('hora_inicio_tarde')->nullable();
+            $table->time('hora_fin_tarde')->nullable();
+            $table->string('dia')->nullable();
             $table->timestamps();
             //isDisponible es true si el horario no tiene una sesion agendada. Es false si se ha agendado una sesion en este horario
             $table->boolean('isDisponible');
