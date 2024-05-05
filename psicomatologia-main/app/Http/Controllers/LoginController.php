@@ -44,23 +44,6 @@ class LoginController extends Controller
 
         return redirect('/login');
     }
-    public function homePsicologo()
-    {
-        return view('homePsicologo');
-    }
-    public function homePsicologoHorario()
-    {
-        return view('homePsicologoHorario');
-    }
-
-    public function homePaciente()
-    {
-        return view('homePaciente');
-    }
-    public function homePacienteSesiones()
-    {
-        return view('homePacienteSesiones');
-    }
 
     public function pagina_landing()
     {
