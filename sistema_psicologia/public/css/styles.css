@@ -42,7 +42,7 @@
   --bs-danger: #dc3545;
   --bs-light: #f8f9fa;
   --bs-dark: #212529;
-  --bs-primary-rgb: 41, 55, 240;
+  --bs-primary-rgb: 237,177,181;
   --bs-secondary-rgb: 159, 26, 226;
   --bs-success-rgb: 25, 135, 84;
   --bs-info-rgb: 13, 202, 240;
@@ -255,7 +255,8 @@ sup {
 }
 
 a {
-  color: var(--bs-link-color);
+  /*color: var(--bs-link-color);*/
+  color: #000;
   text-decoration: underline;
 }
 a:hover {
@@ -393,7 +394,7 @@ button,
 [type=button],
 [type=reset],
 [type=submit] {
-  -webkit-appearance: button;
+-webkit-appearance: button;
 }
 button:not(:disabled),
 [type=button]:not(:disabled),
@@ -2031,9 +2032,9 @@ progress {
 .form-control:focus {
   color: #212529;
   background-color: #fff;
-  border-color: #949bf8;
+  border-color: #ffffff;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(41, 55, 240, 0.25);
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.8);
 }
 .form-control::-webkit-date-and-time-value {
   height: 1.5em;
@@ -2839,8 +2840,8 @@ textarea.form-control-lg {
 }
 .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
   color: var(--bs-btn-active-color);
-  background-color: var(--bs-btn-active-bg);
-  border-color: var(--bs-btn-active-border-color);
+  /*background-color: var(--bs-btn-active-bg);
+  border-color: var(--bs-btn-active-border-color);*/
 }
 .btn-check:checked + .btn:focus-visible, :not(.btn-check) + .btn:active:focus-visible, .btn:first-child:active:focus-visible, .btn.active:focus-visible, .btn.show:focus-visible {
   box-shadow: var(--bs-btn-focus-box-shadow);
@@ -3633,7 +3634,7 @@ textarea.form-control-lg {
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
   font-size: var(--bs-nav-link-font-size);
   font-weight: var(--bs-nav-link-font-weight);
-  color: var(--bs-nav-link-color);
+  /*color: var(--bs-nav-link-color);*/
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
@@ -4767,7 +4768,7 @@ textarea.form-control-lg {
   color: var(--bs-progress-bar-color);
   text-align: center;
   white-space: nowrap;
-  background-color: var(--bs-progress-bar-bg);
+  background-color: #EDB1B5;;
   transition: var(--bs-progress-bar-transition);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -10842,8 +10843,116 @@ html {
   background-color: #000 !important;
 }
 
+.description {
+    position: absolute;
+    top: 35%; /* Ajusta la posición vertical */
+    left: calc(100% - 15px); /* Alinea la descripción a la derecha, dejando 20px de margen */
+    transform: translateY(-50%);
+    background-color: white;
+    color: black;
+    padding: 20px; /* Aumenta el padding */
+    border-radius: 15px; /* Aumenta el radio del borde */
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    white-space: normal;
+    display: none;
+    z-index: 1000;
+    width: 280px; /* Aumenta un poco más el ancho */
+    max-height: 250px; /* Ajusta la altura máxima */
+    overflow: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 2px solid #ccc;
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+.description-left {
+    position: absolute;
+    top: 35%; /* Ajusta la posición vertical */
+    left: calc(-100% - 70px); /* Alinea la descripción a la izquierda, dejando 20px de margen */
+    transform: translateY(-50%);
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 15px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    white-space: normal;
+    display: none;
+    z-index: 1000;
+    width: 280px;
+    max-height: 250px;
+    overflow: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 2px solid #ccc;
+    text-align: left;
+}
+
+.form-title {
+    margin-bottom: 20px; /* Puedes ajustar este valor según lo que necesites */
+}
+.btn-paso1 {
+    background-color: #EDB1B5;
+    border-color: transparent; /* Elimina el borde */
+    box-shadow: none; /* Elimina la sombra */
+    color: #ffffff; /* Cambia el color del texto del botón */
+}
+
+.btn-paso1:hover,
+.btn-paso1:focus {
+    background-color: #EDB1B5; /* Mantén el color de fondo al pasar el cursor o enfocar */
+    border-color: transparent; /* Mantén el borde transparente */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Ajusta el tamaño del sombreado aquí */
+    color: #ffffff; /* Cambia el color del texto del botón al pasar el cursor o enfocar */
+}
+
+.btn-servicio {
+    background-color: #ffffff; /* Fondo blanco por defecto */
+    border-color: transparent; /* Borde transparente por defecto */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra bonita */
+    color: #000000; /* Color de texto */
+    transition: border-color 0.3s; /* Transición suave para el cambio de color de borde */
+}
+
+.btn-servicio:hover,
+.btn-servicio:focus {
+    background-color: #ffffff; /* Mantén el fondo blanco al pasar el cursor */
+    border-color: #EDB1B5; /* Cambia el color del borde al pasar el cursor */
+    color: #000000;
+    border-width: 2px;
+}
+
+.servicio-icon {
+    font-size: 24px;
+    color: hsl(340, 80%, 70%); /* Cambia el color de los iconos */
+}
+.custom-textarea {
+    padding: 15px;
+    border-radius: 15px;
+    border: 3px solid #EDB1B5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    resize: vertical; /* Permite redimensionar verticalmente */
+    transition: border-color 0.3s ease; /* Transición suave del color del borde */
+}
+
+/* Cambia el color del borde al pasar el cursor */
+.custom-textarea:hover,
+.custom-textarea:focus {
+    border-color: #EDB1B5;
+    outline: 2px solid #EDB1B5;
+}
+
+/* Estilos para la imagen */
+.img-feature {
+    position: relative;
+}
+
+/* Mostrar la descripción flotante cuando se pasa el mouse sobre la imagen */
+.img-feature:hover .description {
+    display: block;
+}
+
 .bg-gradient-primary-to-secondary {
-  background: linear-gradient(45deg, #2937f0, #9f1ae2) !important;
+  background: linear-gradient(45deg, #FFFFFF, #EDB1B5) !important;
 }
 
 .font-alt {
@@ -10851,7 +10960,7 @@ html {
 }
 
 .text-gradient {
-  background: -webkit-linear-gradient(#2937f0, #9f1ae2);
+  background: -webkit-linear-gradient(#EDB1B5, #7D4C8A);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -10890,7 +10999,7 @@ section {
   color: #6c757d;
 }
 #mainNav .navbar-nav .nav-item .nav-link.active {
-  color: #2937f0;
+  color: #212529;
 }
 
 /*!
@@ -10955,7 +11064,7 @@ section {
 section.cta {
   position: relative;
   padding: 15rem 0;
-  background-image: url("../images/landing4.jpg");
+  background-image: url("../images/landing4.1.jpeg");
 
   background-position: center;
   background-size: cover;

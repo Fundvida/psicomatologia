@@ -8,14 +8,19 @@
     <link rel="stylesheet" href="<?php echo e(asset('./assets/css/style.css')); ?>">
     <!-- Agrega estilos CSS personalizados si es necesario -->
     <style>
-        .logo {
-
-
+        .logo-gav {
             position: absolute;
             top: -20px;
             left: -10px;
             width: 270px; /* Ajusta el ancho según sea necesario */
             height: auto;
+        }
+        .logo-fun {
+            position: absolute;
+            top: 38px;
+            left: -35px;
+            width: 190px; /* Ajusta el ancho según sea necesario */
+            height:auto;
         }
     </style>
 </head>
@@ -24,7 +29,7 @@
         <div class="screen">
             <div class="screen__content">
                 <!-- Agrega el logo aquí -->
-                <img src="<?php echo e(asset('images/logo gav.png')); ?>" alt="Logo" class="logo">
+                <img src="<?php echo e(asset('images/logo gav.png')); ?>" alt="Logo" class="logo-gav">
 
                 <form class="login" method="POST">
                     <?php echo csrf_field(); ?>
@@ -41,7 +46,7 @@
                     </input>
                 </form>
                 <div class="social-login">
-                    <h3>FUNDACIÓN EDUCAR PARA LA VIDA</h3>
+                    <img src="<?php echo e(asset('images/logof.png')); ?>" alt="Logo" class="logo-fun">
                     <div class="social-icons">
                         <a href="#" class="social-login__icon fab fa-instagram"></a>
                         <a href="#" class="social-login__icon fab fa-facebook"></a>

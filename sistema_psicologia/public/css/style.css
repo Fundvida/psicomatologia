@@ -20,7 +20,7 @@
     + Color Functions Mixins
     + Badge Mixins
     + Blockquote Mixins
-    
+
   * Core Styles
     + Reset Styles
     + Fonts
@@ -58,6 +58,9 @@
 /* === Import template variables === */
 /*-------------------------------------------------------------------*/
 /* === SCSS Compass Functions === */
+
+
+
 @-moz-keyframes flash {
   0% {
     opacity: 1;
@@ -12321,6 +12324,7 @@ fieldset:disabled .btn {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
@@ -21782,6 +21786,20 @@ dl li {
     margin: auto;
   }
 }
+.logo-gav {
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    width: 270px; /* Ajusta el ancho según sea necesario */
+    height: auto;
+}
+.logo-fun {
+    position: absolute;
+    top: 38px;
+    left: -35px;
+    width: 190px; /* Ajusta el ancho según sea necesario */
+    height:auto;
+}
 
 .auth .brand-logo {
   margin-bottom: 2rem;
@@ -22138,9 +22156,9 @@ dl li {
 }
 
 .navbar .navbar-brand-wrapper .navbar-brand img {
-  width: calc(237px - 130px);
-  max-width: 100%;
-  height: 34px;
+  width: calc(400px - 130px);;
+  max-width: 300%;
+  height: auto;
   margin: auto;
   vertical-align: middle;
 }
@@ -22601,6 +22619,81 @@ dl li {
 .sidebar-icon-only.rtl .sidebar .nav.sub-menu .nav-item .nav-link:before {
   right: 1.75rem;
 }
+
+.custom-sidebar {
+    background: linear-gradient(to right, #7F8DBA, #f4f4f4);
+    width: 250px;
+    padding: 20px;
+    margin-top: 128px;
+    height: 100%; /* Ajuste la altura a 100% para que se extienda hasta el final de la página */
+    position: fixed; /* Fijar la barra lateral para que permanezca visible al desplazarse */
+    top: 0; /* Ajustar la posición superior a 0 para que la barra lateral comience desde la parte superior */
+    left: 0; /* Ajustar la posición izquierda a 0 para que la barra lateral comience desde el borde izquierdo */
+    overflow-y: auto; /* Permitir desplazamiento vertical cuando el contenido sea demasiado largo */
+  }
+
+  /* Ajuste de estilos para los elementos de menú */
+  .custom-menu-item {
+    list-style: none;
+    margin-bottom: 10px;
+    color: #000;
+    background-color: #7F8DBA;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .custom-font-alt {
+    font-family: "Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  }
+
+  .custom-menu-item a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .custom-sub-menu {
+    display: none;
+  }
+
+  .custom-menu-item:hover .custom-sub-menu {
+    display: block;
+  }
+
+  .custom-sub-menu li {
+    margin-left: 20px;
+  }
+
+  .custom-sub-menu li a {
+    color: #666;
+    font-weight: normal;
+    font-size: 14px;
+  }
+
+  .custom-sub-menu li a:hover {
+    color: #333;
+  }
+
+  /* Ajuste para dispositivos móviles */
+  @media (max-width: 768px) {
+    .custom-sidebar {
+      width: 100%; /* La barra lateral ocupa todo el ancho en dispositivos móviles */
+      left: -100%; /* Ocultar la barra lateral al principio en dispositivos móviles */
+      z-index: 1000; /* Asegurar que la barra lateral esté por encima del contenido */
+    }
+
+    .main-content {
+      margin-left: 0; /* Ajustar el margen izquierdo del contenido principal en dispositivos móviles */
+    }
+
+    .custom-sidebar.open {
+      left: 0; /* Mostrar la barra lateral al abrir en dispositivos móviles */
+    }
+  }
+
 
 .rtl .product-chart-wrapper::-webkit-scrollbar,
 .rtl .tab-content .tab-pane .scroll-wrapper::-webkit-scrollbar,

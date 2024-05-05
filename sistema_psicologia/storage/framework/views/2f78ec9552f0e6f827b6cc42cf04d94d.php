@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>BIENVENIDA</title>
+        <title>BIENVENID@...</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -18,6 +18,9 @@
         <link href="css/styles.css" rel="stylesheet"/>
 
     </head>
+
+
+
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
@@ -29,17 +32,20 @@
 
                 <!-- Botón para colapsar el navbar en dispositivos pequeños -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
+                    Menú
                     <i class="bi-list"></i>
                 </button>
 
-                <!-- Contenido del navbar: enlaces y botón de enviar feedback -->
+                <!-- Contenido del navbar -->
                 <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
-                        <li class="nav-item"><a class="nav-link me-lg-3" href="#features">INICIAR SESIÓN</a></li>
-                        <li class="nav-item"><a class="nav-link me-lg-15" href="#download">REGISTRARSE</a></li>
+                    <ul class="navbar-nav ms-auto me-4 my-4 my-lg-1">
+                        <li class="nav-item mb-3 me-3">
+                            <a class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold" href="#features">INICIAR SESIÓN</a>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <a class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold" href="#download">AGENDAR CITA</a>
+                        </li>
                     </ul>
-
                 </div>
             </div>
         </nav>
@@ -47,30 +53,116 @@
         <header class="masthead">
             <div class="container px-5">
                 <div class="row gx-5 align-items-center">
+
                     <div class="col-lg-6">
                         <!-- Mashead text and app badges-->
                         <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                            <h1 class="display-3 lh-1 mb-3 codec">Encontrando Equilibrio y Bienestar: Un Paso a la Vez</h1>
+                            <h1 class="display-3 lh-1 mb-3 font-alt">No Existe Salud Sin Salud Mental</h1>
                             <p class="lead fw-normal text-muted mb-5 ttNorms">Acceso directo a terapias personalizadas y atención especializada que comprende y atiende sus necesidades.</p>
+
                         </div>
                     </div>
+
                     <div class="col-lg-6">
                         <!-- Masthead device mockup feature-->
                         <div class="masthead-device-mockup">
-                            <img src="<?php echo e(asset('images/landing1.png')); ?>" alt="landing1" style="height: 500px">
+                            <img src="<?php echo e(asset('images/LOGO-SALUD-MENTAL.png')); ?>" alt="landing1" style="height: 500px">
 
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Quote/testimonial aside-->
-        <aside class="text-center bg-gradient-primary-to-secondary">
+
+        <aside class="text-center bg-gradient-primary-to-secondary py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-3 font-weight-bold text-black font-alt mb-4">Nuestros Servicios</h1>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section id="servicios">
             <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-xl-8">
-                        <div class="h2 fs-1 text-white mb-4">NUESTROS SERVICIOS</div>
-                        <img src="<?php echo e(asset('images/logof.png')); ?>" alt="landing2" style="height: 100px">
+                <div class="row justify-content-center align-items-center">
+
+                    <!-- Primer grupo de cuatro imágenes -->
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/psicologia-infantil.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 1" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Psicología Infantil</h3>
+                            <p class="text-muted mb-0 description">"Nuestro enfoque en la psicología infantil se centra en comprender y atender las necesidades emocionales y mentales de los niños en su etapa de desarrollo. Desde el cuidado psicológico especializado hasta el apoyo en el crecimiento y la resolución de conflictos, trabajamos para promover un entorno saludable y feliz para los más pequeños."</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/jovenes-adolescentes.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 2" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Adolescentes y Jóvenes</h3>
+                            <p class="text-muted mb-0 description">"En nuestra fundación, nos dedicamos a ofrecer apoyo psicológico especializado para adolescentes y jóvenes en su camino hacia la madurez emocional y el bienestar mental. Reconocemos los desafíos únicos que enfrentan en esta etapa de la vida y trabajamos para proporcionar un espacio seguro donde puedan explorar sus emociones, enfrentar los desafíos y desarrollar habilidades para una vida plena."</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/adulto.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 3" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Adultos</h3>
+                            <p class="text-muted mb-0 description">"En nuestra fundación, ofrecemos un espacio acogedor y de apoyo para adultos que buscan cuidar su salud mental y emocional. Entendemos que la vida adulta puede presentar una variedad de desafíos, desde el manejo del estrés y la ansiedad hasta la resolución de conflictos y la búsqueda de un mayor bienestar."</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/adulto-mayor.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 4" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Adulto Mayor</h3>
+                            <p class="text-muted mb-0 description">"En nuestra fundación, nos dedicamos a proporcionar un apoyo especializado y compasivo para los adultos mayores que buscan mantener su bienestar emocional y mental en esta etapa de la vida. Reconocemos los desafíos únicos que enfrentan los adultos mayores, desde ajustes en la vida después de la jubilación hasta enfrentar la soledad y la pérdida."</p>
+                        </div>
+                    </div>
+
+                    <!-- Segundo grupo de tres imágenes -->
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/terapia-pareja.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 5" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Terapia de Pareja</h3>
+                            <p class="text-muted mb-0 description description-left">"En nuestra fundación, ofrecemos un espacio seguro y de apoyo para las parejas que buscan fortalecer su relación y superar desafíos juntos. Entendemos que las relaciones de pareja pueden enfrentar dificultades en cualquier etapa, ya sea que estén lidiando con problemas de comunicación, conflictos recurrentes o cambios en la dinámica de la relación."</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/taller-de-charlas-y-foros.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 6" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Taller de Charlas y Foros</h3>
+                            <p class="text-muted mb-0 description description-left">"En nuestra fundación, ofrecemos un espacio seguro y de apoyo para las parejas que buscan fortalecer su relación y superar desafíos juntos. Entendemos que las relaciones de pareja pueden enfrentar dificultades en cualquier etapa, ya sea que estén lidiando con problemas de comunicación, conflictos recurrentes o cambios en la dinámica de la relación."</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
+                        <!-- Feature item-->
+                        <div class="text-center img-feature">
+                            <img src="<?php echo e(asset('images/taller-de-cuerdas-bajas.png')); ?>" class="img-feature d-block mx-auto mb-4" alt="Imagen 7" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #366a75;">Taller de Cuerdas Bajas</h3>
+                            <p class="text-muted mb-0 description description-left">"En nuestra fundación, ofrecemos un espacio seguro y de apoyo para las parejas que buscan fortalecer su relación y superar desafíos juntos. Entendemos que las relaciones de pareja pueden enfrentar dificultades en cualquier etapa, ya sea que estén lidiando con problemas de comunicación, conflictos recurrentes o cambios en la dinámica de la relación."</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote/testimonial aside-->
+        <aside class="text-center bg-gradient-primary-to-secondary py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-3 font-weight-bold text-black font-alt mb-4">Te Ofrecemos...</h1>
                     </div>
                 </div>
             </div>
@@ -138,7 +230,7 @@
                     <div class="col-lg-4 order-lg-0">
                         <!-- Features section device mockup-->
                         <div class="features-device-mockup">
-                            <img src="<?php echo e(asset('images/landing2.png')); ?>" alt="landing2" style="height: 500px">
+                            <img src="<?php echo e(asset('images/landing2.1.jpg')); ?>" alt="landing2" style="height: 280px">
                         </div>
                     </div>
                 </div>
@@ -149,11 +241,11 @@
             <div class="container px-5">
                 <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
                     <div class="col-12 col-lg-5">
-                        <h2 class="display-4 lh-1 mb-4">Profesionales dedicados a tu bienestar emocional</h2>
+                        <h1 class="font-weight-bold text-black font-alt mb-4">Profesionales dedicados a tu bienestar emocional</h1>
                         <p class="lead fw-normal text-muted mb-5 mb-lg-0">Nuestro compromiso es brindar apoyo psicológico de calidad, accesible y adaptado a tus necesidades. Con un equipo de expertos en salud mental, ofrecemos un camino hacia la resiliencia y la recuperación emocional.</p>
                     </div>
                     <div class="col-sm-8 col-md-6">
-                        <div class="px-5 px-sm-0"><img src="<?php echo e(asset('images/landing3.png')); ?>" alt="landing3" style="height: 500px"></div>
+                        <div class="px-5 px-sm-0"><img src="<?php echo e(asset('images/landing3.1.jpg')); ?>" alt="landing3" style="height: 400px"></div>
                     </div>
                 </div>
             </div>
@@ -162,9 +254,8 @@
         <section class="cta">
             <div class="cta-content">
                 <div class="container px-5">
-                    <h2 class="text-white display-1 lh-1 mb-4">
-                        Conecta con Especialistas en Salud Mental.
-                    </h2>
+                    <h1 class="font-weight-bold text-white font-alt mb-4">Conecta con Especialistas en Salud Mental</h1>
+
                     <a class="btn btn-outline-light py-3 px-4 rounded-pill" href="" target="_blank">Agende su Consulta Aquí</a>
                 </div>
             </div>
@@ -173,14 +264,19 @@
         <!-- Footer-->
         <footer class="bg-black text-center py-5">
             <div class="container px-5">
+                <h1 class="text-white font-alt">Contactanos para más Información...</h1>
+                <br></br>
                 <div class="text-white-50 small">
-                    <a href="#!">TELF: (+591) 72087186 (+591) 4 4284295 (+591) 2 2433208</a>
+                    <a href="#!">TELF: (+591) 72087186 (+591) 72714248</a>
                     <br></br>
                     <a href="#!">OFICINA CENTRAL: Av. Melchor Pérez de Olguín e Idelfonso Murgía Nro. 1253 Cochabamba - Bolivia</a>
                     <br></br>
-                    <a href="#!">OFICINA REGIONAL: Calle Pinilla Edifico Arcadia Nro. 2588 La Paz - Bolivia</a>
+                    <a href="#!">OFICINA REGIONAL: C. Batallón Colorados. Edificio "El Condor", Piso 4, Oficina 402. La Paz - Bolivia</a>
                     <br></br>
-                    <a href="#!">contacto@educarparalavida.org.bo</a>
+                    <a href="https://wa.me/59172087186" target="_blank" class="text-white fs-2 me-3"><i class="bi bi-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/gabinetedesanacion/" target="_blank" class="text-white fs-2 me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@gabinete_de_sanacion" target="_blank" class="text-white fs-2 me-3"><i class="bi bi-tiktok"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100089761086195" target="_blank" class="text-white fs-2 me-3"><i class="bi bi-facebook"></i></a>
                 </div>
             </div>
         </footer>
@@ -254,6 +350,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+
+        <script src="js/hoverDescription.js"></script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
