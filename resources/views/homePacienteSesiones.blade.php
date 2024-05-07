@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SISTEMA DE PSICOLOGÍA</title>
 
     <!-- Enlaces a los estilos CSS -->
@@ -302,7 +303,7 @@
 
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="table-sesiones">
                                     <!-- Registro 1 -->
                                     <tr>
                                         <td>2024-05-05</td>
@@ -322,8 +323,8 @@
                                             <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar"></i>
                                         </td>
 
-                                    </tr>
-                                    <!-- Registro 2 -->
+                                    <!-- </tr>
+
                                     <tr>
                                         <td>2024-05-06</td>
                                         <td>14:00 - 15:00</td>
@@ -336,7 +337,7 @@
                                         <td>Terminada</td>
                                         <td>Realizado</td>
                                     </tr>
-                                    <!-- Registro 3 -->
+                             
                                     <tr>
                                         <td>2024-05-07</td>
                                         <td>16:00 - 17:00</td>
@@ -348,7 +349,7 @@
                                         <td>Informe.docx</td>
                                         <td>Cancelada</td>
                                         <td>Cancelado</td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -444,6 +445,10 @@
                 $('#pagoModal').modal('show'); // Bootstrap Modal
             });
         });
+
+        function mostrarModalPago(){
+            $('#pagoModal').modal('show');
+        }
     </script>
 
     <script>
@@ -469,7 +474,8 @@
     </script>
 
     <script>
-        function confirmarCancelar(nombre) {
+        function confirmarCancelar(sesion_id) {
+            console.log(sesion_id);
             Swal.fire({
                 title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
                 text: "¡No podrás revertir esto!",
@@ -486,11 +492,29 @@
                 allowHtml: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                        '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                        'La sesión ha sido eliminada.',
-                        'success'
-                    )
+                    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    $.ajax({
+                        url: '/paciente/cancelarSesion',
+                        type: 'POST',
+                        data: {
+                            'sesion_id': sesion_id,
+                            '_token': token
+                        },
+                        success: function(data) {
+                            console.log("exito!!!!  ");
+                            Swal.fire(
+                                '<h2 class="text-center mb-4 font-alt">Sesión cancelada</h2>',
+                                'La sesión ha sido cancelada.',
+                                'success'
+                            )
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    }); 
                 }
             });
         }
@@ -520,7 +544,54 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+     <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: '/paciente/getSesiones',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var tbody = $('#table-sesiones');
+                    tbody.empty();
+                    $.each(data.sesiones, function(index, sesion) {
+                        var row = $('<tr>');
 
+                        row.append($('<td>').text(sesion.fecha_hora_inicio.split(' ')[0])); //Fecha 
+                        row.append($('<td>').text(sesion.fecha_hora_inicio.split(' ')[1] + '/' + sesion.fecha_hora_fin.split(' ')[1])); //Hora Inicio/Hora Fin
+                        row.append($('<td>').text(data.user.ci));              //CI Paciente
+                        row.append($('<td>').text(data.user.name));            //Nombre(s) 
+                        row.append($('<td>').text(data.user.apellidos));        //Apellidos
+                        row.append($('<td>').text(sesion.descripcion_sesion)); // Descripción de la Sesión
+                        row.append($('<td>').text(sesion.calificacion_descripcion)); //Diagnòstico
+                        row.append($('<td>').text("test"));                     // archivos
+                        if(sesion.estado == "Cancelado"){
+                            row.append($('<td>').text("No concluida")); 
+                        }else{
+                            row.append($('<td>').text(sesion.estado));      // estado de la sesion
+                        }
+
+                        if(sesion.estado != "Activa"){
+                            row.append('<td><span class="text-danger">Cancelada</span></td>');
+                        } else if (sesion.pago_confirmado == 0) {
+                            var actionIconsPago = $('<td>Pendiente</td><td class="action-icons">' +
+                                '<i class="fas fa-money-bill text-success" onclick="mostrarModalPago(\'\')" title="Pagar"></i></td>' +
+                                '<td class="action-icons">' +
+                                '<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(' + sesion.id + ')" title="Cancelar"></i>' +
+                                '</td>');
+
+                            row.append(actionIconsPago);
+                        } else {
+                            row.append('<td>Realizado</td>');
+                            //closeNotification();
+                        }
+
+                        $('#table-sesiones').append(row);
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

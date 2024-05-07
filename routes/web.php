@@ -61,6 +61,9 @@ Route::post('/psicologo/inhabilitarHorario', [PsicologoController::class, 'inhab
 Route::post('/storePaciente', [PacienteController::class,'store'])->name('paciente.store');  // crear paciente
 Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])->name('paciente.edit'); // get paciente x id
 Route::get('/paciente/{id}/del', [PacienteController::class, 'delete'])->name('paciente.del');     // delete paciente
+Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'])->name('paciente.listar');
+Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])->name('paciente.delSesion');
+
 
 Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')->names('paciente.files');
 
