@@ -159,6 +159,7 @@
             bottom: 20px;
             right: 20px;
             z-index: 1000;
+            display: none;
         }
 
         .notification {
@@ -385,6 +386,7 @@
             <div class="modal-content">
                 <form action="{{ route('paciente.files.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title font-alt" id="pagoModalLabel">Pagar Sesión</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -395,6 +397,8 @@
                         <!-- Campo para subir el comprobante de pago -->
                         <div class="mb-3">
                             <input type="hidden" name="id_paciente" value="{{ auth()->id() }}">
+                            <input type="hidden" name="tipo_doc" value="">
+                            <input type="hidden" name="id_sesion" value="">
                             <label for="file" class="form-label font-alt mb-4" style="font-size: 25px;">Subir Comprobante de Pago</label>
                             <i class="fas fa-chevron-down ms-2" style="font-size: 20px;"></i>
                             <input type="file" class="form-control" name="file">
@@ -418,7 +422,7 @@
             const pagarIcon = document.querySelector('.fas.fa-money-bill');
 
             // Mostrar la notificación cuando se carga la página o se refresca
-            showNotification();
+            //showNotification();
 
             // Función para mostrar la notificación
             function showNotification() {
@@ -437,7 +441,7 @@
             goButton.addEventListener('click', function() {
                 // Aquí puedes agregar la lógica para redirigir a la página correspondiente
                 // Por ejemplo:
-                window.location.href = 'url-de-la-pagina-a-la-que-quieres-redirigir';
+                window.location.href =  '#';//'url-de-la-pagina-a-la-que-quieres-redirigir';
             });
 
             // Evento para abrir el modal al hacer clic en el icono de pagar
@@ -446,7 +450,10 @@
             });
         });
 
-        function mostrarModalPago(){
+        function mostrarModalPago(id_sesion){
+            var tipo_doc = 'image';
+            $('input[name="tipo_doc"]').val(tipo_doc);
+            $('input[name="id_sesion"]').val(id_sesion);
             $('#pagoModal').modal('show');
         }
     </script>
@@ -552,6 +559,9 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    const notificationContainer = document.getElementById('notification-container');
+                    var pagosPendientes = 0;
+
                     var tbody = $('#table-sesiones');
                     tbody.empty();
                     $.each(data.sesiones, function(index, sesion) {
@@ -575,17 +585,23 @@
                             row.append('<td><span class="text-danger">Cancelada</span></td>');
                         } else if (sesion.pago_confirmado == 0) {
                             var actionIconsPago = $('<td>Pendiente</td><td class="action-icons">' +
-                                '<i class="fas fa-money-bill text-success" onclick="mostrarModalPago(\'\')" title="Pagar"></i></td>' +
+                                '<i class="fas fa-money-bill text-success" onclick="mostrarModalPago(' + sesion.id + ')" title="Pagar"></i></td>' +
                                 '<td class="action-icons">' +
                                 '<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(' + sesion.id + ')" title="Cancelar"></i>' +
                                 '</td>');
-
                             row.append(actionIconsPago);
+                            pagosPendientes++;
                         } else {
                             row.append('<td>Realizado</td>');
                             //closeNotification();
                         }
 
+                        if(pagosPendientes > 0){
+                            notificationContainer.style.display = 'block';
+                        }else {
+                            notificationContainer.style.display = 'none';
+                        }
+                        
                         $('#table-sesiones').append(row);
                     });
                 }

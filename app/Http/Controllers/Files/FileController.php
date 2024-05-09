@@ -38,7 +38,9 @@ class FileController extends Controller
         $url = Storage::url($imagen);
         File::create([
             'url' => $url,
-            'paciente_id' => $request->id_paciente
+            'paciente_id' => $request->id_paciente,
+            'sesion_id' => $request->id_sesion,
+            'tipo_doc' => $request->tipo_doc
         ]);
         // Almacenar la URL anterior en la sesión
         session()->flash('previous_url', url()->previous());
