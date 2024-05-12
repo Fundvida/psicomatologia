@@ -56,7 +56,7 @@ class PacienteController extends Controller
             $user->name                 = $request->nombres;
             $user->apellidos            = $request->apellidos;
             $user->email                = $request->correoElectronico;
-            $user->password             = $request->contrasena;
+            //$user->password             = $request->contrasena;
             $user->contador_bloqueos    = 0;
             $user->fecha_nacimiento     = $request->fechaNacimiento;
             $user->ci                   = $request->numeroCI;

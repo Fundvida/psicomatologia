@@ -185,6 +185,9 @@
                 });
 
                 function limpiar() {
+                    document.getElementById("divContrasena").style.display = "block";
+                    document.getElementById("divConfirmarContrasena").style.display = "block";
+
                     document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
                     document.getElementById("nombres").value = "";
                     document.getElementById("apellidos").value = "";

@@ -119,12 +119,12 @@
                                     <input type="text" class="form-control" id="numeroCI" name="numeroCI" required>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-3" id="divContrasena">
                                     <div class="col">
                                         <label for="contrasena" class="form-label">Contraseña</label>
                                         <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                                     </div>
-                                    <div class="col">
+                                    <div class="col" id="divConfirmarContrasena">
                                         <label for="confirmarContrasena" class="form-label">Confirmar Contraseña</label>
                                         <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" required>
                                     </div>
@@ -177,6 +177,9 @@
 
                 function limpiar() {
                     document.getElementById("btnAddOrEdit").textContent = "Registrar Paciente";
+                    document.getElementById("divContrasena").style.display = "block";
+                    document.getElementById("divConfirmarContrasena").style.display = "block";
+                    
                     $('#paciente_id').val('');
                     $('#tipoUsuario').val('');
 
@@ -198,6 +201,8 @@
                 }
 
                 function editar(paciente_id) {
+                    document.getElementById("divContrasena").style.display = "none";
+                    document.getElementById("divConfirmarContrasena").style.display = "none";
                     document.getElementById("btnAddOrEdit").textContent = "Actualizar Paciente";
                     console.log(paciente_id)
                     $('#formularioRegistroModal').modal('show');
