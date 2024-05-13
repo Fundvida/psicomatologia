@@ -82,37 +82,100 @@
                 margin-left: 0; /* Restablecer el margen izquierdo del contenido principal en dispositivos móviles */
             }
         }
+
+        /* NOTIFICACION */
+
+        .notification-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin-bottom: 10px; /* Espacio entre notificaciones */
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #7f8dba;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .notification-header button {
+            border: none;
+            background: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .notification-body {
+            padding: 10px;
+        }
+
+        .notification-footer {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: right;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .notification-footer button {
+            background-color: #7f8dba;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .notification-footer button:hover {
+            background-color: #616c96;
+        }
     </style>
 </head>
 <body>
     <!-- Barra de navegación principal -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-    <div class="container px-5">
-    <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
-        <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
-    </a>
-    <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
-        <li class="nav-item nav-profile dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-            <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-        </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown" style="right: 0; left: auto;">
-            <a class="dropdown-item" href="#">
-            <i class="ti-settings text-primary"></i>
-            Configuración
+        <div class="container px-5">
+            <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
+                <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
             </a>
-            <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
-            @csrf
-            <button type="submit" class="btn btn-link">
-                <i class="ti-power-off text-primary"></i>
-                Cerrar Sesión
-            </button>
-            </form>
+            <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
+                <li class="nav-item nav-profile dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+                    <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown" style="right: 0; left: auto;">
+                    <a class="dropdown-item" href="#">
+                    <i class="ti-settings text-primary"></i>
+                    Configuración
+                    </a>
+                    <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
+                    @csrf
+                    <button type="submit" class="btn btn-link">
+                        <i class="ti-power-off text-primary"></i>
+                        Cerrar Sesión
+                    </button>
+                    </form>
+                </div>
+                </li>
+            </ul>
         </div>
-        </li>
-    </ul>
-
-</nav>
+    </nav>
 
 <!-- Menú lateral -->
 <div class="custom-sidebar">
@@ -158,7 +221,31 @@
         </div>
     </section>
 </main>
+    
+<div class="container">
+    
+    <div class="notification-container" id="notification-container">
+        <!-- Aquí se agregarán las notificaciones -->
+    </div>
+</div>
 
+<!-- Plantilla de notificación -->
+<template id="notification-template">
+    <div class="notification">
+        <div class="notification-header">
+            <i class="fas fa-info-circle"></i> Información
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="notification-body">
+            Usted tiene una sesión pendiente de pago
+        </div>
+        <div class="notification-footer">
+            <button class="go-btn">
+                Ir <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</template>
 <!-- Enlaces a los scripts JS -->
 <script src="{{asset('./vendors/base/vendor.bundle.base.js')}}"></script>
 <script src="{{asset('./vendors/chart.js/Chart.min.js')}}"></script>
@@ -180,5 +267,63 @@
 <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    function createNotification(message) {
+        const container = document.getElementById('notification-container');
+        const template = document.getElementById('notification-template');
+
+        const clone = template.content.cloneNode(true);
+        const notificationBody = clone.querySelector('.notification-body');
+        notificationBody.innerHTML = message; // Asignar el contenido HTML al cuerpo de la notificación
+
+        container.appendChild(clone);
+    }
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('notification-container');
+            const template = document.getElementById('notification-template');
+
+            // Función para cerrar una notificación
+            function closeNotification(notification) {
+                notification.remove();
+            }
+
+            // Botón cerrar notificación
+            container.addEventListener('click', function (event) {
+                if (event.target.classList.contains('close-btn')) {
+                    closeNotification(event.target.closest('.notification'));
+                }
+            });
+
+            // Ejemplo de uso
+            document.getElementById('add-notification').addEventListener('click', function () {
+                createNotification('Nueva notificación');
+            });
+        });
+
+        $(document).ready(function() {
+        $.ajax({
+            url: '/psicologo/getNotificaciones',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data)
+                data.forEach(function(notification) {
+                    const horaInicio = notification.fecha_hora_inicio.split(' ')[1].split(':').slice(0, 2).join(':');
+                    const horaFin = notification.fecha_hora_fin.split(' ')[1].split(':').slice(0, 2).join(':');
+                    const horaRango = `${horaInicio} - ${horaFin}`;
+
+                    const message = `<h5 class="d-inline">Fecha: </h5> ${notification.fecha_hora_inicio.split(' ')[0]} <br>
+                                 <h5 class="d-inline">Hora: </h5> ${horaRango}<br>
+                                 <h5 class="d-inline">Descripcion: </h5><p>${notification.descripcion_sesion}</p>`;
+                    createNotification(message);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    </script>
 </body>
 </html>

@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\Horario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use App\Models\Sesion;
 
 class PsicologoController extends Controller
 {
@@ -279,5 +280,20 @@ class PsicologoController extends Controller
         $horario->save();
         
         return response()->json($request);
+    }
+
+    public function getNotificaciones(){
+        $user = Auth::user();
+        $psicologo = Psicologo::where('user_id', $user->id)->first();
+        
+        if (!$psicologo) {
+            return response()->json(['error' => 'No se encontró el psicólogo'], 404);
+        }
+
+        $notificaciones = Sesion::where('psicologo_id', $psicologo->id)
+                                ->where('pago_confirmado', 1)
+                                ->get();
+
+        return response()->json($notificaciones);
     }
 }

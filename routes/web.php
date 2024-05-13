@@ -57,6 +57,7 @@ Route::post('/psicologoHorario', [PsicologoController::class, 'addHorario'])->na
 Route::post('/psicologoHorarioDia', [PsicologoController::class, 'editHorarioXdia'])->name('psicologo.editHorario_x_dia');
 Route::get('/psicologo/getHorario', [PsicologoController::class, 'getHorario'])->name('psicologo.disponible');
 Route::post('/psicologo/inhabilitarHorario', [PsicologoController::class, 'inhabilitarHorario'])->name('psicologo.inhabilitarHorario');
+Route::get('/psicologo/getNotificaciones', [PsicologoController::class, 'getNotificaciones'])->name('psicologo.notificaciones');
 
 Route::post('/storePaciente', [PacienteController::class,'store'])->name('paciente.store');  // crear paciente
 Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])->name('paciente.edit'); // get paciente x id
