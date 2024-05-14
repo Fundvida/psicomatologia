@@ -687,7 +687,7 @@
                             row.append($('<td>').text(sesion.estado));      // estado de la sesion
                         }
 
-                        if(sesion.estado != "Activa"){
+                        if(sesion.estado != "activo" && sesion.estado != "Activa" ){
                             row.append('<td><span class="text-danger">Cancelada</span></td>');
                         } else if (sesion.pago_confirmado == 0) {
                             var actionIconsPago = $('<td>Pendiente</td><td class="action-icons">' +

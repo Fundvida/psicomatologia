@@ -113,21 +113,20 @@ class SesionController extends Controller
                     $sesion->descripcion_sesion=$request->input('adicional_info');
                     $sesion->solicitante= $paciente->id;
 
-                    $pago = new Pago();
-                    if ($sesion->id != null) {
-                        $pago->servicio = $request->input('servicio');
-                        $pago->sesion_id = $sesion->id;
-                        $pago->institucion='';
-                        $pago->convenio='';
-                        $pago->isTerminado = 0;
-                        $pago->save();
-                    }
-
                     $sesion->save();
                 }
             } catch (QueryException $e) {
                 throw new Exception("Error assigning sesión: " . $e->getMessage());
             }
+            $pago = new Pago();
+                if ($sesion->id != null) {
+                    $pago->servicio = $request->input('servicio');
+                    $pago->sesion_id = $sesion->id;
+                    $pago->institucion='';
+                    $pago->convenio='';
+                    $pago->isTerminado = 0;
+                    $pago->save();
+                }
             // return $user;
             return response()->json([
                 'message' => 'Sesión registrada exitosamente',

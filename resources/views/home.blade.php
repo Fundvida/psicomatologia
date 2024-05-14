@@ -114,7 +114,6 @@
             </ul>
         </div>
     </nav>
-
     <!-- Menú lateral -->
     <div class="custom-sidebar">
         <ul>
