@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Especialidad extends Model
 {
     use HasFactory;
+    protected $table = 'especialidades';
+    protected $primaryKey = 'psico_id';
 
 
     public function psicologo()

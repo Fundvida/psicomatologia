@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <!-- Meta etiquetas requeridas -->
+    <!-- Meta etiquetas requeridas -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>SISTEMA DE PSICOLOGIA</title>
@@ -26,7 +27,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" />
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -36,118 +37,126 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
-<style>
-    /* Estilos adicionales */
-    .container {
-        padding-right: 15px;
-        padding-left: 15px;
-        margin-right: auto;
-        margin-left: auto;
-    }
-
-    @media (min-width: 768px) {
+    <style>
+        /* Estilos adicionales */
         .container {
-            max-width: 750px;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
         }
-    }
 
-    @media (min-width: 992px) {
-        .container {
-            max-width: 970px;
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
         }
-    }
 
-    @media (min-width: 1200px) {
-        .container {
-            max-width: 1170px;
+        @media (min-width: 992px) {
+            .container {
+                max-width: 970px;
+            }
         }
-    }
 
-    .main-content {
-        margin-left: 250px; /* Ajustar el margen izquierdo del contenido principal para dejar espacio para la barra lateral */
-    }
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1170px;
+            }
+        }
 
-    .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-    }
-
-    /* Ajuste para dispositivos móviles */
-    @media (max-width: 768px) {
         .main-content {
-            margin-left: 0; /* Restablecer el margen izquierdo del contenido principal en dispositivos móviles */
+            margin-left: 250px;
+            /* Ajustar el margen izquierdo del contenido principal para dejar espacio para la barra lateral */
         }
-    }
-</style>
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Ajuste para dispositivos móviles */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                /* Restablecer el margen izquierdo del contenido principal en dispositivos móviles */
+            }
+        }
+    </style>
 </head>
+
 <body>
-<!-- Barra de navegación principal -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-    <div class="container px-5">
-    <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
-        <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
-    </a>
-    <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
-        <li class="nav-item nav-profile dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-            <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-        </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown" style="right: 0; left: auto;">
-            <a class="dropdown-item" href="#">
-            <i class="ti-settings text-primary"></i>
-            Configuración
+    <!-- Barra de navegación principal -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+        <div class="container px-5">
+            <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
+                <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
             </a>
-            <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
-            @csrf
-            <button type="submit" class="btn btn-link">
-                <i class="ti-power-off text-primary"></i>
-                Cerrar Sesión
-            </button>
-            </form>
+            <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+                        <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown" style="right: 0; left: auto;">
+                        <a class="dropdown-item" href="#">
+                            <i class="ti-settings text-primary"></i>
+                            Configuración
+                        </a>
+                        <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
+                            @csrf
+                            <button type="submit" class="btn btn-link">
+                                <i class="ti-power-off text-primary"></i>
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </div>
-        </li>
-    </ul>
-    </div>
-</nav>
+    </nav>
 
     <!-- Menú lateral -->
     <div class="custom-sidebar">
         <ul>
-        <li class="custom-menu-item custom-font-alt">PACIENTES
-            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-            <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
-            </ul>
-        </li>
-        <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
-            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-            <li><a href="{{ route('listaPsicologo') }}" style="color: #fff;">Psicologos</a></li>
-            </ul>
-        </li>
-        <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
-            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-            <li><a href="#" style="color: #fff;">Datos Personales</a></li>
-            </ul>
-        </li>
-        <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA
-            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-            <li><a href="#" style="color: #fff;">Cambiar Contraseña</a></li>
-            </ul>
-        </li>
+            <li class="custom-menu-item custom-font-alt">Sesiones
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="{{ route('listadoAllSesiones') }}" style="color: #fff;">Todas las sesiones</a></li>
+                </ul>
+            </li>
+            <li class="custom-menu-item custom-font-alt">PACIENTES
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
+                </ul>
+            </li>
+            <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="{{ route('listaPsicologo') }}" style="color: #fff;">Psicologos</a></li>
+                </ul>
+            </li>
+            <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="#" style="color: #fff;">Datos Personales</a></li>
+                </ul>
+            </li>
+            <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="#" style="color: #fff;">Cambiar Contraseña</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 
 
-<!-- Contenido principal -->
-<main class="main-content ">
-    <section class="py-0 d-flex justify-content-center align-items-center" id="">
-        <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
-            <!-- Título -->
-            <h2 class="display-3 lh-1 mb-5 font-alt">¡Bienvenido/a Administrador!</h2>
-            <p class="lead fw-normal text-muted mb-5 ttNorms">¡Gracias por acceder al Sistema de Psicología!</p>
-        </div>
-    </section>
-</main>
+    <!-- Contenido principal -->
+    <main class="main-content ">
+        <section class="py-0 d-flex justify-content-center align-items-center" id="">
+            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
+                <!-- Título -->
+                <h2 class="display-3 lh-1 mb-5 font-alt">¡Bienvenido/a Administrador!</h2>
+                <p class="lead fw-normal text-muted mb-5 ttNorms">¡Gracias por acceder al Sistema de Psicología!</p>
+            </div>
+        </section>
+    </main>
 
     <!-- Enlaces a los scripts JS -->
     <script src="{{asset('./vendors/base/vendor.bundle.base.js')}}"></script>
@@ -158,16 +167,17 @@
     <script src="{{asset('./js/template.js')}}"></script>
     <script src="{{asset('./js/todolist.js')}}"></script>
     <script src="{{asset('./js/dashboard.js')}}"></script>
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
 
-<script src="js/hoverDescription.js"></script>
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<!-- * *                               SB Forms JS                               * *-->
-<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <script src="js/hoverDescription.js"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <!-- * *                               SB Forms JS                               * *-->
+    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 </body>
+
 </html>

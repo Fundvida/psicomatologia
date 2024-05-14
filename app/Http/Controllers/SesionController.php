@@ -16,10 +16,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
+use App\Models\Pago;
 
 class SesionController extends Controller
 {
     use AddsToastTrait;
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+    
     public function index()
     {
     }
@@ -105,6 +112,17 @@ class SesionController extends Controller
                     $sesion->psicologo_id= $request->input('psicologo_id');
                     $sesion->descripcion_sesion=$request->input('adicional_info');
                     $sesion->solicitante= $paciente->id;
+
+                    $pago = new Pago();
+                    if ($sesion->id != null) {
+                        $pago->servicio = $request->input('servicio');
+                        $pago->sesion_id = $sesion->id;
+                        $pago->institucion='';
+                        $pago->convenio='';
+                        $pago->isTerminado = 0;
+                        $pago->save();
+                    }
+
                     $sesion->save();
                 }
             } catch (QueryException $e) {
@@ -255,5 +273,10 @@ class SesionController extends Controller
             }
 
         }
+    }
+
+    public function listadoAllSesiones (){
+        return view('homeAdminSesiones');
+        //return response()->json(['message: aqui se listaran todas las sesiones nombre y apellido paciente, nombre y apellido psicologo, estado sesión, estado de pago.']);
     }
 }

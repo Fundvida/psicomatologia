@@ -19,8 +19,6 @@
 
     </head>
 
-
-
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
@@ -40,7 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto me-4 my-4 my-lg-1">
                         <li class="nav-item mb-3 me-3">
-                            <a class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold" href="{{ route('login') }}">INICIAR SESIÓN</a>
+                            <a id="loginLink" class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold" href="{{ route('login') }}">INICIAR SESIÓN</a>
                         </li>
                         <li class="nav-item mb-3">
                             <a class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold" href="{{ route('agendarcita') }}">AGENDAR CITA</a>
@@ -357,5 +355,28 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                var loginLink = document.getElementById('loginLink');
+                $.ajax({
+                    type: "GET",
+                    url: "/check-auth",
+                    success: function(response) {
+                        if(response.authenticated) {
+                            loginLink.innerHTML = 'IR A CUENTA';
+                            console.log("El usuario está autenticado.");
+                        } else {
+                            loginLink.innerHTML = 'INICIAR SESIÓN'
+                            console.log("El usuario no está autenticado.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", error);
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

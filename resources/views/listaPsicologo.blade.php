@@ -86,84 +86,93 @@
                                 @csrf
 
                                 <input type="hidden" id="psicologo_id" name="psicologo_id" value="">
+                                <div class="mb-3">
+                                    <label for="especialidad" class="form-label">Especialidad <span class="text-danger">*</span></label>
+                                    <select id="especialidad" name="especialidad" class="form-select" required>
+                                        <option value="Terapia Adultos">Terapia Adultos</option>
+                                        <option value="Terapia Adolecentes/Jóvenes">Terapia Adolecentes/Jóvenes</option>
+                                        <option value="Terapia Adultos Mayores">Terapia Adultos Mayores</option>
+                                        <option value="Terapia Pareja">Terapia Pareja</option>
+                                    </select>
+                                </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label for="nombres" class="form-label">Nombres</label>
+                                        <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="nombres" name="nombres" required>
                                     </div>
                                     <div class="col">
-                                        <label for="apellidos" class="form-label">Apellidos</label>
+                                        <label for="apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="apellidos" name="apellidos" required>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                                    <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="fechaFuncion" class="form-label">Fecha función título provisión nacional</label>
+                                    <label for="fechaFuncion" class="form-label">Fecha función título provisión nacional <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="fechaFuncion" name="fechaFuncion" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="universidad" class="form-label">Universidad</label>
+                                    <label for="universidad" class="form-label">Universidad <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="universidad" name="universidad" required>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label for="ciudadResidencia" class="form-label">Ciudad de Residencia</label>
+                                        <label for="ciudadResidencia" class="form-label">Ciudad de Residencia <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="ciudadResidencia" name="ciudadResidencia" required>
                                     </div>
                                     <div class="col">
-                                        <label for="paisResidencia" class="form-label">País de Residencia</label>
+                                        <label for="paisResidencia" class="form-label">País de Residencia <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="paisResidencia" name="paisResidencia" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="ci" class="form-label">Carnet de identidad o equivalente</label>
+                                    <label for="ci" class="form-label">Carnet de identidad o equivalente <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="ci" name="ci" required>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col" id="divContrasena">
-                                        <label for="contrasena" class="form-label">Contraseña</label>
+                                        <label for="contrasena" class="form-label">Contraseña <span class="text-danger">*</span></label>
                                         <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                                     </div>
                                     <div class="col" id="divConfirmarContrasena">
-                                        <label for="confirmarContrasena" class="form-label">Confirmar Contraseña</label>
+                                        <label for="confirmarContrasena" class="form-label">Confirmar Contraseña <span class="text-danger">*</span></label>
                                         <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="archivos" class="form-label">Archivos</label>
+                                    <label for="archivos" class="form-label">Archivos <span class="text-danger">*</span></label>
                                     <input type="file" id="archivos" class="form-control" name="archivos[]" multiple required>
                                     <!--<button type="submit">Subir Archivo(s)</button>-->
                                 </div>
                                 <div class="mb-3">
-                                    <label for="descripcionCV">Descripción de CV:</label><br>
+                                    <label for="descripcionCV">Descripción de CV: <span class="text-danger">*</span></label><br>
                                     <textarea id="descripcionCV" name="descripcionCV" class="form-control" required></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="correoElectronico" class="form-label">Correo Electrónico</label>
+                                    <label for="correoElectronico" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" id="correoElectronico" name="correoElectronico" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                                    <label for="telefono" class="form-label">Número de Teléfono <span class="text-danger">*</span></label>
                                     <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" style="width: 312px;" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta</label>
+                                    <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta <span class="text-danger">*</span></label>
                                     <select id="metodoConfirmacion" name="metodoConfirmacion" class="form-select" required>
                                         <option value="correo">Correo Electrónico</option>
                                         <option value="sms">SMS</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="preguntaSeguridad1" class="form-label">Pregunta de Seguridad 1</label>
+                                    <label for="preguntaSeguridad1" class="form-label">Pregunta de Seguridad <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="preguntaSeguridad1" name="preguntaSeguridad1" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="preguntaSeguridad2" class="form-label">Pregunta de Seguridad 2</label>
+                                    <label for="preguntaSeguridad2" class="form-label">Respuesta <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="preguntaSeguridad2" name="preguntaSeguridad2" required>
                                 </div>
                                 <div class="modal-footer">

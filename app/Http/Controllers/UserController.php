@@ -9,6 +9,11 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     protected function convertValidationExceptionToResponse(ValidationException $exception, $request)
     {
             return response()->json([
@@ -44,5 +49,10 @@ class UserController extends Controller
     }
     function storeChangedPassword(Request $request)
     {
+    }
+
+    public function cambiarContraseña()
+    {
+        return view('cambiarContraseña');
     }
 }

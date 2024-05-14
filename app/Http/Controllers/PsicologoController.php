@@ -10,23 +10,28 @@ use App\Models\Horario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use App\Models\Sesion;
+use App\Models\Especialidad;
+use Illuminate\Support\Facades\DB;
+
 
 class PsicologoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index_registrar()
     {
         return view('');
     }
 
-    // public function store(Request $request){
-    //     $data = $request->all();
 
-    //     return response()->json($data);
-    // }
-
+    public function homePsicologoHorario (){
+        return view('homePsicologoHorario');
+    }
     public function store(Request $request)
     {
-
         if ($request->psicologo_id == "") {
             $user = new User();
             $user->name                 = $request->nombres;
@@ -55,6 +60,12 @@ class PsicologoController extends Controller
             $psicologo->descripcion_cv          = $request->descripcionCV;
 
             $psicologo->save();
+
+            $especialidad = new Especialidad();
+            $especialidad->psico_id = $psicologo->id;
+            $especialidad->especialidad = $request->especialidad;
+
+            $especialidad->save();
 
             $diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes"];
             foreach ($diasSemana as $dia) {
@@ -94,9 +105,15 @@ class PsicologoController extends Controller
             $user->pregunta_seguridad_b = $request->preguntaSeguridad2;
             $user->save();
 
+            $especialidad = Especialidad::where('psico_id', $psicologo->id)->first();
+            $especialidad->especialidad = $request->especialidad;
+
+            $especialidad->save();
+
             //return redirect()->route('mntPsicologo.index')->with('resultado', "actualizado");
             return redirect()->route('listaPsicologo')->with('resultado', "actualizado");
         }
+        return response()->json($request);
     }
 
     public function edit($id)
@@ -151,6 +168,7 @@ class PsicologoController extends Controller
         }
         return response()->json([
             'message' => 'Psicologos Found',
+            'especialidad' => $especialidad,
             'psicologos' => $psicologo,
             'status' => 'success',
         ]);
@@ -295,5 +313,27 @@ class PsicologoController extends Controller
                                 ->get();
 
         return response()->json($notificaciones);
+    }
+
+    public function listaPsicologo()
+    {
+        $psicologos = Psicologo::all();
+
+        return view('listaPsicologo', compact('psicologos'));
+    }
+
+    public function getAllSesiones(){
+
+        $resultados = DB::table('sesions')
+            ->join('pacientes as pas', 'sesions.paciente_id', '=' , 'pas.id')
+            ->join('psicologos as psi', 'sesions.psicologo_id', '=' , 'psi.id')
+            ->join('users as pu', 'pas.user_id', '=', 'pu.id')
+            ->join('users as ps', 'psi.user_id', '=', 'ps.id')
+            ->select('pu.name as nombre_paciente', 'pu.apellidos as apellido_paciente',
+            'ps.name as nombre_psicologo', 'ps.apellidos as apellido_psicologo',
+            'sesions.estado', 'sesions.pago_confirmado')
+            ->get();
+            
+        return response()->json($resultados);
     }
 }

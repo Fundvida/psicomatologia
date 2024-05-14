@@ -214,6 +214,70 @@
         .notification-footer button:hover {
             background-color: #616c96;
         }
+
+        /* TRANSICION */
+
+        /* .tab-pane.fade:not(.show) {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-pane.fade.show {
+            opacity: 1;
+        } */
+
+        /* Estilos para la ventana emergente de notificaciones */
+        /* .notification-container {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .notification-header h5 {
+            margin-bottom: 0;
+        }
+
+        .notification-body {
+            padding: 10px;
+        }
+
+        .notification-item-container {
+            border-radius: 10px;
+            background-color: #f9c5d1;
+            padding: 4px;
+        }
+
+        .notification-item {
+            padding: 8px 0;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background-color: transparent !important;
+        }
+
+        .show {
+            display: block !important;
+        } */
     </style>
 </head>
 
@@ -371,11 +435,11 @@
             <div class="notification-body">
                 Usted tiene una sesión pendiente de pago
             </div>
-            <div class="notification-footer">
+            <!-- <div class="notification-footer">
                 <button id="go-btn">
                     Ir <i class="fas fa-arrow-right"></i>
                 </button>
-            </div>
+            </div> -->
 
         </div>
     </div>
@@ -383,32 +447,74 @@
     <!-- Modal de Pago -->
     <div class="modal fade" id="pagoModal" tabindex="-1" aria-labelledby="pagoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <form action="{{ route('paciente.files.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
+        <form action="{{ route('paciente.files.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+                <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title font-alt" id="pagoModalLabel">Pagar Sesión</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body text-center">
-                        <!-- Aquí puedes colocar el elemento para mostrar el QR de pago -->
-                        <img src="{{ asset('images/qr_real.jpeg') }}" alt="QR de Pago" class="img-fluid mb-4" style="max-height: 300px;">
-                        <!-- Campo para subir el comprobante de pago -->
-                        <div class="mb-3">
-                            <input type="hidden" name="id_paciente" value="{{ auth()->id() }}">
-                            <input type="hidden" name="tipo_doc" value="">
-                            <input type="hidden" name="id_sesion" value="">
-                            <label for="file" class="form-label font-alt mb-4" style="font-size: 25px;">Subir Comprobante de Pago</label>
-                            <i class="fas fa-chevron-down ms-2" style="font-size: 20px;"></i>
-                            <input type="file" class="form-control" name="file">
+                    <div class="modal-body">
+                        
+                        <!-- Pestañas -->
+                        <ul class="nav nav-tabs custom-tabs" id="pagoTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pagoQR-tab" data-bs-toggle="tab" data-bs-target="#pagoQR" type="button" role="tab" aria-controls="pagoQR" aria-selected="true">Pago por QR</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="cuentaBancaria-tab" data-bs-toggle="tab" data-bs-target="#cuentaBancaria" type="button" role="tab" aria-controls="cuentaBancaria" aria-selected="false">Pago por Cuenta Bancaria</button>
+                            </li>
+                        </ul>
+
+                        <!-- Contenido de las pestañas -->
+                        <div class="tab-content mt-4" id="pagoTabsContent">
+                            <!-- Pestaña Pago por QR -->
+                        <div class="tab-pane fade show active" id="pagoQR" role="tabpanel" aria-labelledby="pagoQR-tab">
+
+                            <div class="text-center">
+                                <h4 class="mb-4 font-alt">Pago por Código QR</h4>
+                                <p class="mt-4">Por favor, escanea el código de pago a continuación y sube el comprobante correspondiente para confirmar tu transacción.</p>
+                                <img src="{{ asset('images/qr_real.jpeg') }}" alt="QR de Pago" class="img-fluid mb-4" style="max-height: 300px;">
+                                <!-- Campo para subir el comprobante de pago -->
+                                <!-- <div class="mb-3">
+                                    <h5 for="comprobantePago" class="font-alt mb-2">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
+                                    <input type="file" class="form-control" id="file" name="file">
+                                </div> -->
+                            </div>
+                        </div>
+                        <!-- Pestaña Cuenta Bancaria -->
+                        <div class="tab-pane fade" id="cuentaBancaria" role="tabpanel" aria-labelledby="cuentaBancaria-tab">
+
+                            <div class="text-center">
+                                <!-- Pestaña Cuenta Bancaria -->
+                                <h4 class="mb-4 font-alt">Pago por Cuenta Bancaria</h4>
+                                <p class="mt-4">Por favor, realiza el pago a esta cuenta bancaria y sube el comprobante de pago para confirmar tu transacción.</p>
+                                <p><strong>Número de Cuenta:</strong> 4001-3356-418</p>
+                                <p><strong>Banco:</strong> Banco FIE</p>
+                                <p><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
+                                <p><strong>A nombre de:</strong> Fundación Educar Para La Vida</p>
+                                <p><strong>NIT:</strong> 16-943-002-8</p>
+                                <!-- <div class="mb-3">
+                                    <h5 for="comprobantePago" class="mb-2 font-alt">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
+                                    <input type="file" class="form-control" id="file" name="file">
+                                </div> -->
+                            </div>
+                        </div>
+
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="submit" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
+                            <input type="hidden" name="id_paciente" value="{{ auth()->id() }}">
+                            <input type="hidden" name="tipo_doc" value="">
+                            <input type="hidden" name="id_sesion" value="">
+                            <div class="mb-3">
+                                <h5 for="comprobantePago" class="font-alt mb-2">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
+                                <input type="file" class="form-control" name="file">
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 

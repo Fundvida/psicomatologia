@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\PsicologoController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/login',[LoginController::class,'index'])->name('login');
 Route::group(['middleware' => ['auth']], function () {
@@ -21,18 +22,29 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('homePaciente');
 });
 
+Route::get('/check-auth', function () {
+    $authenticated = Auth::check();
+
+    return response()->json(['authenticated' => $authenticated]);
+});
+
 Route::get('/', function () {
     return view('landingPage');
 });
 
+// Route::get('/test', function () {
+//     return view('test');
+// });
+
 //Route::get('/home',[LoginController::class,'home'])->name('home');
 
 //Route::get('/homePsicologo',[LoginController::class,'homePsicologo'])->name('homePsicologo');
-Route::get('/homePsicologoHorario',[LoginController::class,'homePsicologoHorario'])->name('homePsicologoHorario');
-
+Route::get('/homePsicologoHorario',[PsicologoController::class,'homePsicologoHorario'])->name('homePsicologoHorario');
 
 //Route::get('/homePaciente',[LoginController::class,'homePaciente'])->name('homePaciente');
-Route::get('/homePacienteSesiones',[LoginController::class,'homePacienteSesiones'])->name('homePacienteSesiones');
+Route::get('/homePacienteSesiones',[PacienteController::class,'homePacienteSesiones'])->name('homePacienteSesiones');
+
+Route::get('/listadoAllSesiones',[SesionController::class,'listadoAllSesiones'])->name('listadoAllSesiones');
 
 //agregadas las siguientes rutas para el wizard
 Route::post('/checkemail', [UserController::class, 'checkEmail'])->name('checkemail');
@@ -43,11 +55,10 @@ Route::get('/landing',[LoginController::class,'pagina_landing'])->name('pagina_l
 //agregado de nueva ruta para agendarcita
 Route::get('/agendarcita', [LoginController::class,'agendarCita1'])->name('agendarcita');
 
-Route::get('/cambiarContraseña', [LoginController::class,'cambiarContraseña'])->name('cambiarContraseña');
-Route::get('/listaPaciente', [LoginController::class,'listaPaciente'])->name('listaPaciente');
+Route::get('/cambiarContraseña', [UserController::class,'cambiarContraseña'])->name('cambiarContraseña');
+Route::get('/listaPaciente', [PacienteController::class,'listaPaciente'])->name('listaPaciente');
 
-
-Route::get('/listaPsicologo', [LoginController::class,'listaPsicologo'])->name('listaPsicologo'); // admin
+Route::get('/listaPsicologo', [PsicologoController::class,'listaPsicologo'])->name('listaPsicologo'); // admin
 
 Route::post('/storePsicologo', [PsicologoController::class,'store'])->name('psicologo.store');    // crear psicologo
 Route::get('/psicologo/{id}/edit', [PsicologoController::class, 'edit'])->name('psicologo.edit'); // get psicologo x id
@@ -64,6 +75,8 @@ Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])->name('pa
 Route::get('/paciente/{id}/del', [PacienteController::class, 'delete'])->name('paciente.del');     // delete paciente
 Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'])->name('paciente.listar');
 Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])->name('paciente.delSesion');
+
+Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])->name('paciente.listar');
 
 
 Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')->names('paciente.files');

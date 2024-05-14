@@ -227,7 +227,7 @@
         <section class="py-0 d-flex justify-content-center align-items-center" id="">
             <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                 <!-- Título "Agende su cita inicial" -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">Calendario de Sesiones</h2>
+                <h2 class="display-3 lh-1 mb-5 font-alt">Horarios</h2>
                 <p class="lead fw-normal text-muted mb-5 ttNorms">Administra tus citas y horarios de atención aquí.</p>
                 <div class="text-end mb-3">
                     <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold mb-3" style="font-size: 20px; padding: 12px 14px;" onclick="crearHorario()">

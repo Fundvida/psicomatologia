@@ -87,7 +87,7 @@
 
                                 <input type="hidden" id="paciente_id" name="paciente_id" value="">
                                 <div class="mb-3">
-                                    <label for="tipoUsuario" class="form-label">Tipo de Usuario</label>
+                                    <label for="tipoUsuario" class="form-label">Tipo de Usuario <span class="text-danger">*</span></label>
                                     <select id="tipoUsuario" name="tipoUsuario" class="form-select" required>
                                         <option value="mayor">Paciente Mayor</option>
                                         <option value="menor">Paciente Menor de Edad</option>
@@ -95,61 +95,61 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label for="nombres" class="form-label">Nombres</label>
+                                        <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="nombres" name="nombres" required>
                                     </div>
                                     <div class="col">
-                                        <label for="apellidos" class="form-label">Apellidos</label>
+                                        <label for="apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="apellidos" name="apellidos" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
                                     </div>
                                     <div class="col">
-                                        <label for="ocupacion" class="form-label">Ocupación</label>
+                                        <label for="ocupacion" class="form-label">Ocupación <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="ocupacion" name="ocupacion" required>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="numeroCI" class="form-label">Número de CI</label>
+                                    <label for="numeroCI" class="form-label">Número de CI <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="numeroCI" name="numeroCI" required>
                                 </div>
 
                                 <div class="row mb-3" id="divContrasena">
                                     <div class="col">
-                                        <label for="contrasena" class="form-label">Contraseña</label>
+                                        <label for="contrasena" class="form-label">Contraseña <span class="text-danger">*</span></label>
                                         <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                                     </div>
                                     <div class="col" id="divConfirmarContrasena">
-                                        <label for="confirmarContrasena" class="form-label">Confirmar Contraseña</label>
+                                        <label for="confirmarContrasena" class="form-label">Confirmar Contraseña <span class="text-danger">*</span></label>
                                         <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="correoElectronico" class="form-label">Correo Electrónico</label>
+                                    <label for="correoElectronico" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" id="correoElectronico" name="correoElectronico" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                                    <label for="telefono" class="form-label">Número de Teléfono <span class="text-danger">*</span></label>
                                     <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" style="width: 312px;" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta</label>
+                                    <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta <span class="text-danger">*</span></label>
                                     <select id="metodoConfirmacion" name="metodoConfirmacion" class="form-select" required>
                                         <option value="correo">Correo Electrónico</option>
                                         <option value="sms">SMS</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="preguntaSeguridad1" class="form-label">Pregunta de Seguridad 1</label>
+                                    <label for="preguntaSeguridad1" class="form-label">Pregunta de Seguridad 1 <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="preguntaSeguridad1" name="preguntaSeguridad1" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="preguntaSeguridad2" class="form-label">Pregunta de Seguridad 2</label>
+                                    <label for="preguntaSeguridad2" class="form-label">Pregunta de Seguridad 2 <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="preguntaSeguridad2" name="preguntaSeguridad2" required>
                                 </div>
                                 <div class="modal-footer">
@@ -204,7 +204,10 @@
                     document.getElementById("divContrasena").style.display = "none";
                     document.getElementById("divConfirmarContrasena").style.display = "none";
                     document.getElementById("btnAddOrEdit").textContent = "Actualizar Paciente";
-                    console.log(paciente_id)
+                    document.getElementById("contrasena").removeAttribute("required");
+                    document.getElementById("confirmarContrasena").removeAttribute("required");
+
+                    //console.log(paciente_id)
                     $('#formularioRegistroModal').modal('show');
                     $.ajax({
                         url: '/paciente/' + paciente_id + '/edit',

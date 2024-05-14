@@ -239,11 +239,11 @@
         <div class="notification-body">
             Usted tiene una sesión pendiente de pago
         </div>
-        <div class="notification-footer">
+        <!-- <div class="notification-footer">
             <button class="go-btn">
                 Ir <i class="fas fa-arrow-right"></i>
             </button>
-        </div>
+        </div> -->
     </div>
 </template>
 <!-- Enlaces a los scripts JS -->

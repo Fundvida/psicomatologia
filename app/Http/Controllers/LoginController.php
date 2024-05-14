@@ -76,29 +76,7 @@ class LoginController extends Controller
     {
         return view('agendarCita5');
     }
-    public function cambiarContraseña()
-    {
-        return view('cambiarContraseña');
-    }
-    public function listaPaciente()
-    {
-        $pacientes = Paciente::all();
-        return view('listaPaciente', compact('pacientes'));
-    }
 
-    public function listaPsicologo()
-    {
-        $psicologos = Psicologo::all();
-
-        return view('listaPsicologo', compact('psicologos'));
-    }
-
-    public function homePacienteSesiones (){
-        return view('homePacienteSesiones');
-    }
-
-    public function homePsicologoHorario (){
-        return view('homePsicologoHorario');
-    }
+    
 
 }

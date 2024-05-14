@@ -11,9 +11,19 @@ use App\Models\Sesion;
 
 class PacienteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index_registrar()
     {
         return view('');
+    }
+
+    public function homePacienteSesiones (){
+        return view('homePacienteSesiones');
     }
 
     public function store(Request $request)
@@ -129,5 +139,11 @@ class PacienteController extends Controller
         $sesion->save();
 
         return response()->json($request);
+    }
+
+    public function listaPaciente()
+    {
+        $pacientes = Paciente::all();
+        return view('listaPaciente', compact('pacientes'));
     }
 }
