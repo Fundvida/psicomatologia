@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('profile_photo_path')->nullable();
-            $table->tinyInteger('activate')->length(3)->nullable();
+            $table->tinyInteger('activated')->length(3)->nullable();
 
             /*$table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();*/

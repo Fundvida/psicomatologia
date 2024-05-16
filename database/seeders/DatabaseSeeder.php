@@ -14,6 +14,5 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(roles_seeder::class);
         $this->call(adminSeeder::class);
-
     }
 }
