@@ -87,7 +87,7 @@
 
                                 <input type="hidden" id="paciente_id" name="paciente_id" value="">
                                 <div class="mb-3">
-                                    <label for="tipoUsuario" class="form-label">Tipo de Usuario <span class="text-danger">*</span></label>
+                                    <label for="tipoUsuario" class="form-label">Tipo de paciente <span class="text-danger">*</span></label>
                                     <select id="tipoUsuario" name="tipoUsuario" class="form-select" required>
                                         <option value="mayor">Paciente Mayor</option>
                                         <option value="menor">Paciente Menor de Edad</option>

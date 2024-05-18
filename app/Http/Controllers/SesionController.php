@@ -97,6 +97,9 @@ class SesionController extends Controller
                     $paciente->user_id = $user->id;
                     $paciente->psicologo_id = $request->input('psicologo_id');
                     $paciente->isAlta = '0';
+                    $paciente->estado = 'ACTIVO';
+                    $paciente->tipo_paciente = 'mayor';
+                    $paciente->ocupacion = 'no especificado';
                     $paciente->save();
                 }
             } catch (QueryException $e) {
@@ -112,6 +115,8 @@ class SesionController extends Controller
                     $sesion->psicologo_id= $request->input('psicologo_id');
                     $sesion->descripcion_sesion=$request->input('adicional_info');
                     $sesion->solicitante= $paciente->id;
+                    $sesion->fecha_hora_inicio = "2024-05-22 15:44:18";
+                    $sesion->fecha_hora_fin = "2024-05-22 15:44:18";
 
                     $sesion->save();
                 }

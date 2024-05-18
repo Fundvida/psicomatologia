@@ -39,12 +39,18 @@ Route::get('/', function () {
 //Route::get('/home',[LoginController::class,'home'])->name('home');
 
 //Route::get('/homePsicologo',[LoginController::class,'homePsicologo'])->name('homePsicologo');
-Route::get('/homePsicologoHorario',[PsicologoController::class,'homePsicologoHorario'])->name('homePsicologoHorario');
+Route::get('/homePsicologoHorario',[PsicologoController::class,'homePsicologoHorario'])
+    ->middleware('can:homePsicologoHorario')
+    ->name('homePsicologoHorario');
 
 //Route::get('/homePaciente',[LoginController::class,'homePaciente'])->name('homePaciente');
-Route::get('/homePacienteSesiones',[PacienteController::class,'homePacienteSesiones'])->name('homePacienteSesiones');
+Route::get('/homePacienteSesiones',[PacienteController::class,'homePacienteSesiones'])
+    ->middleware('can:homePacienteSesiones')
+    ->name('homePacienteSesiones');
 
-Route::get('/listadoAllSesiones',[SesionController::class,'listadoAllSesiones'])->name('listadoAllSesiones');
+Route::get('/listadoAllSesiones',[SesionController::class,'listadoAllSesiones'])
+    ->middleware('can:listadoAllSesiones')
+    ->name('listadoAllSesiones');
 
 //agregadas las siguientes rutas para el wizard
 Route::post('/checkemail', [UserController::class, 'checkEmail'])->name('checkemail');
@@ -55,31 +61,77 @@ Route::get('/landing',[LoginController::class,'pagina_landing'])->name('pagina_l
 //agregado de nueva ruta para agendarcita
 Route::get('/agendarcita', [LoginController::class,'agendarCita1'])->name('agendarcita');
 
-Route::get('/cambiarContraseña', [UserController::class,'cambiarContraseña'])->name('cambiarContraseña');
-Route::get('/listaPaciente', [PacienteController::class,'listaPaciente'])->name('listaPaciente');
+Route::get('/cambiarContraseña', [UserController::class,'cambiarContraseña'])
+    ->middleware('can:cambiarContraseña')
+    ->name('cambiarContraseña');
 
-Route::get('/listaPsicologo', [PsicologoController::class,'listaPsicologo'])->name('listaPsicologo'); // admin
+Route::get('/listaPaciente', [PacienteController::class,'listaPaciente'])
+    ->middleware('can:listaPaciente')
+    ->name('listaPaciente');
 
-Route::post('/storePsicologo', [PsicologoController::class,'store'])->name('psicologo.store');    // crear psicologo
-Route::get('/psicologo/{id}/edit', [PsicologoController::class, 'edit'])->name('psicologo.edit'); // get psicologo x id
-Route::get('/psicologo/{id}/del', [PsicologoController::class, 'delete'])->name('psicologo.del');     // delete psicologo
+Route::get('/listaPsicologo', [PsicologoController::class,'listaPsicologo'])
+    ->middleware('can:listaPsicologo')
+    ->name('listaPsicologo'); // admin
 
-Route::post('/psicologoHorario', [PsicologoController::class, 'addHorario'])->name('psicologo.addHorario');
-Route::post('/psicologoHorarioDia', [PsicologoController::class, 'editHorarioXdia'])->name('psicologo.editHorario_x_dia');
-Route::get('/psicologo/getHorario', [PsicologoController::class, 'getHorario'])->name('psicologo.disponible');
-Route::post('/psicologo/inhabilitarHorario', [PsicologoController::class, 'inhabilitarHorario'])->name('psicologo.inhabilitarHorario');
-Route::get('/psicologo/getNotificaciones', [PsicologoController::class, 'getNotificaciones'])->name('psicologo.notificaciones');
+Route::post('/storePsicologo', [PsicologoController::class,'store'])
+    ->middleware('can:psicologo.store')
+    ->name('psicologo.store');    // crear psicologo
 
-Route::post('/storePaciente', [PacienteController::class,'store'])->name('paciente.store');  // crear paciente
-Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])->name('paciente.edit'); // get paciente x id
-Route::get('/paciente/{id}/del', [PacienteController::class, 'delete'])->name('paciente.del');     // delete paciente
-Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'])->name('paciente.listar');
-Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])->name('paciente.delSesion');
+Route::get('/psicologo/{id}/edit', [PsicologoController::class, 'edit'])
+    ->middleware('can:psicologo.edit')
+    ->name('psicologo.edit'); // get psicologo x id
 
-Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])->name('paciente.listar');
+Route::get('/psicologo/{id}/del', [PsicologoController::class, 'delete'])
+    ->middleware('can:psicologo.del')
+    ->name('psicologo.del');     // delete psicologo
 
+Route::post('/psicologoHorario', [PsicologoController::class, 'addHorario'])
+    ->middleware('can:psicologo.addHorario')
+    ->name('psicologo.addHorario');
 
-Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')->names('paciente.files');
+Route::post('/psicologoHorarioDia', [PsicologoController::class, 'editHorarioXdia'])
+    ->middleware('can:psicologo.editHorario_x_dia')
+    ->name('psicologo.editHorario_x_dia');
+
+Route::get('/psicologo/getHorario', [PsicologoController::class, 'getHorario'])
+    ->middleware('can:psicologo.disponible')
+    ->name('psicologo.disponible');
+
+Route::post('/psicologo/inhabilitarHorario', [PsicologoController::class, 'inhabilitarHorario'])
+    ->middleware('can:psicologo.inhabilitarHorario')
+    ->name('psicologo.inhabilitarHorario');
+
+Route::get('/psicologo/getNotificaciones', [PsicologoController::class, 'getNotificaciones'])
+    ->middleware('can:psicologo.notificaciones')
+    ->name('psicologo.notificaciones');
+
+Route::post('/storePaciente', [PacienteController::class,'store'])
+    ->middleware('can:paciente.store')
+    ->name('paciente.store');  // crear paciente
+
+Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])
+    ->middleware('can:paciente.edit')
+    ->name('paciente.edit'); // get paciente x id
+
+Route::get('/paciente/{id}/del', [PacienteController::class, 'delete'])
+    ->middleware('can:paciente.del')
+    ->name('paciente.del');     // delete paciente
+
+Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'])
+    //->middleware('can:paciente.listar')
+    ->name('paciente.listar');
+
+Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])
+    ->middleware('can:paciente.delSesion')
+    ->name('paciente.delSesion');
+
+Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])
+    ->middleware('can:paciente.listar')
+    ->name('paciente.listar');
+
+Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')
+    ->middleware('can:paciente.files')
+    ->names('paciente.files');
 
 Route::post('/login',[LoginController::class,'iniciar_sesion'])->name('iniciar_sesion');
 Route::post('/logout',[LoginController::class,'cerrar_sesion'])->name('cerrar_sesion');
