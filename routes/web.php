@@ -93,8 +93,8 @@ Route::get('/psicologo/{id}/edit', [PsicologoController::class, 'edit'])
     ->middleware('can:psicologo.edit')
     ->name('psicologo.edit'); // get psicologo x id
 
-Route::get('/psicologo/{id}/del', [PsicologoController::class, 'delete'])
-    ->middleware('can:psicologo.del')
+Route::post('/psicologo/del', [PsicologoController::class, 'delete'])
+    //->middleware('can:psicologo.del')
     ->name('psicologo.del');     // delete psicologo
 
 Route::post('/psicologoHorario', [PsicologoController::class, 'addHorario'])
@@ -114,7 +114,7 @@ Route::post('/psicologo/inhabilitarHorario', [PsicologoController::class, 'inhab
     ->name('psicologo.inhabilitarHorario');
 
 Route::get('/psicologo/getNotificaciones', [PsicologoController::class, 'getNotificaciones'])
-    ->middleware('can:psicologo.notificaciones')
+    //->middleware('can:psicologo.notificaciones')
     ->name('psicologo.notificaciones');
 
 Route::post('/storePaciente', [PacienteController::class,'store'])
@@ -125,8 +125,8 @@ Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])
     ->middleware('can:paciente.edit')
     ->name('paciente.edit'); // get paciente x id
 
-Route::get('/paciente/{id}/del', [PacienteController::class, 'delete'])
-    ->middleware('can:paciente.del')
+Route::post('/paciente/del', [PacienteController::class, 'delete'])
+    //->middleware('can:paciente.del')
     ->name('paciente.del');     // delete paciente
 
 Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'])

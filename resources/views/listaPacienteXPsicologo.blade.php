@@ -609,13 +609,9 @@
                             <td>${paciente.telefono}</td>
                             <td>${paciente.tipo_paciente}</td>
                             <td>${f_nacimiento}</td>
-                            <td> 
-                                <button onclick="editar(${paciente.id})" class="btn btn-sm btn-outline-primary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.2rem;">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </button>
-                                <button onclick="eliminar(${paciente.id})" class="btn btn-sm btn-outline-danger" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.2rem;">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </button>
+                            <td class="action-icons"> 
+                                <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
+                                <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
                             </td>
                         </tr>
                     `);

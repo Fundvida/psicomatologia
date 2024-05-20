@@ -35,7 +35,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.js"></script>
     <!-- Importar el archivo de idioma español -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
-
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
     <style>
@@ -347,6 +346,11 @@
     <!-- Menú lateral -->
     <div class="custom-sidebar">
         <ul>
+        <li class="custom-menu-item custom-font-alt">PACIENTES
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+            <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
+            </ul>
+        </li>
         <li class="custom-menu-item custom-font-alt">SESIONES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
             <li><a href="#" style="color: #fff;">Lista de Sesiones</a></li>
@@ -592,8 +596,9 @@
 <script>
     function confirmarCancelar(nombre) {
         Swal.fire({
-            title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
-            text: "¡No podrás revertir esto!",
+            title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
+            html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, explícale al paciente el motivo de la cancelación:</p>
+                   <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -604,18 +609,23 @@
                 title: 'swal-title', // Clase CSS para el título personalizado
             },
             // Permite que el HTML se muestre en la notificación
-            allowHtml: true
+            allowHtml: true,
+            preConfirm: () => {
+                return document.getElementById('justificacion').value;
+            }
         }).then((result) => {
             if (result.isConfirmed) {
+                const justificacion = result.value;
                 Swal.fire(
                     '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                    'La sesión ha sido cancelada.',
+                    `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
                     'success'
                 )
             }
         });
     }
 </script>
+
 
 <script>
     function verComprobante() {

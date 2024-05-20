@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Sesion;
 use App\Models\Psicologo;
+use Illuminate\Support\Facades\Log;
 
 class PacienteController extends Controller
 {
@@ -98,15 +99,16 @@ class PacienteController extends Controller
         ];
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $paciente = Paciente::findOrFail($id);
+        Log::info('Solicitud recibida para eliminar paciente', $request->all());
+        $paciente = Paciente::findOrFail($request->paciente_id);
         $paciente->estado = "INACTIVO";
-        //$paciente->motivo = $request->motivo;
+        $paciente->motivo = $request->justificacion;
         
         $paciente->save();
 
-        return redirect()->route('listaPaciente')->with('resultado', "eliminado");
+        //return redirect()->route('listaPaciente')->with('resultado', "eliminado");
     }
 
     public function listarSesiones()
@@ -148,6 +150,7 @@ class PacienteController extends Controller
         }
 
         $sesion->estado = 'Cancelado';
+        $sesion->justificacion = $request->justificacion;
         $sesion->save();
 
         return response()->json($request);

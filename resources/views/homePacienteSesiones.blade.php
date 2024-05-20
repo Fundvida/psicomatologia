@@ -613,34 +613,40 @@
         function confirmarCancelar(sesion_id) {
             console.log(sesion_id);
             Swal.fire({
-                title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
-                text: "¡No podrás revertir esto!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, cancelar',
-                cancelButtonText: 'No, cancelar',
-                customClass: {
-                    title: 'swal-title', // Clase CSS para el título personalizado
-                },
-                // Permite que el HTML se muestre en la notificación
-                allowHtml: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
+            html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, explícale al paciente el motivo de la cancelación:</p>
+                   <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'No',
+            customClass: {
+                title: 'swal-title', // Clase CSS para el título personalizado
+            },
+            // Permite que el HTML se muestre en la notificación
+            allowHtml: true,
+            preConfirm: () => {
+                return document.getElementById('justificacion').value;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const justificacion = result.value;
+                var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                     $.ajax({
                         url: '/paciente/cancelarSesion',
                         type: 'POST',
                         data: {
                             'sesion_id': sesion_id,
-                            '_token': token
+                            '_token': token,
+                            'justificacion': justificacion
                         },
                         success: function(data) {
                             console.log("exito!!!!  ");
                             Swal.fire(
-                                '<h2 class="text-center mb-4 font-alt">Sesión cancelada</h2>',
-                                'La sesión ha sido cancelada.',
+                                '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
+                                `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
                                 'success'
                             )
                             setTimeout(function() {
@@ -651,8 +657,8 @@
                             console.error(error);
                         }
                     }); 
-                }
-            });
+            }
+        });
         }
     </script>
 

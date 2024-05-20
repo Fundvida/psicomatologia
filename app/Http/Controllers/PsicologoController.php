@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use App\Models\Sesion;
 use App\Models\Especialidad;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class PsicologoController extends Controller
@@ -127,15 +128,16 @@ class PsicologoController extends Controller
         ];
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $psicologo = Psicologo::findOrFail($id);
+        Log::info('Solicitud recibida para eliminar psicólogo', $request->all());
+        $psicologo = Psicologo::findOrFail($request->psicologo_id);
         $psicologo->estado = "INACTIVO";
-        //$psciologo->motivo = $request->motivo;
+        $psicologo->motivo = $request->justificacion;
 
         $psicologo->save();
 
-        return redirect()->route('listaPsicologo')->with('resultado', "eliminado");
+        //return redirect()->route('listaPsicologo')->with('resultado', "eliminado");
     }
 
     protected function convertValidationExceptionToResponse(ValidationException $exception, $request)

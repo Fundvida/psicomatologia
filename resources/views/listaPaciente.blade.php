@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SISTEMA DE PSICOLOGÍA</title>
 
     <!-- Enlaces a los estilos CSS -->
@@ -611,13 +612,9 @@
                             <td>${paciente.telefono}</td>
                             <td>${paciente.tipo_paciente}</td>
                             <td>${f_nacimiento}</td>
-                            <td> 
-                                <button onclick="editar(${paciente.id})" class="btn btn-sm btn-outline-primary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.2rem;">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </button>
-                                <button onclick="eliminar(${paciente.id})" class="btn btn-sm btn-outline-danger" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.2rem;">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </button>
+                            <td class="action-icons"> 
+                                <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
+                                <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
                             </td>
                         </tr>
                     `);
@@ -695,34 +692,82 @@
         function eliminar(id) {
             console.log(id);
             Swal.fire({
-                title: "¿Estas seguro?",
-                text: "Estas seguro que eliminar el registro?",
-                icon: "warning",
+                title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Eliminar el registro?</h2>',
+                html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, escriba el motivo de eliminación:</p>
+                    <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Si!"
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'No',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true,
+                preConfirm: () => {
+                    return document.getElementById('justificacion').value;
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/paciente/' + id + '/del',
-                        type: 'GET',
-                        success: function(response) {
-                            Swal.fire({
-                                title: "Eliminado!",
-                                text: "Paciente eliminado exitosamente.",
-                                icon: "success"
-                            }).then(function() {
-                                // Recargar la página
-                                window.location.reload();
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.log(error);
-                        }
-                    });
+                    const justificacion = result.value;
+                    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        $.ajax({
+                            url: '/paciente/del',
+                            type: 'POST',
+                            data: {
+                                'paciente_id': id,
+                                '_token': token,
+                                'justificacion': justificacion
+                            },
+                            success: function(data) {
+                                console.log("exito!!!!  ");
+                                Swal.fire(
+                                    '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
+                                    `Registro eliminado.<br> Motivo: ${justificacion}`,
+                                    'success'
+                                )
+                                setTimeout(function() {
+                                    window.location.reload();
+                                }, 3000);
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('hoasdfhjk')
+                                console.error(error);
+                            }
+                        }); 
                 }
             });
+            // Swal.fire({
+            //     title: "¿Estas seguro?",
+            //     text: "Estas seguro que eliminar el registro?",
+            //     icon: "warning",
+            //     showCancelButton: true,
+            //     confirmButtonColor: "#3085d6",
+            //     cancelButtonColor: "#d33",
+            //     confirmButtonText: "Si!"
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         $.ajax({
+            //             url: '/paciente/' + id + '/del',
+            //             type: 'GET',
+            //             success: function(response) {
+            //                 Swal.fire({
+            //                     title: "Eliminado!",
+            //                     text: "Paciente eliminado exitosamente.",
+            //                     icon: "success"
+            //                 }).then(function() {
+            //                     // Recargar la página
+            //                     window.location.reload();
+            //                 });
+            //             },
+            //             error: function(xhr, status, error) {
+            //                 console.log(error);
+            //             }
+            //         });
+            //     }
+            // });
         }
     </script>
     @if(session('resultado') === 'registrado')

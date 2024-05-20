@@ -331,6 +331,7 @@
             type: 'GET',
             dataType: 'json',
             success: function(data) {
+                console.log("notificaciones aqui");
                 console.log(data)
                 data.forEach(function(notification) {
                     const horaInicio = notification.fecha_hora_inicio.split(' ')[1].split(':').slice(0, 2).join(':');
