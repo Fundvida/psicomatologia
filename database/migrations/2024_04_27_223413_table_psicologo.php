@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('fecha_funcion_titulo');
             $table->string('universidad');
             $table->string('ciudad_residencia');
+            $table->string('motivo');
             //$table->string('departamento_residencia');
             $table->string('pais_residencia');
             //los archivos del cv se guardan en la tabla archivos

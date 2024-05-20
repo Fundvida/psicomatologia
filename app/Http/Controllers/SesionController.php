@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Sesion;
 use App\Models\Horario;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use App\Models\Pago;
+use Illuminate\Support\Facades\Auth;
 
 class SesionController extends Controller
 {
@@ -281,6 +281,26 @@ class SesionController extends Controller
 
     public function listadoAllSesiones (){
         return view('homeAdminSesiones');
-        //return response()->json(['message: aqui se listaran todas las sesiones nombre y apellido paciente, nombre y apellido psicologo, estado sesión, estado de pago.']);
+    }
+
+    public function psicologoSesiones (){
+        return view('psicologoSesiones');
+    }
+
+    public function psicologoSesionesProgramadas (){
+        $user = Auth::user();
+        $psicologo = Psicologo::where('user_id', $user->id)->first();
+
+        $sessions = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
+        'sesions.calificacion', 'sesions.fecha_hora_inicio', 'sesions.fecha_hora_fin', 'sesions.id as sesion_id',
+            'users.ci', 'users.name', 'users.apellidos', 
+            'pagos.isTerminado', 'pacientes.id as id_paciente')
+            ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+            ->join('users', 'pacientes.user_id', '=', 'users.id')
+            ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+            ->where('sesions.psicologo_id', $psicologo->id)
+            ->get();
+
+        return response()->json($sessions);
     }
 }

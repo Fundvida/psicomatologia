@@ -217,12 +217,12 @@
         <ul>
             <li class="custom-menu-item custom-font-alt">PACIENTES
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
+                    <li><a href="{{ route('psicologo.pacientes') }}" style="color: #fff;">Pacientes</a></li>
                 </ul>
             </li>
             <li class="custom-menu-item custom-font-alt">SESIONES
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="#" style="color: #fff;">Sesiones</a></li>
+                    <li><a href="{{ route('psicologo.sesiones') }}" style="color: #fff;">Sesiones</a></li>
                 </ul>
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                     <li><a href="#" style="color: #fff;">Mis Horarios</a></li>

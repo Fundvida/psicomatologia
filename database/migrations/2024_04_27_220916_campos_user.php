@@ -25,9 +25,7 @@ return new class extends Migration
             $table->string('codigo_pais_telefono')->nullable();
             $table->string('telefono')->nullable();
             $table->string('pregunta_seguridad_a')->nullable();
-            $table->string('pregunta_seguridad_b')->nullable();
             $table->string('respuesta_seguridad_a')->nullable();
-            $table->string('respuesta_seguridad_b')->nullable();
           });
     }
 

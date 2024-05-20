@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('psicologo_id')->nullable();
             $table->string('tipo_paciente')->nullable();
             $table->string('ocupacion')->nullable();
+            $table->string('motivo');
             $table->string('estado')->nullable();
             $table->timestamps();
             //Si el paciente esta dado de alta isAlta = true

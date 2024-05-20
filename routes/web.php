@@ -52,6 +52,12 @@ Route::get('/listadoAllSesiones',[SesionController::class,'listadoAllSesiones'])
     ->middleware('can:listadoAllSesiones')
     ->name('listadoAllSesiones');
 
+Route::get('/psicologo/getSesiones',[SesionController::class,'psicologoSesionesProgramadas']);
+
+Route::get('psicologo/sesiones',[SesionController::class,'psicologoSesiones'])
+    //->middleware('can:listadoAllSesiones')
+    ->name('psicologo.sesiones');
+
 //agregadas las siguientes rutas para el wizard
 Route::post('/checkemail', [UserController::class, 'checkEmail'])->name('checkemail');
 Route::post('/getpsicologos',[PsicologoController::class, 'getPsicologos'])->name('getpsicologos');
@@ -65,13 +71,19 @@ Route::get('/cambiarContraseña', [UserController::class,'cambiarContraseña'])
     ->middleware('can:cambiarContraseña')
     ->name('cambiarContraseña');
 
+Route::get('psicologo/listaPaciente', [PacienteController::class,'listaPacienteXpsicologo_'])
+    //->middleware('can:listaPaciente')
+    ->name('psicologo.pacientes');
+
 Route::get('/listaPaciente', [PacienteController::class,'listaPaciente'])
-    ->middleware('can:listaPaciente')
+    //->middleware('can:listaPaciente')
     ->name('listaPaciente');
 
 Route::get('/listaPsicologo', [PsicologoController::class,'listaPsicologo'])
-    ->middleware('can:listaPsicologo')
+    //->middleware('can:listaPsicologo')
     ->name('listaPsicologo'); // admin
+
+Route::get('/admin/listaPsicologos', [PsicologoController::class,'getPsicologosL']);
 
 Route::post('/storePsicologo', [PsicologoController::class,'store'])
     ->middleware('can:psicologo.store')
@@ -121,8 +133,11 @@ Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'
     //->middleware('can:paciente.listar')
     ->name('paciente.listar');
 
+Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXPsicologo']);
+    //->name('psicologo.pacientes');
+
 Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])
-    ->middleware('can:paciente.delSesion')
+    //->middleware('can:paciente.delSesion')
     ->name('paciente.delSesion');
 
 Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])
@@ -137,5 +152,9 @@ Route::post('/login',[LoginController::class,'iniciar_sesion'])->name('iniciar_s
 Route::post('/logout',[LoginController::class,'cerrar_sesion'])->name('cerrar_sesion');
 
 
+
+Route::get('/test', function () {
+    return view('test');
+});
 
 

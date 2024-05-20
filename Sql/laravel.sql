@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-05-2024 a las 17:16:02
+-- Tiempo de generación: 20-05-2024 a las 03:05:28
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -40,7 +40,8 @@ CREATE TABLE `especialidades` (
 --
 
 INSERT INTO `especialidades` (`espec_id`, `psico_id`, `especialidad`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Psicología Infantil', '2024-05-07 09:40:50', NULL);
+(1, 1, 'Terapia Adultos', '2024-05-16 17:24:09', '2024-05-16 17:24:09'),
+(2, 2, 'Terapia Pareja', '2024-05-19 20:45:43', '2024-05-19 20:45:43');
 
 -- --------------------------------------------------------
 
@@ -67,17 +68,12 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `files` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `paciente_id` bigint(20) UNSIGNED NOT NULL,
+  `sesion_id` bigint(20) UNSIGNED NOT NULL,
+  `tipo_doc` varchar(255) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `files`
---
-
-INSERT INTO `files` (`id`, `paciente_id`, `url`, `created_at`, `updated_at`) VALUES
-(1, 3, '/storage/comprobantes/9v9fQnb5AFT0uhguv8DR7dD6yrE0wxpvcIL9cSgq.png', '2024-05-05 17:40:15', '2024-05-05 17:40:15');
 
 -- --------------------------------------------------------
 
@@ -104,11 +100,16 @@ CREATE TABLE `horarios` (
 --
 
 INSERT INTO `horarios` (`id`, `psicologo_id`, `hora_inicio_maniana`, `hora_fin_maniana`, `hora_inicio_tarde`, `hora_fin_tarde`, `dia`, `created_at`, `updated_at`, `isDisponibleManiana`, `isDisponibleTarde`) VALUES
-(1, 1, '11:00:00', '11:59:00', '00:00:00', '00:00:00', 'lunes', '2024-05-05 15:57:14', '2024-05-06 13:27:19', 0, 0),
-(2, 1, '09:00:00', '11:00:00', '16:00:00', '17:00:00', 'martes', '2024-05-05 15:57:14', '2024-05-06 13:27:09', 0, 0),
-(3, 1, '09:00:00', '11:59:00', '00:00:00', '00:00:00', 'miercoles', '2024-05-05 15:57:14', '2024-05-06 13:26:48', 0, 0),
-(4, 1, '00:00:00', '00:00:00', '14:00:00', '17:00:00', 'jueves', '2024-05-05 15:57:14', '2024-05-06 13:27:24', 0, 0),
-(5, 1, '09:00:00', '11:59:00', '00:00:00', '00:00:00', 'viernes', '2024-05-05 15:57:14', '2024-05-06 13:14:12', 0, 0);
+(1, 1, NULL, NULL, NULL, NULL, 'lunes', '2024-05-16 17:24:09', '2024-05-16 17:24:09', 0, 0),
+(2, 1, NULL, NULL, NULL, NULL, 'martes', '2024-05-16 17:24:09', '2024-05-16 17:24:09', 0, 0),
+(3, 1, NULL, NULL, NULL, NULL, 'miercoles', '2024-05-16 17:24:09', '2024-05-16 17:24:09', 0, 0),
+(4, 1, NULL, NULL, NULL, NULL, 'jueves', '2024-05-16 17:24:09', '2024-05-16 17:24:09', 0, 0),
+(5, 1, NULL, NULL, NULL, NULL, 'viernes', '2024-05-16 17:24:09', '2024-05-16 17:24:09', 0, 0),
+(6, 2, NULL, NULL, NULL, NULL, 'lunes', '2024-05-19 20:45:43', '2024-05-19 20:45:43', 0, 0),
+(7, 2, NULL, NULL, NULL, NULL, 'martes', '2024-05-19 20:45:43', '2024-05-19 20:45:43', 0, 0),
+(8, 2, NULL, NULL, NULL, NULL, 'miercoles', '2024-05-19 20:45:43', '2024-05-19 20:45:43', 0, 0),
+(9, 2, NULL, NULL, NULL, NULL, 'jueves', '2024-05-19 20:45:43', '2024-05-19 20:45:43', 0, 0),
+(10, 2, NULL, NULL, NULL, NULL, 'viernes', '2024-05-19 20:45:43', '2024-05-19 20:45:43', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -138,9 +139,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (9, '2024_04_27_235432_table_paciente', 1),
 (10, '2024_05_05_150927_table_files', 1),
 (11, '2024_05_05_171948_table_horarios', 1),
-(12, '2024_05_07_082242_table_especialidades', 2),
-(13, '2024_05_07_082937_table_sesiones', 2),
-(14, '2024_05_07_085453_table_pagos', 3);
+(12, '2024_05_07_082242_table_especialidades', 1),
+(13, '2024_05_07_082937_table_sesiones', 1),
+(14, '2024_05_07_085453_table_pagos', 1);
 
 -- --------------------------------------------------------
 
@@ -172,8 +173,13 @@ CREATE TABLE `model_has_roles` (
 
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 2),
+(1, 'App\\Models\\User', 9),
 (2, 'App\\Models\\User', 3),
 (2, 'App\\Models\\User', 4),
+(2, 'App\\Models\\User', 5),
+(2, 'App\\Models\\User', 6),
+(2, 'App\\Models\\User', 7),
+(2, 'App\\Models\\User', 8),
 (4, 'App\\Models\\User', 1);
 
 -- --------------------------------------------------------
@@ -199,8 +205,12 @@ CREATE TABLE `pacientes` (
 --
 
 INSERT INTO `pacientes` (`id`, `user_id`, `psicologo_id`, `tipo_paciente`, `ocupacion`, `estado`, `created_at`, `updated_at`, `isAlta`) VALUES
-(1, 3, 1, 'mayor', 'trabajador', 'ACTIVO', '2024-05-05 17:39:36', '2024-05-05 17:39:36', 0),
-(2, 4, NULL, 'mayor', 'trabajador', 'ACTIVO', '2024-05-07 12:47:02', '2024-05-07 12:47:02', 0);
+(1, 3, 1, 'mayor', 'test', 'ACTIVO', '2024-05-16 17:28:51', '2024-05-19 19:11:30', 0),
+(2, 4, 1, 'mayor', 'test', 'INACTIVO', '2024-05-17 10:42:12', '2024-05-19 19:11:37', 0),
+(3, 5, 1, 'mayor', NULL, 'INACTIVO', '2024-05-18 11:28:50', '2024-05-19 18:58:20', 0),
+(4, 6, 1, 'mayor', 'no especificado', 'INACTIVO', '2024-05-18 11:32:12', '2024-05-19 19:10:26', 0),
+(5, 7, 1, 'mayor', 'trabajador', 'ACTIVO', '2024-05-19 19:09:26', '2024-05-19 19:09:26', 0),
+(6, 8, NULL, 'mayor', 'trabajador', 'ACTIVO', '2024-05-19 20:11:51', '2024-05-19 20:11:51', 0);
 
 -- --------------------------------------------------------
 
@@ -224,9 +234,10 @@ CREATE TABLE `pagos` (
 --
 
 INSERT INTO `pagos` (`id`, `servicio`, `institucion`, `convenio`, `sesion_id`, `created_at`, `updated_at`, `isTerminado`) VALUES
-(1, 'Servicio de terapia', 'Institución XYZ', 'Convenio ABC', 1, NULL, NULL, 0),
-(2, 'Servicio de terapia', 'Institución', 'Convenio', 2, '2024-05-07 14:08:49', '2024-05-07 14:08:49', 0),
-(3, 'Servicio de terapia', 'Institución', 'Convenio', 3, '2024-05-07 14:48:41', '2024-05-07 14:48:41', 0);
+(1, 'Terapia Adultos', '', '', 1, '2024-05-16 17:28:51', '2024-05-16 17:28:51', 0),
+(2, 'Terapia Adultos', '', '', 2, '2024-05-17 10:42:12', '2024-05-17 10:42:12', 0),
+(3, 'Terapia Adultos', '', '', 3, '2024-05-18 11:28:50', '2024-05-18 11:28:50', 0),
+(4, 'Terapia Adultos', '', '', 4, '2024-05-18 11:32:12', '2024-05-18 11:32:12', 0);
 
 -- --------------------------------------------------------
 
@@ -265,6 +276,31 @@ CREATE TABLE `permissions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'listadoAllSesiones', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(2, 'listaPaciente', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(3, 'listaPsicologo', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(4, 'psicologo.store', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(5, 'psicologo.edit', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(6, 'psicologo.del', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(7, 'paciente.listar', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(8, 'homePsicologoHorario', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(9, 'psicologo.editHorario_x_dia', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(10, 'psicologo.inhabilitarHorario', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(11, 'psicologo.addHorario', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(12, 'psicologo.notificaciones', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(13, 'homePacienteSesiones', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(14, 'paciente.files', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(15, 'cambiarContraseña', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(16, 'paciente.store', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(17, 'paciente.edit', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(18, 'paciente.del', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(19, 'paciente.delSesion', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13');
 
 -- --------------------------------------------------------
 
@@ -309,7 +345,8 @@ CREATE TABLE `psicologos` (
 --
 
 INSERT INTO `psicologos` (`id`, `user_id`, `estado`, `created_at`, `updated_at`, `fecha_funcion_titulo`, `universidad`, `ciudad_residencia`, `pais_residencia`, `descripcion_cv`) VALUES
-(1, 2, 'ACTIVO', '2024-05-05 15:57:14', '2024-05-05 15:57:14', '2024-05-01', 'test', 'test', 'test', 'test');
+(1, 2, 'ACTIVO', '2024-05-16 17:24:09', '2024-05-19 20:44:07', '2024-05-01', 'test', 'test', 'test', 'test'),
+(2, 9, 'ACTIVO', '2024-05-19 20:45:43', '2024-05-19 20:45:43', '2024-05-08', 'test', 'test', 'test', 'test');
 
 -- --------------------------------------------------------
 
@@ -330,10 +367,10 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'Psicologo', 'web', '2024-05-05 15:56:01', '2024-05-05 15:56:01'),
-(2, 'Paciente', 'web', '2024-05-05 15:56:01', '2024-05-05 15:56:01'),
-(3, 'Tutor', 'web', '2024-05-05 15:56:01', '2024-05-05 15:56:01'),
-(4, 'Administrador', 'web', '2024-05-05 15:56:01', '2024-05-05 15:56:01');
+(1, 'Psicologo', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(2, 'Paciente', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(3, 'Tutor', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13'),
+(4, 'Administrador', 'web', '2024-05-16 17:22:13', '2024-05-16 17:22:13');
 
 -- --------------------------------------------------------
 
@@ -345,6 +382,39 @@ CREATE TABLE `role_has_permissions` (
   `permission_id` bigint(20) UNSIGNED NOT NULL,
   `role_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `role_has_permissions`
+--
+
+INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
+(1, 4),
+(2, 4),
+(3, 4),
+(4, 4),
+(5, 4),
+(6, 4),
+(7, 1),
+(7, 4),
+(8, 1),
+(9, 1),
+(10, 1),
+(11, 1),
+(12, 1),
+(13, 2),
+(14, 2),
+(15, 1),
+(15, 2),
+(15, 3),
+(15, 4),
+(16, 1),
+(16, 4),
+(17, 1),
+(17, 4),
+(18, 1),
+(18, 4),
+(19, 1),
+(19, 2);
 
 -- --------------------------------------------------------
 
@@ -375,9 +445,10 @@ CREATE TABLE `sesions` (
 --
 
 INSERT INTO `sesions` (`id`, `estado`, `pago_confirmado`, `fecha_hora_inicio`, `fecha_hora_fin`, `paciente_id`, `psicologo_id`, `created_at`, `updated_at`, `descripcion_sesion`, `calificacion`, `calificacion_descripcion`, `contador_cancelaciones`, `solicitante`, `cancelador`) VALUES
-(1, 'Activa', 0, '2024-05-07 08:00:00', '2024-05-07 09:00:00', 1, 1, NULL, '2024-05-07 12:35:29', 'Primera sesión', NULL, NULL, NULL, 'paciente', NULL),
-(2, 'Activa', 1, '2024-05-07 08:00:00', '2024-05-07 09:00:00', 1, 1, '2024-05-07 14:08:49', '2024-05-07 14:08:49', 'Descripción de la sesión', NULL, NULL, NULL, 'Paciente', NULL),
-(3, 'Activa', 1, '2024-05-07 08:00:00', '2024-05-07 09:00:00', 2, 1, '2024-05-07 14:48:41', '2024-05-07 14:48:41', 'Descripción de la sesión', NULL, NULL, NULL, 'Paciente', NULL);
+(1, 'Cancelado', 0, '2024-05-23 20:29:15', '2024-05-22 22:00:00', 1, 1, '2024-05-16 17:28:51', '2024-05-19 22:56:01', 'test', NULL, NULL, NULL, '1', NULL),
+(2, 'activo', 0, '2024-05-22 13:44:18', '2024-05-22 22:00:00', 2, 1, '2024-05-17 10:42:12', '2024-05-17 10:42:12', 'test', NULL, NULL, NULL, '2', NULL),
+(3, 'activo', 0, '2024-05-22 13:44:18', '2024-05-22 13:44:18', 3, 1, '2024-05-18 11:28:50', '2024-05-18 11:28:50', 'test', NULL, NULL, NULL, '3', NULL),
+(4, 'activo', 0, '2024-05-22 13:44:18', '2024-05-22 13:44:18', 4, 1, '2024-05-18 11:32:12', '2024-05-18 11:32:12', 'test', NULL, NULL, NULL, '4', NULL);
 
 -- --------------------------------------------------------
 
@@ -393,6 +464,8 @@ CREATE TABLE `users` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
+  `profile_photo_path` varchar(255) DEFAULT NULL,
+  `activated` tinyint(4) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `canal_comunicacion` varchar(255) DEFAULT NULL,
@@ -413,11 +486,16 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `apellidos`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `canal_comunicacion`, `contador_bloqueos`, `bloqueo_permanente`, `fecha_nacimiento`, `ocupacion`, `ci`, `codigo_pais_telefono`, `telefono`, `pregunta_seguridad_a`, `pregunta_seguridad_b`, `respuesta_seguridad_a`, `respuesta_seguridad_b`) VALUES
-(1, 'admin', NULL, 'admin@gmail.com', NULL, '$2y$12$hhOSuyZ19/eLVIcXjOBSZuH.ZJsdBWgwL/0ttgh1LiG0NJx13iANS', NULL, '2024-05-05 15:56:01', '2024-05-05 15:56:01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'psicologo', 'test', 'psicologo@gmail.com', NULL, '$2y$12$Tp9K3VgpE6H.ZZHSV1d65OZGfJpFZXJUOI580m8OhsPwdr1i6n8Lm', NULL, '2024-05-05 15:57:14', '2024-05-05 15:57:14', NULL, 0, NULL, '2024-04-30', NULL, '7863242', NULL, '7986544', 'test', 'test', NULL, NULL),
-(3, 'Juan', 'Pérez', 'paciente@gmail.com', NULL, '$2y$12$igV.XH5nUxmPrqCB108hZuCULcrRirniyE8e1lZWuhlnsycflFyXu', NULL, '2024-05-05 17:39:36', '2024-05-05 17:39:36', NULL, 0, NULL, '2024-05-01', NULL, '705509', NULL, '798798465', 'test', 'test', NULL, NULL),
-(4, 'Fernando', 'Garcia', 'fernando@gmail.com', NULL, '$2y$12$cLo6t.U5i74i1Uj4Ie1/OeO2xe1rOIIAaf1AkVgTmvBzd9Q2TqIDm', NULL, '2024-05-07 12:47:02', '2024-05-07 12:47:02', NULL, 0, NULL, '2024-04-29', NULL, '7700000', NULL, '7651679645', 'test', 'test', NULL, NULL);
+INSERT INTO `users` (`id`, `name`, `apellidos`, `email`, `email_verified_at`, `password`, `remember_token`, `profile_photo_path`, `activated`, `created_at`, `updated_at`, `canal_comunicacion`, `contador_bloqueos`, `bloqueo_permanente`, `fecha_nacimiento`, `ocupacion`, `ci`, `codigo_pais_telefono`, `telefono`, `pregunta_seguridad_a`, `pregunta_seguridad_b`, `respuesta_seguridad_a`, `respuesta_seguridad_b`) VALUES
+(1, 'admin', NULL, 'admin@gmail.com', NULL, '$2y$12$JnzELnIp/6n1G/bH7p.u3eWuIrkSQ1ZBXXz9J6T2CdeFtF1jQYK.2', NULL, NULL, NULL, '2024-05-16 17:22:13', '2024-05-16 17:22:13', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'Psicologo', 'Perez', 'psicologo@gmail.com', NULL, '$2y$12$IWUKgwROqpsIGlJz4ZOy0uAcvcqTXtl9VReoWNWKZpKsb78D473v2', NULL, NULL, NULL, '2024-05-16 17:24:09', '2024-05-19 20:43:32', NULL, 0, NULL, '2024-04-30', NULL, '7863242', NULL, '70203100', '1+1', NULL, '2', NULL),
+(3, 'Eddy', 'test', 'paciente@gmail.com', NULL, '$2y$12$x04v9eM1Oqgbl9nTW3Q7suZhoWOzn.iYBhxttv1dFvGX9Uh.FMhnC', NULL, NULL, 1, '2024-05-16 17:28:51', '2024-05-19 19:11:30', NULL, 0, NULL, '2024-05-09', NULL, '7700000', NULL, '70102030', '1+1', NULL, '2', NULL),
+(4, 'update', 'test', 'test@gmail.com', NULL, '$2y$12$NPvRDGVhSjhQ8Pn7adt1BuJj2GFMJwHiXTQhAvoxemkm8CUJ3DfMq', NULL, NULL, 1, '2024-05-17 10:42:12', '2024-05-19 18:42:42', NULL, 0, NULL, '2024-05-01', NULL, '7020300', NULL, '70203010', '1+1', NULL, '2', NULL),
+(5, 'prueba', 'prueba', 'paciente2@gmail.com', NULL, '$2y$12$82BpetOotoLN8C0WFXYOou4H0x5lbWSIwTCpeY5anrm.ZtKbs2PDG', NULL, NULL, 1, '2024-05-18 11:28:50', '2024-05-18 11:28:50', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '70203010', NULL, NULL, NULL, NULL),
+(6, 'paciente', 'test', 'paciente3@gmail.com', NULL, '$2y$12$y.Cm7TYAaYjYa1BceLRNDuM.Rlr9wgx9GNJDs3RoSC5tkkEbz/HJ.', NULL, NULL, 1, '2024-05-18 11:32:12', '2024-05-18 11:32:12', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '70203010', NULL, NULL, NULL, NULL),
+(7, 'Jose', 'Velarde', 'jose@gmail.com', NULL, '$2y$12$0ENthUuuYjy8cYJguRXV/.nE0hSC5vHsCZ5P0jL.pHy/TIgTOwgdK', NULL, NULL, NULL, '2024-05-19 19:09:26', '2024-05-19 19:09:26', NULL, 0, NULL, '2024-05-01', NULL, '7020300', NULL, '70203010', '1+1', NULL, '2', NULL),
+(8, 'Juan', 'Valle', 'juan@gmail.com', NULL, '$2y$12$54kG1242njyuJxVFBXkTvenDPJG4lEDKnC3Tb2z8/us14oiJfb7K2', NULL, NULL, NULL, '2024-05-19 20:11:51', '2024-05-19 20:11:51', NULL, 0, NULL, '2024-04-29', NULL, '7700000', NULL, '70203010', '1+1', NULL, '2', NULL),
+(9, 'Psicologo 2', 'Garcia', 'psicologo2@gmail.com', NULL, '$2y$12$sQ/Klj1WYogAEJ15/DMhzeW1E/gN7zJerlZILUP4Ze316zv5bzffa', NULL, NULL, NULL, '2024-05-19 20:45:43', '2024-05-19 20:45:43', NULL, 0, NULL, '2024-04-29', NULL, '7863242', NULL, '70203010', '1+1', NULL, '2', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -548,7 +626,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `especialidades`
 --
 ALTER TABLE `especialidades`
-  MODIFY `espec_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `espec_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -560,13 +638,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `files`
 --
 ALTER TABLE `files`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `horarios`
 --
 ALTER TABLE `horarios`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -578,19 +656,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `pacientes`
 --
 ALTER TABLE `pacientes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `personal_access_tokens`
@@ -602,7 +680,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT de la tabla `psicologos`
 --
 ALTER TABLE `psicologos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -614,13 +692,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `sesions`
 --
 ALTER TABLE `sesions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

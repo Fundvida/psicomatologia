@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Paciente;
-use App\Models\Pago;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Sesion;
+use App\Models\Psicologo;
 
 class PacienteController extends Controller
 {
@@ -28,6 +28,10 @@ class PacienteController extends Controller
 
     public function store(Request $request)
     {
+        $userL = Auth::user();
+        $psicologo = Psicologo::where('user_id', $userL->id)->first();
+        $psicologo_id = $psicologo ? $psicologo->id : null;
+
         if ($request->paciente_id == "") {
             $user = new User();
             $user->name                 = $request->nombres;
@@ -40,8 +44,9 @@ class PacienteController extends Controller
             $user->ci                   = $request->numeroCI;
             $user->codigo_pais_telefono = $request->codigo_pais;
             $user->telefono             = $request->telefono;
-            $user->pregunta_seguridad_a = $request->preguntaSeguridad1;
-            $user->pregunta_seguridad_b = $request->preguntaSeguridad2;
+            $user->pregunta_seguridad_a = $request->preguntaSeguridad;
+            $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+            
             $user->assignRole('Paciente');
 
             $user->save();
@@ -52,6 +57,7 @@ class PacienteController extends Controller
             $paciente->ocupacion = $request->ocupacion;
             $paciente->isAlta = false;
             $paciente->estado = "ACTIVO";
+            $paciente->psicologo_id = $psicologo_id;
 
             $paciente->save();
             return redirect()->route('listaPaciente')->with('resultado', "registrado");
@@ -60,6 +66,7 @@ class PacienteController extends Controller
             $paciente->tipo_paciente = $request->tipoUsuario;
             $paciente->ocupacion = $request->ocupacion;
             $paciente->isAlta = false;
+            $paciente->psicologo_id = $psicologo_id;
             $paciente->save();
 
             $user = User::findOrFail($paciente->user_id);
@@ -72,8 +79,8 @@ class PacienteController extends Controller
             $user->ci                   = $request->numeroCI;
             $user->codigo_pais_telefono = $request->codigo_pais;
             $user->telefono             = $request->telefono;
-            $user->pregunta_seguridad_a = $request->preguntaSeguridad1;
-            $user->pregunta_seguridad_b = $request->preguntaSeguridad2;
+            $user->pregunta_seguridad_a = $request->preguntaSeguridad;
+            $user->respuesta_seguridad_a = $request->respuestaSeguridad;
             $user->save();
 
             return redirect()->route('listaPaciente')->with('resultado', "actualizado");
@@ -95,6 +102,8 @@ class PacienteController extends Controller
     {
         $paciente = Paciente::findOrFail($id);
         $paciente->estado = "INACTIVO";
+        //$paciente->motivo = $request->motivo;
+        
         $paciente->save();
 
         return redirect()->route('listaPaciente')->with('resultado', "eliminado");
@@ -131,9 +140,12 @@ class PacienteController extends Controller
         $user = Auth::user();
         $paciente = Paciente::select('id')
                     ->where('user_id', $user->id)->first();
-
-        $sesion = Sesion::where('id', $request->sesion_id)
-        ->where('paciente_id', $paciente->id)->first();
+        if($paciente){
+            $sesion = Sesion::where('id', $request->sesion_id)
+                ->where('paciente_id', $paciente->id)->first();
+        }else {
+            $sesion = Sesion::where('id', $request->sesion_id)->first();
+        }
 
         $sesion->estado = 'Cancelado';
         $sesion->save();
@@ -145,5 +157,31 @@ class PacienteController extends Controller
     {
         $pacientes = Paciente::all();
         return view('listaPaciente', compact('pacientes'));
+    }
+
+    public function listaPacienteXpsicologo_()
+    {
+        //$pacientes = Paciente::all();
+        return view('listaPacienteXPsicologo');
+    }
+
+    public function listaPacienteXPsicologo (){
+        $user = Auth::user();
+        $psicologo = Psicologo::where('user_id', $user->id)->first();
+        //$datos = User::
+        if($psicologo){
+            $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+                  ->where('pacientes.psicologo_id', $psicologo->id) 
+                  ->where('pacientes.estado', 'ACTIVO')
+                  ->select('users.*', 'pacientes.*') 
+                  ->get();
+        } else {
+            $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+                  ->where('pacientes.estado', 'ACTIVO')
+                  ->select('users.*', 'pacientes.*') 
+                  ->get();
+        }
+
+        return response()->json($datos);
     }
 }

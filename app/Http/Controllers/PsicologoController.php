@@ -39,13 +39,13 @@ class PsicologoController extends Controller
             $user->email                = $request->correoElectronico;
             $user->password             = $request->contrasena;
             //$user->role                 = "psicologo";
-            $user->contador_bloqueos    = 0;
-            $user->fecha_nacimiento     = $request->fechaNacimiento;
-            $user->ci                   = $request->ci;
-            $user->codigo_pais_telefono = $request->codigo_pais;
-            $user->telefono             = $request->telefono;
-            $user->pregunta_seguridad_a = $request->preguntaSeguridad1;
-            $user->pregunta_seguridad_b = $request->preguntaSeguridad2;
+            $user->contador_bloqueos     = 0;
+            $user->fecha_nacimiento      = $request->fechaNacimiento;
+            $user->ci                    = $request->ci;
+            $user->codigo_pais_telefono  = $request->codigo_pais;
+            $user->telefono              = $request->telefono;
+            $user->pregunta_seguridad_a  = $request->preguntaSeguridad;
+            $user->respuesta_seguridad_a = $request->respuestaSeguridad;
             $user->assignRole('psicologo');
 
             $user->save();
@@ -101,8 +101,8 @@ class PsicologoController extends Controller
             $user->ci                   = $request->ci;
             $user->codigo_pais_telefono = $request->codigo_pais;
             $user->telefono             = $request->telefono;
-            $user->pregunta_seguridad_a = $request->preguntaSeguridad1;
-            $user->pregunta_seguridad_b = $request->preguntaSeguridad2;
+            $user->pregunta_seguridad_a = $request->preguntaSeguridad;
+            $user->respuesta_seguridad_a = $request->respuestaSeguridad;
             $user->save();
 
             $especialidad = Especialidad::where('psico_id', $psicologo->id)->first();
@@ -131,6 +131,8 @@ class PsicologoController extends Controller
     {
         $psicologo = Psicologo::findOrFail($id);
         $psicologo->estado = "INACTIVO";
+        //$psciologo->motivo = $request->motivo;
+
         $psicologo->save();
 
         return redirect()->route('listaPsicologo')->with('resultado', "eliminado");
@@ -320,6 +322,15 @@ class PsicologoController extends Controller
         $psicologos = Psicologo::all();
 
         return view('listaPsicologo', compact('psicologos'));
+    }
+
+    public function getPsicologosL (){
+        $psicologos = User::join('psicologos', 'users.id', '=', 'psicologos.user_id')
+                    ->where('psicologos.estado', 'ACTIVO')
+                    ->select('users.*', 'psicologos.*')
+                    ->get();
+
+        return response()->json($psicologos);
     }
 
     public function getAllSesiones(){

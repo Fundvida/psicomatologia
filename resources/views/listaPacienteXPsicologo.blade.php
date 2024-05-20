@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SISTEMA DE PSICOLOGÍA</title>
+    <title>Listado de pacientes</title>
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -368,39 +368,37 @@
 
     <!-- Menú lateral -->
     <div class="custom-sidebar">
-        <ul>
-            <li class="custom-menu-item custom-font-alt">PACIENTES
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
-                </ul>
-            </li>
-            <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="{{ route('listaPsicologo') }}" style="color: #fff;">Psicologos</a></li>
-                </ul>
-            </li>
-            <li class="custom-menu-item custom-font-alt">SESIONES
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="#" style="color: #fff;">Lista de Sesiones</a></li>
-                </ul>
-            </li>
-            <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="#" style="color: #fff;">Datos Personales</a></li>
-                </ul>
-            </li>
-            <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="#" style="color: #fff;">Cambiar Contraseña</a></li>
-                </ul>
-            </li>
-            <li class="custom-menu-item custom-font-alt">NOTIFICACIONES
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="#" style="color: #fff;">Aviso de Pagos</a></li>
-                </ul>
-            </li>
+    <ul>
+    <li class="custom-menu-item custom-font-alt">PACIENTES
+        <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+        <li><a href="{{ route('psicologo.pacientes') }}" style="color: #fff;">Pacientes</a></li>
         </ul>
-    </div>
+    </li>
+    <li class="custom-menu-item custom-font-alt">SESIONES
+        <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+        <li><a href="{{ route('psicologo.sesiones') }}" style="color: #fff;">Sesiones</a></li>
+        </ul>
+        <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+            <li><a href="{{ route('homePsicologoHorario') }}" style="color: #fff;">Mis Horarios</a></li>
+        </ul>
+    </li>
+    <li class="custom-menu-item custom-font-alt">CALENDARIO
+        <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+        <li><a href="#" style="color: #fff;">Calendario</a></li>
+        </ul>
+    </li>
+    <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
+        <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+        <li><a href="#" style="color: #fff;">Datos Personales</a></li>
+        </ul>
+    </li>
+    <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA
+        <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+        <li><a href="#" style="color: #fff;">Cambiar Contraseña</a></li>
+        </ul>
+    </li>
+    </ul>
+</div>
 
     <div class="modal fade" id="formularioRegistroModal" tabindex="-1" aria-labelledby="formularioRegistroModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -497,7 +495,7 @@
             <div class="container px-5">
                 <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                     <!-- Título -->
-                    <h2 class="display-3 lh-1 mb-5 font-alt">Listado de todos los Pacientes</h2>
+                    <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Pacientes Asignados</h2>
                     <!-- <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p> -->
                     <div class="text-end mb-3">
                         <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="limpiar()">
