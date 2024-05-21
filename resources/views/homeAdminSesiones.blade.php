@@ -404,7 +404,7 @@
                 <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                     <!-- Título -->
                     <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
-                    <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p>
+                    <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Listado de todas las sesiones programadas y/o ya realizadas de todos los psicologos.</p>
                     <!-- Tabla de pacientes -->
                     <div class="custom-table-container shadow" style="height: 500px;">
                         <div class="table-responsive">

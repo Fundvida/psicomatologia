@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('calificacion_descripcion')->nullable();
             $table->smallInteger('contador_cancelaciones')->nullable();
             $table->string('solicitante');
-            $table->string('justificacion');
+            $table->string('justificacion')->nullable();
             $table->string('cancelador')->nullable();
         });
         

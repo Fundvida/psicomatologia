@@ -375,15 +375,29 @@
                     <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
                 </ul>
             </li>
-            <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
-                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="{{ route('listaPsicologo') }}" style="color: #fff;">Psicologos</a></li>
-                </ul>
-            </li>
+            @can('listaPsicologo')
+                <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
+                    <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                        <li><a href="{{ route('listaPsicologo') }}" style="color: #fff;">Psicologos</a></li>
+                    </ul>
+                </li>
+            @endcan
             <li class="custom-menu-item custom-font-alt">SESIONES
+                @can('listadoAllSesiones')
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                    <li><a href="#" style="color: #fff;">Lista de Sesiones</a></li>
+                    <li><a href="{{ route('listadoAllSesiones') }}" style="color: #fff;">Lista de Sesiones</a></li>
                 </ul>
+                @endcan
+                @can('psicologo.sesiones')
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="{{ route('psicologo.sesiones') }}" style="color: #fff;">Sesiones</a></li>
+                </ul>
+                @endcan
+                @can('homePsicologoHorario')
+                <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                    <li><a href="{{ route('homePsicologoHorario') }}" style="color: #fff;">Mis Horarios</a></li>
+                </ul>
+                @endcan
             </li>
             <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
@@ -498,7 +512,7 @@
             <div class="container px-5">
                 <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                     <!-- Título -->
-                    <h2 class="display-3 lh-1 mb-5 font-alt">Listado de todos los Pacientes</h2>
+                    <h2 class="display-3 lh-1 mb-5 font-alt" id="title-user">Listado de todos los Pacientes</h2>
                     <!-- <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p> -->
                     <div class="text-end mb-3">
                         <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="limpiar()">
@@ -522,14 +536,14 @@
                                 <tbody id="pacientes-body">
                                     
                                     <!-- Registro 1 -->
-                                    <tr>
+                                    <!-- <tr>
                                         <td>Jessica</td>
                                         <td>Lopez</td>
                                         <td>Manuel</td>
                                         <td>Torrez</td>
                                         <td>Pendiente</td>
                                         <td>Pendiente</td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -597,29 +611,39 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    //console.log(data);
+                    console.log('asdf')
+                    console.log(data);
+        
+                    var pacientes = data.datos;
+                    var rol = data.rol;
+                    var titleElement = document.getElementById('title-user');
+
+                    console.log('Rol del usuario:', rol);
+                    if(rol == 'Administrador'){
+                        titleElement.textContent = 'Listado de todos los Pacientes';
+                    } else if (rol == 'Psicologo'){
+                        titleElement.textContent = 'Listado de Paciente Designados';
+                    }
+
                     $('#pacientes-body').empty();
-                
-                // Recorrer los datos y agregar filas a la tabla
-                $.each(data, function(index, paciente) {
-                    var f_nacimiento = paciente.fecha_nacimiento == null? 'No especificado': paciente.fecha_nacimiento;
-                    var paciente_ci = paciente.ci == null? 'No especificado': paciente.ci;
+                    $.each(pacientes, function(index, paciente) {
+                        var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
+                        var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
 
-                    $('#pacientes-body').append(`
-                        <tr>
-                            <td>${paciente_ci}</td>
-                            <td>${paciente.name} ${paciente.apellidos}</td>
-                            <td>${paciente.telefono}</td>
-                            <td>${paciente.tipo_paciente}</td>
-                            <td>${f_nacimiento}</td>
-                            <td class="action-icons"> 
-                                <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
-                                <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
-                            </td>
-                        </tr>
-                    `);
-                });
-
+                        $('#pacientes-body').append(`
+                            <tr>
+                                <td>${paciente_ci}</td>
+                                <td>${paciente.name} ${paciente.apellidos}</td>
+                                <td>${paciente.telefono}</td>
+                                <td>${paciente.tipo_paciente}</td>
+                                <td>${f_nacimiento}</td>
+                                <td class="action-icons"> 
+                                    <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${pacientes.id})" title="Editar"></i>
+                                    <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${pacientes.id})" title="Eliminar Sesión"></i>
+                                </td>
+                            </tr>
+                        `);
+                    });
                 }
             });
         });
@@ -739,35 +763,6 @@
                         }); 
                 }
             });
-            // Swal.fire({
-            //     title: "¿Estas seguro?",
-            //     text: "Estas seguro que eliminar el registro?",
-            //     icon: "warning",
-            //     showCancelButton: true,
-            //     confirmButtonColor: "#3085d6",
-            //     cancelButtonColor: "#d33",
-            //     confirmButtonText: "Si!"
-            // }).then((result) => {
-            //     if (result.isConfirmed) {
-            //         $.ajax({
-            //             url: '/paciente/' + id + '/del',
-            //             type: 'GET',
-            //             success: function(response) {
-            //                 Swal.fire({
-            //                     title: "Eliminado!",
-            //                     text: "Paciente eliminado exitosamente.",
-            //                     icon: "success"
-            //                 }).then(function() {
-            //                     // Recargar la página
-            //                     window.location.reload();
-            //                 });
-            //             },
-            //             error: function(xhr, status, error) {
-            //                 console.log(error);
-            //             }
-            //         });
-            //     }
-            // });
         }
     </script>
     @if(session('resultado') === 'registrado')

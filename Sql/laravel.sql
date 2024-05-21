@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-05-2024 a las 03:05:28
+-- Tiempo de generación: 21-05-2024 a las 17:37:03
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -197,20 +197,21 @@ CREATE TABLE `pacientes` (
   `estado` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `isAlta` tinyint(1) NOT NULL
+  `isAlta` tinyint(1) NOT NULL,
+  `motivo` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `pacientes`
 --
 
-INSERT INTO `pacientes` (`id`, `user_id`, `psicologo_id`, `tipo_paciente`, `ocupacion`, `estado`, `created_at`, `updated_at`, `isAlta`) VALUES
-(1, 3, 1, 'mayor', 'test', 'ACTIVO', '2024-05-16 17:28:51', '2024-05-19 19:11:30', 0),
-(2, 4, 1, 'mayor', 'test', 'INACTIVO', '2024-05-17 10:42:12', '2024-05-19 19:11:37', 0),
-(3, 5, 1, 'mayor', NULL, 'INACTIVO', '2024-05-18 11:28:50', '2024-05-19 18:58:20', 0),
-(4, 6, 1, 'mayor', 'no especificado', 'INACTIVO', '2024-05-18 11:32:12', '2024-05-19 19:10:26', 0),
-(5, 7, 1, 'mayor', 'trabajador', 'ACTIVO', '2024-05-19 19:09:26', '2024-05-19 19:09:26', 0),
-(6, 8, NULL, 'mayor', 'trabajador', 'ACTIVO', '2024-05-19 20:11:51', '2024-05-19 20:11:51', 0);
+INSERT INTO `pacientes` (`id`, `user_id`, `psicologo_id`, `tipo_paciente`, `ocupacion`, `estado`, `created_at`, `updated_at`, `isAlta`, `motivo`) VALUES
+(1, 3, 1, 'mayor', 'test', 'ACTIVO', '2024-05-16 17:28:51', '2024-05-19 19:11:30', 0, NULL),
+(2, 4, 1, 'mayor', 'test', 'INACTIVO', '2024-05-17 10:42:12', '2024-05-19 19:11:37', 0, NULL),
+(3, 5, 1, 'mayor', NULL, 'INACTIVO', '2024-05-18 11:28:50', '2024-05-19 18:58:20', 0, NULL),
+(4, 6, 1, 'mayor', 'no especificado', 'INACTIVO', '2024-05-18 11:32:12', '2024-05-19 19:10:26', 0, NULL),
+(5, 7, 1, 'mayor', 'trabajador', 'ACTIVO', '2024-05-19 19:09:26', '2024-05-19 19:09:26', 0, NULL),
+(6, 8, NULL, 'mayor', 'trabajador', 'INACTIVO', '2024-05-19 20:11:51', '2024-05-20 11:37:08', 0, 'abandono');
 
 -- --------------------------------------------------------
 
@@ -337,16 +338,17 @@ CREATE TABLE `psicologos` (
   `universidad` varchar(255) NOT NULL,
   `ciudad_residencia` varchar(255) NOT NULL,
   `pais_residencia` varchar(255) NOT NULL,
-  `descripcion_cv` varchar(255) DEFAULT NULL
+  `descripcion_cv` varchar(255) DEFAULT NULL,
+  `motivo` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `psicologos`
 --
 
-INSERT INTO `psicologos` (`id`, `user_id`, `estado`, `created_at`, `updated_at`, `fecha_funcion_titulo`, `universidad`, `ciudad_residencia`, `pais_residencia`, `descripcion_cv`) VALUES
-(1, 2, 'ACTIVO', '2024-05-16 17:24:09', '2024-05-19 20:44:07', '2024-05-01', 'test', 'test', 'test', 'test'),
-(2, 9, 'ACTIVO', '2024-05-19 20:45:43', '2024-05-19 20:45:43', '2024-05-08', 'test', 'test', 'test', 'test');
+INSERT INTO `psicologos` (`id`, `user_id`, `estado`, `created_at`, `updated_at`, `fecha_funcion_titulo`, `universidad`, `ciudad_residencia`, `pais_residencia`, `descripcion_cv`, `motivo`) VALUES
+(1, 2, 'ACTIVO', '2024-05-16 17:24:09', '2024-05-19 20:44:07', '2024-05-01', 'test', 'test', 'test', 'test', NULL),
+(2, 9, 'ACTIVO', '2024-05-19 20:45:43', '2024-05-20 11:21:15', '2024-05-08', 'test', 'test', 'test', 'test', 'abandono');
 
 -- --------------------------------------------------------
 
@@ -437,18 +439,19 @@ CREATE TABLE `sesions` (
   `calificacion_descripcion` varchar(255) DEFAULT NULL,
   `contador_cancelaciones` smallint(6) DEFAULT NULL,
   `solicitante` varchar(255) NOT NULL,
-  `cancelador` varchar(255) DEFAULT NULL
+  `cancelador` varchar(255) DEFAULT NULL,
+  `justificacion` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `sesions`
 --
 
-INSERT INTO `sesions` (`id`, `estado`, `pago_confirmado`, `fecha_hora_inicio`, `fecha_hora_fin`, `paciente_id`, `psicologo_id`, `created_at`, `updated_at`, `descripcion_sesion`, `calificacion`, `calificacion_descripcion`, `contador_cancelaciones`, `solicitante`, `cancelador`) VALUES
-(1, 'Cancelado', 0, '2024-05-23 20:29:15', '2024-05-22 22:00:00', 1, 1, '2024-05-16 17:28:51', '2024-05-19 22:56:01', 'test', NULL, NULL, NULL, '1', NULL),
-(2, 'activo', 0, '2024-05-22 13:44:18', '2024-05-22 22:00:00', 2, 1, '2024-05-17 10:42:12', '2024-05-17 10:42:12', 'test', NULL, NULL, NULL, '2', NULL),
-(3, 'activo', 0, '2024-05-22 13:44:18', '2024-05-22 13:44:18', 3, 1, '2024-05-18 11:28:50', '2024-05-18 11:28:50', 'test', NULL, NULL, NULL, '3', NULL),
-(4, 'activo', 0, '2024-05-22 13:44:18', '2024-05-22 13:44:18', 4, 1, '2024-05-18 11:32:12', '2024-05-18 11:32:12', 'test', NULL, NULL, NULL, '4', NULL);
+INSERT INTO `sesions` (`id`, `estado`, `pago_confirmado`, `fecha_hora_inicio`, `fecha_hora_fin`, `paciente_id`, `psicologo_id`, `created_at`, `updated_at`, `descripcion_sesion`, `calificacion`, `calificacion_descripcion`, `contador_cancelaciones`, `solicitante`, `cancelador`, `justificacion`) VALUES
+(1, 'activo', 0, '2024-05-23 08:29:15', '2024-05-23 09:29:15', 1, 1, '2024-05-16 17:28:51', '2024-05-20 10:50:28', 'test', NULL, NULL, NULL, '1', NULL, 'Falta de tiempo'),
+(2, 'activo', 1, '2024-05-22 13:44:18', '2024-05-23 14:30:15', 2, 1, '2024-05-17 10:42:12', '2024-05-17 10:42:12', 'test', NULL, NULL, NULL, '2', NULL, NULL),
+(3, 'activo', 0, '2024-05-24 07:00:05', '2024-05-24 08:30:05', 3, 1, '2024-05-18 11:28:50', '2024-05-18 11:28:50', 'test', NULL, NULL, NULL, '3', NULL, NULL),
+(4, 'Cancelado', 0, '2024-05-22 14:45:18', '2024-05-22 15:59:18', 4, 1, '2024-05-18 11:32:12', '2024-05-20 10:46:32', 'test', NULL, NULL, NULL, '4', NULL, 'Falta de tiempo');
 
 -- --------------------------------------------------------
 

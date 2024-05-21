@@ -37,7 +37,7 @@ class roles_seeder extends Seeder
         // Crear permisos y asignarlos
         $permissions = [
             'listadoAllSesiones' => [$role_4],
-            'listaPaciente' => [$role_4],
+            'listaPaciente' => [$role_4, $role_1],
             'listaPsicologo' => [$role_4],
             'psicologo.store' => [$role_4],
             'psicologo.edit' => [$role_4],
@@ -56,6 +56,7 @@ class roles_seeder extends Seeder
             'paciente.del' => [$role_1, $role_4],
             'paciente.listar' => [$role_1, $role_4],
             'paciente.delSesion' => [$role_1, $role_2],
+            'psicologo.sesiones' => [$role_1],
         ];
 
         foreach ($permissions as $permission => $roles) {

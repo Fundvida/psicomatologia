@@ -168,10 +168,13 @@ class PacienteController extends Controller
         return view('listaPacienteXPsicologo');
     }
 
-    public function listaPacienteXPsicologo (){
+    public function listaPacienteXRol (){
         $user = Auth::user();
         $psicologo = Psicologo::where('user_id', $user->id)->first();
-        //$datos = User::
+
+        $roles = $user->getRoleNames(); // Obtiene los roles del usuario autenticado
+        $nombreRol = $roles->isNotEmpty() ? $roles->first() : 'Sin rol';
+
         if($psicologo){
             $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
                   ->where('pacientes.psicologo_id', $psicologo->id) 
@@ -185,6 +188,11 @@ class PacienteController extends Controller
                   ->get();
         }
 
-        return response()->json($datos);
+        // return response()->json($datos);
+        $respuesta = [
+            'datos' => $datos,
+            'rol' => $nombreRol
+        ];
+        return response()->json($respuesta);
     }
 }
