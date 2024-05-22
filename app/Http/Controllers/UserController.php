@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -39,9 +42,36 @@ class UserController extends Controller
             'status' => 'success',
         ]);
     }
+
+    public function changePassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'currentPassword' => 'required',
+            'newPassword' => 'required|min:8',
+            'confirmPassword' => 'required|same:newPassword',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 400);
+        }
+
+        // Verificar si la contraseña actual proporcionada coincide con la del usuario
+        if (!Hash::check($request->currentPassword, Auth::user()->password)) {
+            return response()->json(['error' => 'La contraseña actual no es válida'], 400);
+        }
+
+        // Si la contraseña actual es válida, proceder con la actualización de la contraseña
+        $user = Auth::user();
+        $user->password = bcrypt($request->newPassword);
+        $user->save();
+
+        return response()->json(['message' => 'Contraseña actualizada correctamente'], 200);
+    }
+
+
     function cambiarPassword()
     {
     }
+
     function storeChangedPassword(Request $request)
     {
     }

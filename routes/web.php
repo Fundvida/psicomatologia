@@ -151,6 +151,8 @@ Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')
 Route::post('/login',[LoginController::class,'iniciar_sesion'])->name('iniciar_sesion');
 Route::post('/logout',[LoginController::class,'cerrar_sesion'])->name('cerrar_sesion');
 
+Route::post('/changePassword', [UserController::class, 'changePassword'])
+    ->name('user.password');
 
 
 Route::get('/test', function () {

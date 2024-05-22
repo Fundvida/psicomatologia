@@ -710,7 +710,7 @@
                                 }, 3000);
                             },
                             error: function(xhr, status, error) {
-                                console.log('hoasdfhjk')
+                                //console.log('hoasdfhjk')
                                 console.error(error);
                             }
                         }); 

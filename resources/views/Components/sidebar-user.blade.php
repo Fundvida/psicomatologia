@@ -42,7 +42,7 @@
         </li>
         <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                <li><a href="#" style="color: #fff;">Cambiar Contraseña</a></li>
+                <li><a href="{{ route('cambiarContraseña') }}" style="color: #fff;">Cambiar Contraseña</a></li>
             </ul>
         </li>
     </ul>
