@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Sesion;
 use App\Models\Psicologo;
 use Illuminate\Support\Facades\Log;
+use App\Models\Notificacion;
 
 class PacienteController extends Controller
 {
@@ -113,12 +114,6 @@ class PacienteController extends Controller
 
     public function listarSesiones()
     {
-        // Fecha	Hora Inicio/Hora Fin	
-        // CI Paciente	Nombre(s)	Apellidos	
-        // Descripción de la Sesión	
-        // Diagnòstico	Archivos Adjuntos	
-        // Estado de la Sesión,	Estado de Pago	
-        // Pagar Sesión	Cancelar Sesión
         $user = Auth::user();
         $paciente = Paciente::where('user_id', $user->id)->first();
         $sesiones = $paciente->sesiones;
@@ -142,16 +137,23 @@ class PacienteController extends Controller
         $user = Auth::user();
         $paciente = Paciente::select('id')
                     ->where('user_id', $user->id)->first();
-        if($paciente){
+        if($paciente){ // Si el usuario es un paciente
             $sesion = Sesion::where('id', $request->sesion_id)
                 ->where('paciente_id', $paciente->id)->first();
-        }else {
+        }else { // Si es un psicologo
             $sesion = Sesion::where('id', $request->sesion_id)->first();
+
         }
 
         $sesion->estado = 'Cancelado';
         $sesion->justificacion = $request->justificacion;
         $sesion->save();
+        
+        Notificacion::create([ // Notificacion para el usuario actual
+            'descripcion' => 'Usted ha cancelado una sesión.',
+            'user_id' => $user->id,
+            'sesion_id' => $request->sesion_id,
+        ]);
 
         return response()->json($request);
     }

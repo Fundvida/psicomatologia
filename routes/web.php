@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\PsicologoController;
@@ -159,4 +160,8 @@ Route::get('/test', function () {
     return view('test');
 });
 
+
+
+
+Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']);
 

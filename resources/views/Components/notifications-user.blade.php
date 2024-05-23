@@ -5,11 +5,12 @@
                 <button id="markReadBtn" class="btn btn-link"><i class="fas fa-check"></i></button>
             </div>
             <hr class="my-2">
-            <div class="notification-body">
+            <div class="notification-body" id="notificationBody">
                 <!-- Contenedor adicional para cada notificación -->
-                <div class="notification-item-container mb-2">
+                <!-- <div class="notification-item-container mb-2">
+                    TODO PENDIENTE
                     <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Usted ha registrado una nueva sesión.
+                        Usted ha registrado una nueva sesión. 
                     </button>
                 </div>
                 <div class="notification-item-container mb-2">
@@ -26,7 +27,7 @@
                     <button class="notification-item rounded bg-light py-2 px-3 border-0">
                         Un usuario ha realizado el pago de una sesión programada.
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

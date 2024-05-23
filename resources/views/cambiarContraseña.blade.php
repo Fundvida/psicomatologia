@@ -353,6 +353,36 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Función para cargar las notificaciones
+        function loadNotifications() {
+            fetch('/notificaciones')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const notificationBody = document.getElementById('notificationBody');
+                    notificationBody.innerHTML = '';
+
+                    data.forEach(notification => {
+                        const notificationItem = document.createElement('div');
+                        notificationItem.className = 'notification-item-container mb-2';
+                        notificationItem.innerHTML = `
+                            <button class="notification-item rounded bg-light py-2 px-3 border-0">
+                                ${notification.descripcion}
+                            </button>
+                        `;
+                        notificationBody.appendChild(notificationItem);
+                    });
+                });
+        }
+
+        loadNotifications();
+
+        setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+    });
+</script>
 </body>
 
 </html>

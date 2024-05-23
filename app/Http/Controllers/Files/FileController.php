@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\File;
+use App\Models\Notificacion;
+use App\Models\Psicologo;
+use App\Models\Sesion;
 
 class FileController extends Controller
 {
@@ -30,6 +33,10 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
+        // return response()->json([
+        //     'psicologo_id' => $psicologo_id,
+        //     'user_id' => $user_id,
+        // ]); 
         $request->validate([
             'file' => 'required|image|max:2048'
         ]);
@@ -44,6 +51,15 @@ class FileController extends Controller
         ]);
         // Almacenar la URL anterior en la sesión
         session()->flash('previous_url', url()->previous());
+
+        $psicologo_id = Sesion::where('id', $request->id_sesion)->pluck('psicologo_id')->first();
+        $user_id = Psicologo::where('id', $psicologo_id)->pluck('user_id')->first();
+
+        Notificacion::create([
+            'descripcion' => 'Un usuario a realizado el pago de una sesión programada',
+            'user_id' => $user_id,
+            'sesion_id' => $request->id_sesion,
+        ]);
 
         return redirect()->route('homePacienteSesiones');
     }

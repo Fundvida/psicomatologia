@@ -54,7 +54,7 @@ class roles_seeder extends Seeder
             'paciente.store' => [$role_1, $role_4],
             'paciente.edit' => [$role_1, $role_4],
             'paciente.del' => [$role_1, $role_4],
-            'paciente.listar' => [$role_1, $role_4],
+            'paciente.listar' => [$role_2], //[$role_1, $role_4],
             'paciente.delSesion' => [$role_1, $role_2],
             'psicologo.sesiones' => [$role_1],
         ];
