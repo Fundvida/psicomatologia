@@ -155,62 +155,130 @@
         .custom-checkboxes .form-check-inline {
             margin-right: 20px;
         }
+
+        /* NOTIFICACION */
+
+        .notification-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #7f8dba;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .notification-header button {
+            border: none;
+            background: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .notification-body {
+            padding: 10px;
+        }
+
+        .notification-footer {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: right;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .notification-footer button {
+            background-color: #7f8dba;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .notification-footer button:hover {
+            background-color: #616c96;
+        }
+
+        /* Estilos para la ventana emergente de notificaciones */
+        .notification-container {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .notification-header h5 {
+            margin-bottom: 0;
+        }
+
+        .notification-body {
+            padding: 10px;
+        }
+
+        .notification-item-container {
+            border-radius: 10px;
+            background-color: #f9c5d1;
+            padding: 4px;
+        }
+
+        .notification-item {
+            padding: 8px 0;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background-color: transparent !important;
+        }
+
+        .show {
+            display: block !important;
+        }
     </style>
 </head>
 
 <body>
     <!-- Barra de navegación principal -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-        <div class="container px-5">
-            <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
-                <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
-            </a>
-            <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
-                <li class="nav-item nav-profile dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdownToggle">
-                        <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profileDropdown" style="display: none; right: 0; left: auto;">
+    @include('components.navigationbar-user')
 
-                        <form method="POST" action="" class="dropdown-item">
-                            <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">
-                                <i class="fas fa-cog text-primary"></i> <!-- Cambié la clase para el ícono de cierre de sesión -->
-                                Configuración
-                            </button>
-                        </form>
-                        <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
-                            @csrf
-                            <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">
-                                <i class="fas fa-power-off text-primary"></i> <!-- Cambié la clase para el ícono de cierre de sesión -->
-                                Cerrar Sesión
-                            </button>
-                        </form>
-                    </div>
-                </li>
-                <!-- Icono de campana para notificaciones -->
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="notificationIcon">
-                        <i class="fas fa-bell"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var profileDropdown = document.getElementById('profileDropdown');
-            var profileDropdownToggle = document.getElementById('profileDropdownToggle');
-
-            profileDropdownToggle.addEventListener('click', function() {
-                if (profileDropdown.style.display === 'none') {
-                    profileDropdown.style.display = 'block';
-                } else {
-                    profileDropdown.style.display = 'none';
-                }
-            });
-        });
-    </script>
+    <!-- Ventana emergente de notificaciones -->
+    @include('components.notifications-user')
 
     <!-- Menú lateral -->
     @include('components.sidebar-user')
@@ -590,6 +658,40 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener referencias a elementos DOM
+            const notificationIcon = document.getElementById('notificationIcon');
+            const notificationContainer = document.getElementById('notificationContainer');
+            const markReadBtn = document.getElementById('markReadBtn');
+            const notificationItems = document.querySelectorAll('.notification-item');
+            const pagarIcon = document.querySelector('.fas.fa-money-bill');
+
+            notificationIcon.addEventListener('click', function() {
+                notificationContainer.classList.toggle('show');
+            });
+
+            markReadBtn.addEventListener('click', function() {
+                notificationItems.forEach(item => {
+                    item.classList.remove('bg-light');
+                });
+            });
+
+            // Agregar evento clic a cada notificación
+            notificationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    item.classList.remove('bg-light');
+                });
+            });
+
+
+            // Evento para abrir el modal al hacer clic en el icono de pagar
+            pagarIcon.addEventListener('click', function() {
+                $('#pagoModal').modal('show'); // Bootstrap Modal
+            });
+        });
+    </script>
 </body>
 
 </html>

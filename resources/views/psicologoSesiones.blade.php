@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Sesiones Programadas</title>
+    <title>SESIONES PROGRAMADAS</title>
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -258,372 +258,291 @@
 </head>
 <body>
     <!-- Barra de navegación principal -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-        <div class="container px-5">
-            <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
-                <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
-            </a>
-            <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
-                <li class="nav-item nav-profile dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdownToggle">
-                        <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profileDropdown" style="display: none; right: 0; left: auto;">
-
-                        <form method="POST" action="" class="dropdown-item">
-                            <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">
-                                <i class="fas fa-cog text-primary"></i> <!-- Cambié la clase para el ícono de cierre de sesión -->
-                                Configuración
-                            </button>
-                        </form>
-                        <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
-                            @csrf
-                            <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">
-                                <i class="fas fa-power-off text-primary"></i> <!-- Cambié la clase para el ícono de cierre de sesión -->
-                                Cerrar Sesión
-                            </button>
-                        </form>
-                    </div>
-                </li>
-                <!-- Icono de campana para notificaciones -->
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="notificationIcon">
-                        <i class="fas fa-bell"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var profileDropdown = document.getElementById('profileDropdown');
-            var profileDropdownToggle = document.getElementById('profileDropdownToggle');
-
-            profileDropdownToggle.addEventListener('click', function() {
-                if (profileDropdown.style.display === 'none') {
-                    profileDropdown.style.display = 'block';
-                } else {
-                    profileDropdown.style.display = 'none';
-                }
-            });
-        });
-    </script>
+    @include('components.navigationbar-user')
 
     <!-- Ventana emergente de notificaciones -->
-    <div id="notificationContainer" class="notification-container">
-        <div class="notification">
-            <div class="notification-header">
-                <h5 class="mb-0 font-alt">Notificaciones</h5>
-                <button id="markReadBtn" class="btn btn-link"><i class="fas fa-check"></i></button>
-            </div>
-            <hr class="my-2">
-            <div class="notification-body">
-                <!-- Contenedor adicional para cada notificación -->
-                <div class="notification-item-container mb-2">
-                    <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Usted ha registrado una nueva sesión.
-                    </button>
-                </div>
-                <div class="notification-item-container mb-2">
-                    <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Usted ha cancelado una sesión.
-                    </button>
-                </div>
-                <div class="notification-item-container mb-2">
-                    <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Usted tiene una nueva sesión programada.
-                    </button>
-                </div>
-                <div class="notification-item-container mb-2">
-                    <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Un usuario ha realizado el pago de una sesión programada.
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    @include('components.notifications-user')
 
     <!-- Menú lateral -->
     @include('components.sidebar-user')
 
-<!-- Contenido principal -->
-<main class="main-content ">
-    <section class="py-1 d-flex justify-content-center align-items-center" id="sesiones">
+    <!-- Contenido principal -->
+    <main class="main-content ">
+        <section class="py-1 d-flex justify-content-center align-items-center" id="sesiones">
 
-        <div class="container px-5">
-            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
-                <!-- Título -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
-                <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p>
-                <!-- Tabla de pacientes -->
-                <div class="custom-table-container shadow" style="height: 500px;">
-                    <div class="table-responsive">
-                        <table class="table table-striped custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora Inicio/Hora Fin</th>
-                                    <th>CI Paciente</th>
-                                    <th>Nombre(s)</th>
-                                    <th>Apellidos</th>
-                                    <th>Descripción de la Sesión</th>
-                                    <th>Diagnóstico</th>
-                                    <th>Archivos Adjuntos</th>
-                                    <th>Estado de la Sesión</th>
-                                    <th>Estado de Pago</th>
-                                    <th>Registrar Sesión</th>
-                                    <th>Editar Sesión</th>
-                                    <th>Cancelar Sesión</th>
-                                    <th>Ver Comprobante</th>
-                                    <th>Información Paciente</th>
+            <div class="container px-5">
+                <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
+                    <!-- Título -->
+                    <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
+                    <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p>
+                    <!-- Tabla de pacientes -->
+                    <div class="custom-table-container shadow" style="height: 500px;">
+                        <div class="table-responsive">
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora Inicio/Hora Fin</th>
+                                        <th>CI Paciente</th>
+                                        <th>Nombre(s)</th>
+                                        <th>Apellidos</th>
+                                        <th>Descripción de la Sesión</th>
+                                        <th>Diagnóstico</th>
+                                        <th>Archivos Adjuntos</th>
+                                        <th>Estado de la Sesión</th>
+                                        <th>Estado de Pago</th>
+                                        <th>Registrar Sesión</th>
+                                        <th>Editar Sesión</th>
+                                        <th>Cancelar Sesión</th>
+                                        <th>Ver Comprobante</th>
+                                        <th>Información Paciente</th>
 
-                                </tr>
-                            </thead>
-                            <tbody id="sesiones-body">
-                                <!-- Registro 1 -->
-                                <tr>
-                                    <td>2024-05-05</td>
-                                    <td>09:00 - 10:00</td>
-                                    <td>88888888</td>
-                                    <td>Jessica</td>
-                                    <td>Lopez</td>
-                                    <td>Sesión de terapia individual</td>
-                                    <td>Ansiedad leve</td>
-                                    <td>Informe.pdf</td>
-                                    <td>Pendiente</td>
-                                    <td>Pendiente</td>
-                                    <td class="action-icons">
+                                    </tr>
+                                </thead>
+                                <tbody id="sesiones-body">
+                                    <!-- Registro 1 -->
+                                    <tr>
+                                        <td>2024-05-05</td>
+                                        <td>09:00 - 10:00</td>
+                                        <td>88888888</td>
+                                        <td>Jessica</td>
+                                        <td>Lopez</td>
+                                        <td>Sesión de terapia individual</td>
+                                        <td>Ansiedad leve</td>
+                                        <td>Informe.pdf</td>
+                                        <td>Pendiente</td>
+                                        <td>Pendiente</td>
+                                        <td class="action-icons">
 
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-05', '09:00 - 10:00', '88888888', 'Jessica Lopez', 'Sesión de terapia individual', 'Ansiedad leve', 'Informe.pdf')" title="Ver Información"></i>
-                                    </td>
-                                </tr>
-                                <!-- Registro 2 -->
-                                <tr>
-                                    <td>2024-05-06</td>
-                                    <td>14:00 - 15:00</td>
-                                    <td>77777777</td>
-                                    <td>Matias</td>
-                                    <td>Rojas</td>
-                                    <td>Terapia de pareja</td>
-                                    <td>Problemas de comunicación</td>
-                                    <td>None</td>
-                                    <td>Terminada</td>
-                                    <td>Realizado</td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-pen text-success" onclick="registrarSesion()" title="Registrar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-06', '14:00 - 15:00', '77777777', 'Matias Rojas', 'Terapia de pareja', 'Problemas de comunicación', 'None')" title="Ver Información"></i>
-                                    </td>
-                                </tr>
-                                <!-- Registro 3 -->
-                                <tr>
-                                    <td>2024-05-07</td>
-                                    <td>16:00 - 17:00</td>
-                                    <td>1234567</td>
-                                    <td>Juan</td>
-                                    <td>Pérez</td>
-                                    <td>Consulta psicológica</td>
-                                    <td>Estrés laboral</td>
-                                    <td>Informe.docx</td>
-                                    <td>Cancelada</td>
-                                    <td>Cancelado</td>
-                                </tr>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-05', '09:00 - 10:00', '88888888', 'Jessica Lopez', 'Sesión de terapia individual', 'Ansiedad leve', 'Informe.pdf')" title="Ver Información"></i>
+                                        </td>
+                                    </tr>
+                                    <!-- Registro 2 -->
+                                    <tr>
+                                        <td>2024-05-06</td>
+                                        <td>14:00 - 15:00</td>
+                                        <td>77777777</td>
+                                        <td>Matias</td>
+                                        <td>Rojas</td>
+                                        <td>Terapia de pareja</td>
+                                        <td>Problemas de comunicación</td>
+                                        <td>None</td>
+                                        <td>Terminada</td>
+                                        <td>Realizado</td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-pen text-success" onclick="registrarSesion()" title="Registrar Sesión"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
+                                        </td>
+                                        <td class="action-icons">
+                                            <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-06', '14:00 - 15:00', '77777777', 'Matias Rojas', 'Terapia de pareja', 'Problemas de comunicación', 'None')" title="Ver Información"></i>
+                                        </td>
+                                    </tr>
+                                    <!-- Registro 3 -->
+                                    <tr>
+                                        <td>2024-05-07</td>
+                                        <td>16:00 - 17:00</td>
+                                        <td>1234567</td>
+                                        <td>Juan</td>
+                                        <td>Pérez</td>
+                                        <td>Consulta psicológica</td>
+                                        <td>Estrés laboral</td>
+                                        <td>Informe.docx</td>
+                                        <td>Cancelada</td>
+                                        <td>Cancelado</td>
+                                    </tr>
 
-                                <!-- Registro 4 -->
-                                <tr>
-                                    <td>2024-05-08</td>
-                                    <td>09:00 - 10:00</td>
-                                    <td>66666666</td>
-                                    <td>Leonardo</td>
-                                    <td>Torrez</td>
-                                    <td>Sesión de terapia individual</td>
-                                    <td>Ansiedad leve</td>
-                                    <td>Informe.pdf</td>
-                                    <td>Pendiente</td>
-                                    <td>Realizado</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    <!-- Registro 4 -->
+                                    <tr>
+                                        <td>2024-05-08</td>
+                                        <td>09:00 - 10:00</td>
+                                        <td>66666666</td>
+                                        <td>Leonardo</td>
+                                        <td>Torrez</td>
+                                        <td>Sesión de terapia individual</td>
+                                        <td>Ansiedad leve</td>
+                                        <td>Informe.pdf</td>
+                                        <td>Pendiente</td>
+                                        <td>Realizado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <div id="notification-container" class="notification-container">
+        <div class="notification">
+            <div class="notification-header">
+                <i class="fas fa-info-circle"></i> Información
+                <button id="close-btn">&times;</button>
+            </div>
+            <div class="notification-body">
+                Usted tiene nuevas sesiones programadas!
+            </div>
+            <div class="notification-footer">
+                <button id="go-btn">
+                    Ir <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal de Comprobante de Pago -->
+    <div class="modal fade" id="modalComprobantePago" tabindex="-1" aria-labelledby="modalComprobantePagoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title font-alt" id="modalComprobantePagoLabel">Comprobante de Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="imagenComprobante" src="" alt="Comprobante de Pago" style="max-width: 100%;">
+                </div>
+                <div class="modal-footer justify-content-center font-alt">
+                    <button type="button" class="btn btn-primary" onclick="confirmarPago()" style="font-size: 20px;">
+                        <i class="bi bi-download" style="font-size: 24px;"></i> DESCARGAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalles -->
+    <div class="modal fade" id="infoPacienteModal" tabindex="-1" aria-labelledby="infoPacienteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Información del Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Fecha:</strong> <span id="fecha"></span></p>
+                    <p><strong>Hora:</strong> <span id="hora"></span></p>
+                    <p><strong>CI:</strong> <span id="ci"></span></p>
+                    <p><strong>Paciente:</strong> <span id="paciente"></span></p>
+                    <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
+                    <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
+                    <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p>
                 </div>
 
             </div>
         </div>
-
-    </section>
-</main>
-
-<div id="notification-container" class="notification-container">
-    <div class="notification">
-        <div class="notification-header">
-            <i class="fas fa-info-circle"></i> Información
-            <button id="close-btn">&times;</button>
-        </div>
-        <div class="notification-body">
-            Usted tiene nuevas sesiones programadas!
-        </div>
-        <div class="notification-footer">
-            <button id="go-btn">
-                Ir <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-
     </div>
-</div>
-
-<!-- Modal de Comprobante de Pago -->
-<div class="modal fade" id="modalComprobantePago" tabindex="-1" aria-labelledby="modalComprobantePagoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-alt" id="modalComprobantePagoLabel">Comprobante de Pago</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="imagenComprobante" src="" alt="Comprobante de Pago" style="max-width: 100%;">
-            </div>
-            <div class="modal-footer justify-content-center font-alt">
-                <button type="button" class="btn btn-primary" onclick="confirmarPago()" style="font-size: 20px;">
-                    <i class="bi bi-download" style="font-size: 24px;"></i> DESCARGAR
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal Detalles -->
-<div class="modal fade" id="infoPacienteModal" tabindex="-1" aria-labelledby="infoPacienteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Información del Paciente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Fecha:</strong> <span id="fecha"></span></p>
-                <p><strong>Hora:</strong> <span id="hora"></span></p>
-                <p><strong>CI:</strong> <span id="ci"></span></p>
-                <p><strong>Paciente:</strong> <span id="paciente"></span></p>
-                <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
-                <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
-                <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationContainer = document.getElementById('notificationContainer');
-        const markReadBtn = document.getElementById('markReadBtn');
-        const notificationItems = document.querySelectorAll('.notification-item');
-        const pagarIcon = document.querySelector('.fas.fa-money-bill');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationIcon = document.getElementById('notificationIcon');
+            const notificationContainer = document.getElementById('notificationContainer');
+            const markReadBtn = document.getElementById('markReadBtn');
+            const notificationItems = document.querySelectorAll('.notification-item');
+            const pagarIcon = document.querySelector('.fas.fa-money-bill');
 
-        notificationIcon.addEventListener('click', function() {
-            notificationContainer.classList.toggle('show');
-        });
+            notificationIcon.addEventListener('click', function() {
+                notificationContainer.classList.toggle('show');
+            });
 
-        markReadBtn.addEventListener('click', function() {
+            markReadBtn.addEventListener('click', function() {
+                notificationItems.forEach(item => {
+                    item.classList.remove('bg-light');
+                });
+            });
+
+            // Agregar evento clic a cada notificación
             notificationItems.forEach(item => {
-                item.classList.remove('bg-light');
+                item.addEventListener('click', function() {
+                    item.classList.remove('bg-light');
+                });
             });
         });
-
-        // Agregar evento clic a cada notificación
-        notificationItems.forEach(item => {
-            item.addEventListener('click', function() {
-                item.classList.remove('bg-light');
+        // Evento para abrir el modal al hacer clic en el icono de pagar
+        pagarIcon.addEventListener('click', function() {
+                $('#pagoModal').modal('show'); // Bootstrap Modal
             });
-        });
-    });
-    // Evento para abrir el modal al hacer clic en el icono de pagar
-    pagarIcon.addEventListener('click', function() {
-            $('#pagoModal').modal('show'); // Bootstrap Modal
-        });
-</script>
+    </script>
 
-<script>
-    function confirmarCancelar(nombre) {
-        Swal.fire({
-            title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, cancelar',
-            cancelButtonText: 'No',
-            customClass: {
-                title: 'swal-title', // Clase CSS para el título personalizado
-            },
-            // Permite que el HTML se muestre en la notificación
-            allowHtml: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                    '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                    'La sesión ha sido cancelada.',
-                    'success'
-                )
-            }
-        });
-    }
-</script>
+    <script>
+        function confirmarCancelar(nombre) {
+            Swal.fire({
+                title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'No',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
+                        'La sesión ha sido cancelada.',
+                        'success'
+                    )
+                }
+            });
+        }
+    </script>
 
-<script>
+    <script>
 
-    function verComprobante() {
-        // Aquí puedes obtener la URL de la imagen del comprobante de pago
-        var urlComprobantePago = "{{ asset('images/comprobanteEjemplo.png') }}";
+        function verComprobante() {
+            // Aquí puedes obtener la URL de la imagen del comprobante de pago
+            var urlComprobantePago = "{{ asset('images/comprobanteEjemplo.png') }}";
 
-        // Cambia la imagen en el modal
-        var imagenComprobante = document.getElementById("imagenComprobante");
-        imagenComprobante.src = urlComprobantePago;
+            // Cambia la imagen en el modal
+            var imagenComprobante = document.getElementById("imagenComprobante");
+            imagenComprobante.src = urlComprobantePago;
 
-        // Muestra el modal
-        var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
-        modal.show();
-    }
+            // Muestra el modal
+            var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
+            modal.show();
+        }
 
-    function mostrarInfo(fecha, hora, ci, paciente, descripcion, diagnostico, archivoAdjunto) {
-        // Inserta los datos del paciente en el modal
-        document.getElementById('fecha').innerText = fecha;
-        document.getElementById('hora').innerText = hora;
-        document.getElementById('ci').innerText = ci;
-        document.getElementById('paciente').innerText = paciente;
-        document.getElementById('descripcion').innerText = descripcion;
-        document.getElementById('diagnostico').innerText = diagnostico;
-        document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
+        function mostrarInfo(fecha, hora, ci, paciente, descripcion, diagnostico, archivoAdjunto) {
+            // Inserta los datos del paciente en el modal
+            document.getElementById('fecha').innerText = fecha;
+            document.getElementById('hora').innerText = hora;
+            document.getElementById('ci').innerText = ci;
+            document.getElementById('paciente').innerText = paciente;
+            document.getElementById('descripcion').innerText = descripcion;
+            document.getElementById('diagnostico').innerText = diagnostico;
+            document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
 
-        // Muestra el modal
-        $('#infoPacienteModal').modal('show');
-    }
-</script>
+            // Muestra el modal
+            $('#infoPacienteModal').modal('show');
+        }
+    </script>
 
 
 <!-- Enlaces a los scripts JS -->

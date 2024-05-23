@@ -6,7 +6,7 @@
     <title>SISTEMA DE PSICOLOGÍA</title>
 
     <!-- Enlaces a los estilos CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
     <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('./css/style.css')}}">
@@ -35,6 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.js"></script>
     <!-- Importar el archivo de idioma español -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
+
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
     <style>
@@ -199,6 +200,17 @@
             background-color: #616c96;
         }
 
+        /* TRANSICION */
+
+        .tab-pane.fade:not(.show) {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-pane.fade.show {
+            opacity: 1;
+        }
+
         /* Estilos para la ventana emergente de notificaciones */
         .notification-container {
             position: fixed;
@@ -251,7 +263,6 @@
         .show {
             display: block !important;
         }
-
     </style>
 </head>
 <body>
@@ -342,15 +353,9 @@
         </div>
     </div>
 
-
     <!-- Menú lateral -->
     <div class="custom-sidebar">
         <ul>
-        <li class="custom-menu-item custom-font-alt">PACIENTES
-            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-            <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
-            </ul>
-        </li>
         <li class="custom-menu-item custom-font-alt">SESIONES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
             <li><a href="#" style="color: #fff;">Lista de Sesiones</a></li>
@@ -381,8 +386,8 @@
         <div class="container px-5">
             <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                 <!-- Título -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
-                <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p>
+                <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones</h2>
+                <p class="lead fw-normal text-muted mb-5 ttNorms">Consulta tus sesiones programadas para estar al tanto de tus citas y seguir tu progreso.</p>
                 <!-- Tabla de pacientes -->
                 <div class="custom-table-container shadow" style="height: 500px;">
                     <div class="table-responsive">
@@ -395,15 +400,12 @@
                                     <th>Nombre(s)</th>
                                     <th>Apellidos</th>
                                     <th>Descripción de la Sesión</th>
-                                    <th>Diagnóstico</th>
+                                    <th>Diagnòstico</th>
                                     <th>Archivos Adjuntos</th>
                                     <th>Estado de la Sesión</th>
                                     <th>Estado de Pago</th>
-                                    <th>Registrar Sesión</th>
-                                    <th>Editar Sesión</th>
+                                    <th>Pagar Sesión</th>
                                     <th>Cancelar Sesión</th>
-                                    <th>Ver Comprobante</th>
-                                    <th>Información Paciente</th>
 
                                 </tr>
                             </thead>
@@ -412,57 +414,34 @@
                                 <tr>
                                     <td>2024-05-05</td>
                                     <td>09:00 - 10:00</td>
-                                    <td>88888888</td>
-                                    <td>Jessica</td>
-                                    <td>Lopez</td>
+                                    <td>1234567</td>
+                                    <td>Juan</td>
+                                    <td>Pérez</td>
                                     <td>Sesión de terapia individual</td>
                                     <td>Ansiedad leve</td>
                                     <td>Informe.pdf</td>
                                     <td>Pendiente</td>
                                     <td>Pendiente</td>
                                     <td class="action-icons">
+                                        <i class="fas fa-money-bill text-success" title="Pagar"></i>
+                                    </td>
+                                    <td class="action-icons">
+                                        <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar"></i>
+                                    </td>
 
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-05', '09:00 - 10:00', '88888888', 'Jessica Lopez', 'Sesión de terapia individual', 'Ansiedad leve', 'Informe.pdf')" title="Ver Información"></i>
-                                    </td>
                                 </tr>
                                 <!-- Registro 2 -->
                                 <tr>
                                     <td>2024-05-06</td>
                                     <td>14:00 - 15:00</td>
-                                    <td>77777777</td>
-                                    <td>Matias</td>
-                                    <td>Rojas</td>
+                                    <td>1234567</td>
+                                    <td>Juan</td>
+                                    <td>Pérez</td>
                                     <td>Terapia de pareja</td>
                                     <td>Problemas de comunicación</td>
                                     <td>None</td>
                                     <td>Terminada</td>
                                     <td>Realizado</td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-pen text-success" onclick="registrarSesion()" title="Registrar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-06', '14:00 - 15:00', '77777777', 'Matias Rojas', 'Terapia de pareja', 'Problemas de comunicación', 'None')" title="Ver Información"></i>
-                                    </td>
                                 </tr>
                                 <!-- Registro 3 -->
                                 <tr>
@@ -476,20 +455,6 @@
                                     <td>Informe.docx</td>
                                     <td>Cancelada</td>
                                     <td>Cancelado</td>
-                                </tr>
-
-                                <!-- Registro 4 -->
-                                <tr>
-                                    <td>2024-05-08</td>
-                                    <td>09:00 - 10:00</td>
-                                    <td>66666666</td>
-                                    <td>Leonardo</td>
-                                    <td>Torrez</td>
-                                    <td>Sesión de terapia individual</td>
-                                    <td>Ansiedad leve</td>
-                                    <td>Informe.pdf</td>
-                                    <td>Pendiente</td>
-                                    <td>Realizado</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -509,7 +474,7 @@
             <button id="close-btn">&times;</button>
         </div>
         <div class="notification-body">
-            Usted tiene nuevas sesiones programadas!
+            Usted tiene una sesión pendiente de pago
         </div>
         <div class="notification-footer">
             <button id="go-btn">
@@ -520,50 +485,91 @@
     </div>
 </div>
 
-<!-- Modal de Comprobante de Pago -->
-<div class="modal fade" id="modalComprobantePago" tabindex="-1" aria-labelledby="modalComprobantePagoLabel" aria-hidden="true">
+<!-- Modal de Pago -->
+<div class="modal fade" id="pagoModal" tabindex="-1" aria-labelledby="pagoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-alt" id="modalComprobantePagoLabel">Comprobante de Pago</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="imagenComprobante" src="" alt="Comprobante de Pago" style="max-width: 100%;">
-            </div>
-            <div class="modal-footer justify-content-center font-alt">
-                <button type="button" class="btn btn-primary" onclick="confirmarPago()" style="font-size: 20px;">
-                    <i class="bi bi-download" style="font-size: 24px;"></i> DESCARGAR
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal Detalles -->
-<div class="modal fade" id="infoPacienteModal" tabindex="-1" aria-labelledby="infoPacienteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Información del Paciente</h5>
+                <h5 class="modal-title font-alt" id="pagoModalLabel">Pagar Sesión</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Fecha:</strong> <span id="fecha"></span></p>
-                <p><strong>Hora:</strong> <span id="hora"></span></p>
-                <p><strong>CI:</strong> <span id="ci"></span></p>
-                <p><strong>Paciente:</strong> <span id="paciente"></span></p>
-                <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
-                <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
-                <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p>
-            </div>
+                <!-- Pestañas -->
+                <ul class="nav nav-tabs custom-tabs" id="pagoTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pagoQR-tab" data-bs-toggle="tab" data-bs-target="#pagoQR" type="button" role="tab" aria-controls="pagoQR" aria-selected="true">Pago QR</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cuentaBancaria-tab" data-bs-toggle="tab" data-bs-target="#cuentaBancaria" type="button" role="tab" aria-controls="cuentaBancaria" aria-selected="false">Pago Cuenta Bancaria</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pagoEfectivo-tab" data-bs-toggle="tab" data-bs-target="#pagoEfectivo" type="button" role="tab" aria-controls="pagoEfectivo" aria-selected="false">Pago en Efectivo</button>
+                    </li>
+                </ul>
 
+                <!-- Contenido de las pestañas -->
+                <div class="tab-content mt-4" id="pagoTabsContent">
+                    <!-- Pestaña Pago por QR -->
+                    <div class="tab-pane fade show active" id="pagoQR" role="tabpanel" aria-labelledby="pagoQR-tab">
+                        <div class="text-center">
+                            <h4 class="mb-4 font-alt">Pago por Código QR</h4>
+                            <p class="mt-4">Por favor, escanea el código de pago a continuación y sube el comprobante correspondiente para confirmar tu transacción.</p>
+                            <img src="{{ asset('images/qr_real.jpeg') }}" alt="QR de Pago" class="img-fluid mb-4" style="max-height: 300px;">
+                            <!-- Campo para subir el comprobante de pago -->
+                            <div class="mb-3">
+                                <h5 for="comprobantePagoQR" class="font-alt mb-2">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
+                                <input type="file" class="form-control" id="comprobantePagoQR">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
+                        </div>
+                    </div>
+                    <!-- Pestaña Cuenta Bancaria -->
+                    <div class="tab-pane fade" id="cuentaBancaria" role="tabpanel" aria-labelledby="cuentaBancaria-tab">
+                        <div class="text-center">
+                            <h4 class="mb-4 font-alt">Pago por Cuenta Bancaria</h4>
+                            <p class="mt-4">Por favor, realiza el pago a esta cuenta bancaria y sube el comprobante de pago para confirmar tu transacción.</p>
+                            <p><strong>Número de Cuenta:</strong> 4001-3356-418</p>
+                            <p><strong>Banco:</strong> Banco FIE</p>
+                            <p><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
+                            <p><strong>A nombre de:</strong> Fundación Educar Para La Vida</p>
+                            <p><strong>NIT:</strong> 16-943-002-8</p>
+                            <div class="mb-3">
+                                <h5 for="comprobantePagoBanco" class="mb-2 font-alt">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
+                                <input type="file" class="form-control" id="comprobantePagoBanco">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
+                        </div>
+                    </div>
+                    <!-- Pestaña Pago en Efectivo -->
+                    <div class="tab-pane fade" id="pagoEfectivo" role="tabpanel" aria-labelledby="pagoEfectivo-tab">
+                        <div class="text-center">
+                            <h4 class="mb-4 font-alt">Pago en Efectivo</h4>
+                            <div class="rounded p-3 mb-3" style="background-color: #f0f0f0; border: 1px solid #ced4da;">
+                                <div class="d-flex justify-content-between">
+                                    <div>Costo de la sesión:</div>
+                                    <div>Bs. 100</div>
+                                </div>
+                            </div>
+                            <p>Por favor, tenga en cuenta que puede pagar la sesión en efectivo en el momento de la consulta. Además, asegúrese de tener el monto exacto disponible al momento del pago.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
+
+
 <script>
+
     document.addEventListener('DOMContentLoaded', function() {
+        // Obtener referencias a elementos DOM
         const notificationIcon = document.getElementById('notificationIcon');
         const notificationContainer = document.getElementById('notificationContainer');
         const markReadBtn = document.getElementById('markReadBtn');
@@ -586,18 +592,37 @@
                 item.classList.remove('bg-light');
             });
         });
-    });
-    // Evento para abrir el modal al hacer clic en el icono de pagar
-    pagarIcon.addEventListener('click', function() {
+
+
+        // Evento para abrir el modal al hacer clic en el icono de pagar
+        pagarIcon.addEventListener('click', function() {
             $('#pagoModal').modal('show'); // Bootstrap Modal
         });
+    });
+
 </script>
 
+<script>
+    function confirmarPago() {
+        Swal.fire({
+            icon: 'success',
+            title: '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+            text: 'El pago se realizó exitosamente',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+            customClass: {
+                title: 'swal-title', // Clase CSS para el título personalizado
+            },
+            // Permite que el HTML se muestre en la notificación
+            allowHtml: true
+        });
+    }
+</script>
 <script>
     function confirmarCancelar(nombre) {
         Swal.fire({
             title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
-            html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, explícale al paciente el motivo de la cancelación:</p>
+            html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Si cancelas la sesión, por favor dinos el motivo:</p>
                    <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
             icon: 'warning',
             showCancelButton: true,
@@ -618,43 +643,13 @@
                 const justificacion = result.value;
                 Swal.fire(
                     '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                    `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
+                    `La sesión ha sido cancelada.<br>Justificación: ${justificacion}`,
                     'success'
                 )
             }
         });
     }
 </script>
-
-
-<script>
-    function verComprobante() {
-        // Aquí puedes obtener la URL de la imagen del comprobante de pago
-        var urlComprobantePago = "{{ asset('images/comprobanteEjemplo.png') }}";
-
-        // Cambia la imagen en el modal
-        var imagenComprobante = document.getElementById("imagenComprobante");
-        imagenComprobante.src = urlComprobantePago;
-
-        // Muestra el modal
-        var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
-        modal.show();
-    }
-    function mostrarInfo(fecha, hora, ci, paciente, descripcion, diagnostico, archivoAdjunto) {
-    // Inserta los datos del paciente en el modal
-    document.getElementById('fecha').innerText = fecha;
-    document.getElementById('hora').innerText = hora;
-    document.getElementById('ci').innerText = ci;
-    document.getElementById('paciente').innerText = paciente;
-    document.getElementById('descripcion').innerText = descripcion;
-    document.getElementById('diagnostico').innerText = diagnostico;
-    document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
-
-    // Muestra el modal
-    $('#infoPacienteModal').modal('show');
-}
-</script>
-
 
 <!-- Enlaces a los scripts JS -->
 <script src="{{asset('./vendors/base/vendor.bundle.base.js')}}"></script>

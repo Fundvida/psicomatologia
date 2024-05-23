@@ -1,10 +1,12 @@
 <div class="custom-sidebar">
     <ul>
+        @can('listaPaciente')
         <li class="custom-menu-item custom-font-alt">PACIENTES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
             </ul>
         </li>
+        @endcan
         @can('listaPsicologo')
             <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
@@ -13,6 +15,11 @@
             </li>
         @endcan
         <li class="custom-menu-item custom-font-alt">SESIONES
+            @can('homePacienteSesiones')
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('homePacienteSesiones') }}" style="color: #fff;">Mis Sesiones</a></li>
+            </ul>
+            @endcan
             @can('listadoAllSesiones')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('listadoAllSesiones') }}" style="color: #fff;">Lista de Sesiones</a></li>
