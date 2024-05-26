@@ -140,9 +140,20 @@ class PacienteController extends Controller
         if($paciente){ // Si el usuario es un paciente
             $sesion = Sesion::where('id', $request->sesion_id)
                 ->where('paciente_id', $paciente->id)->first();
+            $psicologo = Psicologo::where('id', $sesion->psicologo_id)->first();
+            Notificacion::create([ // Notificacion para el usuario actual
+                'descripcion' => 'Un paciente a cancelado una sesión.',
+                'user_id' => $psicologo->user_id,
+                'sesion_id' => $request->sesion_id,
+            ]);
         }else { // Si es un psicologo
             $sesion = Sesion::where('id', $request->sesion_id)->first();
-
+            $paciente = Paciente::where('id', $sesion->paciente_id)->first();
+            Notificacion::create([ // Notificacion para el usuario actual
+                'descripcion' => 'Tu psicologo canceló la sesión.',
+                'user_id' => $paciente->user_id,
+                'sesion_id' => $request->sesion_id,
+            ]);
         }
 
         $sesion->estado = 'Cancelado';

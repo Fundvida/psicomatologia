@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Notificacion;
 use App\Models\Psicologo;
 use App\Models\Sesion;
+use Illuminate\Support\Facades\Log;
 
 class FileController extends Controller
 {
@@ -94,5 +95,19 @@ class FileController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getComprobanteXPaciente($sesion_id){
+         // Busca el registro en la tabla files
+         $file = File::where('sesion_id', $sesion_id)->first();
+
+         if ($file) {
+            Log::info('Ruta de la imagen: ' . $file->url);
+             // Asegúrate de que $file->ruta_imagen contiene la ruta relativa correcta
+             $url = asset($file->url);
+             return response()->json(['url' => $url]);
+         } else {
+             return response()->json(['error' => 'Comprobante no encontrado'], 404);
+         }
     }
 }

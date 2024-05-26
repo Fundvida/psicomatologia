@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Files\FileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -164,4 +166,6 @@ Route::get('/test', function () {
 
 
 Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']);
+
+Route::get('/comprobante/{sesion_id}', [FileController::class, 'getComprobanteXPaciente']);
 

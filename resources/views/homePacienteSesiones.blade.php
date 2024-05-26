@@ -311,7 +311,7 @@
                                 </thead>
                                 <tbody id="table-sesiones">
                                     <!-- Registro 1 -->
-                                    <tr>
+                                    <!-- <tr>
                                         <td>2024-05-05</td>
                                         <td>09:00 - 10:00</td>
                                         <td>1234567</td>
@@ -329,33 +329,8 @@
                                             <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar"></i>
                                         </td>
 
-                                    <!-- </tr>
-
-                                    <tr>
-                                        <td>2024-05-06</td>
-                                        <td>14:00 - 15:00</td>
-                                        <td>1234567</td>
-                                        <td>Juan</td>
-                                        <td>Pérez</td>
-                                        <td>Terapia de pareja</td>
-                                        <td>Problemas de comunicación</td>
-                                        <td>None</td>
-                                        <td>Terminada</td>
-                                        <td>Realizado</td>
-                                    </tr>
-                             
-                                    <tr>
-                                        <td>2024-05-07</td>
-                                        <td>16:00 - 17:00</td>
-                                        <td>1234567</td>
-                                        <td>Juan</td>
-                                        <td>Pérez</td>
-                                        <td>Consulta psicológica</td>
-                                        <td>Estrés laboral</td>
-                                        <td>Informe.docx</td>
-                                        <td>Cancelada</td>
-                                        <td>Cancelado</td>
                                     </tr> -->
+
                                 </tbody>
                             </table>
                         </div>

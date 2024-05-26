@@ -300,89 +300,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
-                                    <!-- Registro 1 -->
-                                    <tr>
-                                        <td>2024-05-05</td>
-                                        <td>09:00 - 10:00</td>
-                                        <td>88888888</td>
-                                        <td>Jessica</td>
-                                        <td>Lopez</td>
-                                        <td>Sesión de terapia individual</td>
-                                        <td>Ansiedad leve</td>
-                                        <td>Informe.pdf</td>
-                                        <td>Pendiente</td>
-                                        <td>Pendiente</td>
-                                        <td class="action-icons">
-
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-05', '09:00 - 10:00', '88888888', 'Jessica Lopez', 'Sesión de terapia individual', 'Ansiedad leve', 'Informe.pdf')" title="Ver Información"></i>
-                                        </td>
-                                    </tr>
-                                    <!-- Registro 2 -->
-                                    <tr>
-                                        <td>2024-05-06</td>
-                                        <td>14:00 - 15:00</td>
-                                        <td>77777777</td>
-                                        <td>Matias</td>
-                                        <td>Rojas</td>
-                                        <td>Terapia de pareja</td>
-                                        <td>Problemas de comunicación</td>
-                                        <td>None</td>
-                                        <td>Terminada</td>
-                                        <td>Realizado</td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-pen text-success" onclick="registrarSesion()" title="Registrar Sesión"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar Sesión"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('2024-05-06', '14:00 - 15:00', '77777777', 'Matias Rojas', 'Terapia de pareja', 'Problemas de comunicación', 'None')" title="Ver Información"></i>
-                                        </td>
-                                    </tr>
-                                    <!-- Registro 3 -->
-                                    <tr>
-                                        <td>2024-05-07</td>
-                                        <td>16:00 - 17:00</td>
-                                        <td>1234567</td>
-                                        <td>Juan</td>
-                                        <td>Pérez</td>
-                                        <td>Consulta psicológica</td>
-                                        <td>Estrés laboral</td>
-                                        <td>Informe.docx</td>
-                                        <td>Cancelada</td>
-                                        <td>Cancelado</td>
-                                    </tr>
-
-                                    <!-- Registro 4 -->
-                                    <tr>
-                                        <td>2024-05-08</td>
-                                        <td>09:00 - 10:00</td>
-                                        <td>66666666</td>
-                                        <td>Leonardo</td>
-                                        <td>Torrez</td>
-                                        <td>Sesión de terapia individual</td>
-                                        <td>Ansiedad leve</td>
-                                        <td>Informe.pdf</td>
-                                        <td>Pendiente</td>
-                                        <td>Realizado</td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -516,18 +434,29 @@
 
     <script>
 
-        function verComprobante() {
-            // Aquí puedes obtener la URL de la imagen del comprobante de pago
-            var urlComprobantePago = "{{ asset('images/comprobanteEjemplo.png') }}";
+        function verComprobante(sesion_id) {
+            console.log(sesion_id);
 
-            // Cambia la imagen en el modal
-            var imagenComprobante = document.getElementById("imagenComprobante");
-            imagenComprobante.src = urlComprobantePago;
+            fetch(`/comprobante/${sesion_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        //console.log(data.url + " <-imagen");
 
-            // Muestra el modal
-            var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
-            modal.show();
+                        var imagenComprobante = document.getElementById("imagenComprobante");
+                        imagenComprobante.src = data.url;
+
+                        var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
+                        modal.show();
+                    } else {
+                        console.error('Error al obtener el comprobante:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud AJAX:', error);
+                });
         }
+
 
         function mostrarInfo(fecha, hora, ci, paciente, descripcion, diagnostico, archivoAdjunto) {
             // Inserta los datos del paciente en el modal
@@ -611,7 +540,7 @@
                             ${icon_cancel}
                         </td>
                         <td class="action-icons">
-                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante()" title="Ver Comprobante"></i>
+                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
                         </td>
                         <td class="action-icons">
                             <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
@@ -685,6 +614,34 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Función para cargar las notificaciones
+        function loadNotifications() {
+            fetch('/notificaciones')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const notificationBody = document.getElementById('notificationBody');
+                    notificationBody.innerHTML = '';
+
+                    data.forEach(notification => {
+                        const notificationItem = document.createElement('div');
+                        notificationItem.className = 'notification-item-container mb-2';
+                        notificationItem.innerHTML = `
+                            <button class="notification-item rounded bg-light py-2 px-3 border-0">
+                                ${notification.descripcion}
+                            </button>
+                        `;
+                        notificationBody.appendChild(notificationItem);
+                    });
+                });
+        }
+
+        loadNotifications();
+
+        setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+    });
 </script>
 </body>
 </html>
