@@ -144,7 +144,8 @@ Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSes
     ->name('paciente.delSesion');
 
 Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])
-    ->middleware('can:paciente.listar')
+    //TODO cambiar solo admin    
+    //->middleware('can:paciente.listar') 
     ->name('paciente.listar');
 
 Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')
@@ -166,6 +167,7 @@ Route::get('/test', function () {
 
 
 Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']);
+Route::post('/notificaciones/mark-all-read', [NotificacionController::class, 'markAllAsRead']);
 
 Route::get('/comprobante/{sesion_id}', [FileController::class, 'getComprobanteXPaciente']);
 

@@ -300,18 +300,11 @@
                                         <th>Apellidos Psicologo</th>
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
+                                        <th>Registrar Pago</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
-                                    <!-- Registro 1 -->
-                                    <tr>
-                                        <td>Jessica</td>
-                                        <td>Lopez</td>
-                                        <td>Manuel</td>
-                                        <td>Torrez</td>
-                                        <td>Pendiente</td>
-                                        <td>Pendiente</td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -385,6 +378,10 @@
                 // Recorrer los datos y agregar filas a la tabla
                 $.each(data, function(index, sesion) {
                     var pago = sesion.pago_confirmado == 1? 'Cancelado': 'Pendiente';
+                    var actionIcon = pago === 'Pendiente' ? `
+                    <td class="action-icons">
+                        <i class="fa-solid fa-dollar-sign" style="color: green" onclick="registrarPago()" title="Registrar Pago"></i>
+                    </td>` : `<td></td>`;
 
                     $('#sesiones-body').append(`
                         <tr>
@@ -394,6 +391,7 @@
                             <td>${sesion.apellido_psicologo}</td>
                             <td>${sesion.estado}</td>
                             <td>${pago}</td>
+                            ${actionIcon}
                         </tr>
                     `);
                 });

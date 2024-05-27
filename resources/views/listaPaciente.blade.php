@@ -392,6 +392,34 @@
                             <i class="bi bi-person-plus-fill me-2"></i> Agregar Paciente
                         </button>
                     </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                        </div>
+                    </div>
+
+                    <!-- Filtros y barra de búsqueda -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <select class="form-select" id="filtroTipo">
+                                <option value="todos">Todos</option>
+                                <option value="mayor">Paciente Mayor</option>
+                                <option value="menor">Paciente Menor de Edad</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="filtroNombre" placeholder="Nombre del Paciente">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filtroCI" placeholder="CI del Paciente">
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" onclick="filtrarPacientes()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
                     <!-- Tabla de pacientes -->
                     <div class="custom-table-container shadow" style="height: 500px;">
                         <div class="table-responsive">
@@ -511,8 +539,8 @@
                                 <td>${paciente.tipo_paciente}</td>
                                 <td>${f_nacimiento}</td>
                                 <td class="action-icons"> 
-                                    <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${pacientes.id})" title="Editar"></i>
-                                    <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${pacientes.id})" title="Eliminar Sesión"></i>
+                                    <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
+                                    <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
                                 </td>
                             </tr>
                         `);
@@ -586,7 +614,7 @@
             document.getElementById("contrasena").removeAttribute("required");
             document.getElementById("confirmarContrasena").removeAttribute("required");
 
-            console.log(paciente_id)
+            console.log(paciente_id, "   hgkgkhjg");
             $('#formularioRegistroModal').modal('show');
             $.ajax({
                 url: '/paciente/' + paciente_id + '/edit',

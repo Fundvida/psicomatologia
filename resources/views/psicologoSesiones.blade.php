@@ -35,9 +35,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.js"></script>
     <!-- Importar el archivo de idioma español -->
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
-
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
     <style>
         /* Estilos adicionales para responsividad */
@@ -275,6 +272,32 @@
                     <!-- Título -->
                     <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
                     <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p>
+                    
+                    <div class="row mb-3">
+                    <div class="col-md-12">
+                        <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                    </div>
+                </div>
+                <!-- Filtros y barra de búsqueda -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <input type="date" class="form-control" id="filtroFecha" placeholder="Fecha">
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <input type="text" class="form-control" id="filtroNombre" placeholder="Nombre del Paciente">
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <input type="text" class="form-control" id="filtroCI" placeholder="CI del Paciente">
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-primary btn-block" onclick="filtrarPacientes()">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                    
                     <!-- Tabla de pacientes -->
                     <div class="custom-table-container shadow" style="height: 500px;">
                         <div class="table-responsive">
@@ -340,9 +363,10 @@
                 </div>
                 <div class="modal-body text-center">
                     <img id="imagenComprobante" src="" alt="Comprobante de Pago" style="max-width: 100%;">
+                    <p id="mensajeError" style="display: none;">El paciente aun no subio su comprobante.</p>
                 </div>
                 <div class="modal-footer justify-content-center font-alt">
-                    <button type="button" class="btn btn-primary" onclick="confirmarPago()" style="font-size: 20px;">
+                    <button type="button" id="btnDescargar" class="btn btn-primary" onclick="confirmarPago()" style="font-size: 20px;">
                         <i class="bi bi-download" style="font-size: 24px;"></i> DESCARGAR
                     </button>
                 </div>
@@ -441,15 +465,24 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.url) {
-                        //console.log(data.url + " <-imagen");
-
                         var imagenComprobante = document.getElementById("imagenComprobante");
                         imagenComprobante.src = data.url;
+
+                        document.getElementById("mensajeError").style.display = "none";
+                        document.getElementById("imagenComprobante").style.display = "block; max-width: 100%;";
+                        document.getElementById("btnDescargar").setAttribute("type", "button");
 
                         var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
                         modal.show();
                     } else {
                         console.error('Error al obtener el comprobante:', data.error);
+
+                        document.getElementById("mensajeError").style.display = "block";
+                        document.getElementById("imagenComprobante").style.display = "none";
+                        document.getElementById("btnDescargar").setAttribute("type", "hidden");
+
+                        var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
+                        modal.show();
                     }
                 })
                 .catch(error => {

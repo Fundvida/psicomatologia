@@ -31,3 +31,29 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const markReadBtn = document.getElementById('markReadBtn');
+    const notificationBody = document.getElementById('notificationBody');
+
+    if (markReadBtn) {
+        markReadBtn.addEventListener('click', function() {
+            // Lógica para hacer la solicitud AJAX
+            fetch('/notificaciones/mark-all-read', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Notificaciones marcadas como leídas');
+                notificationBody.innerHTML = '';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+});
+    </script>

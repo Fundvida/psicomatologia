@@ -12,4 +12,9 @@ class Psicologo extends Model
     public function user(){
         return $this->belongsTo(User::class, "user_id");
     }
+
+    public function especialidades()
+    {
+        return $this->hasMany(Especialidad::class, 'psico_id');
+    }
 }

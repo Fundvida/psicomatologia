@@ -62,11 +62,13 @@ class PsicologoController extends Controller
 
             $psicologo->save();
 
-            $especialidad = new Especialidad();
-            $especialidad->psico_id = $psicologo->id;
-            $especialidad->especialidad = $request->especialidad;
-
-            $especialidad->save();
+            foreach ($request->especialidad as $especialidadNombre) {
+                $especialidad = new Especialidad();
+                $especialidad->psico_id = $psicologo->id;
+                $especialidad->especialidad = $especialidadNombre;
+                
+                $especialidad->save();
+            }
 
             $diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes"];
             foreach ($diasSemana as $dia) {
@@ -106,10 +108,16 @@ class PsicologoController extends Controller
             $user->respuesta_seguridad_a = $request->respuestaSeguridad;
             $user->save();
 
-            $especialidad = Especialidad::where('psico_id', $psicologo->id)->first();
-            $especialidad->especialidad = $request->especialidad;
+        // Eliminar las especialidades existentes
+        Especialidad::where('psico_id', $psicologo->id)->delete();
 
+        // Iterar sobre las especialidades recibidas y crear un nuevo registro para cada una
+        foreach ($request->especialidad as $especialidadNombre) {
+            $especialidad = new Especialidad();
+            $especialidad->psico_id = $psicologo->id;
+            $especialidad->especialidad = $especialidadNombre;
             $especialidad->save();
+        }
 
             //return redirect()->route('mntPsicologo.index')->with('resultado', "actualizado");
             return redirect()->route('listaPsicologo')->with('resultado', "actualizado");

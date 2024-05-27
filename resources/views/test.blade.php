@@ -1,30 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SISTEMA DE PSICOLOGÍA</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>PSICÓLOGOS</title>
 
-    <!-- Enlaces a los estilos CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
     <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('./css/style.css')}}">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-
-    <!-- Google fonts-->
+    <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
+    <!-- Google fonts-->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" />
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet"/>
@@ -35,7 +31,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.js"></script>
     <!-- Importar el archivo de idioma español -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
-
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
     <style>
@@ -81,8 +76,7 @@
                 margin-left: 0; /* Restablecer el margen izquierdo del contenido principal en dispositivos móviles */
             }
         }
-
-        /* Estilos personalizados para la tabla de sesiones */
+        /* Estilos personalizados para la tabla */
         .custom-table-container {
             border-radius: 20px;
             overflow: hidden;
@@ -100,7 +94,6 @@
             text-align: center; /* Alinea el texto horizontalmente */
             vertical-align: middle; /* Alinea el texto verticalmente */
         }
-
         .custom-table tbody tr:hover {
             background-color: #f5f5f5; /* Resalta la fila al pasar el cursor */
         }
@@ -112,12 +105,10 @@
         .custom-table tbody tr:nth-child(odd) {
             background-color: #ffffff; /* Estilo alternativo para filas impares */
         }
-
         .custom-table th {
             background-color: #cc848a; /* Color de fondo para encabezados */
             color: #fff; /* Color de texto para encabezados */
         }
-
         .custom-table th,
         .custom-table td {
             min-width: 100px; /* Anchura mínima de las columnas */
@@ -128,16 +119,21 @@
             font-size: 1.2rem;
             margin: 0 5px;
         }
-
         .btn-primary {
-                background-color: #edb1b5;
-                border-color: #edb1b5;
+            background-color: #edb1b5;
+            border-color: #edb1b5;
         }
 
         .btn-primary:hover {
             background-color: #cc848a;
             border-color: #cc848a;
         }
+        .btn-primary:focus {
+            color: #fff;
+            background-color: #edb1b5;
+            border-color: #edb1b5;
+        }
+
         /* NOTIFICACION */
 
         .notification-container {
@@ -199,18 +195,6 @@
         .notification-footer button:hover {
             background-color: #616c96;
         }
-
-        /* TRANSICION */
-
-        .tab-pane.fade:not(.show) {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .tab-pane.fade.show {
-            opacity: 1;
-        }
-
         /* Estilos para la ventana emergente de notificaciones */
         .notification-container {
             position: fixed;
@@ -263,9 +247,29 @@
         .show {
             display: block !important;
         }
+
+        /* Boton Estado togledown */
+        .custom-dropdown-toggle {
+            background-color: #727FAB;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.2rem 1rem;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .custom-dropdown-toggle:hover {
+            background-color: #5e699f;
+        }
+        .custom-dropdown-toggle:active {
+            background-color: #4d5680;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2) inset;
+        }
+
     </style>
 </head>
-<body>
+
+<body id="page-top">
     <!-- Barra de navegación principal -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
         <div class="container px-5">
@@ -352,10 +356,19 @@
             </div>
         </div>
     </div>
-
     <!-- Menú lateral -->
     <div class="custom-sidebar">
         <ul>
+        <li class="custom-menu-item custom-font-alt">PACIENTES
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+            <li><a href="{{ route('listaPaciente') }}" style="color: #fff;">Pacientes</a></li>
+            </ul>
+        </li>
+        <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+            <li><a href="{{ route('listaPsicologo') }}" style="color: #fff;">Psicologos</a></li>
+            </ul>
+        </li>
         <li class="custom-menu-item custom-font-alt">SESIONES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
             <li><a href="#" style="color: #fff;">Lista de Sesiones</a></li>
@@ -379,305 +392,384 @@
         </ul>
     </div>
 
-<!-- Contenido principal -->
-<main class="main-content ">
-    <section class="py-1 d-flex justify-content-center align-items-center" id="sesiones">
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <section class="py-1 d-flex justify-content-center align-items-center" id="psicologos">
+            <div class="container px-5">
+                <div class="container px-5 shadow-lg p-5 rounded mt-2">
 
-        <div class="container px-5">
-            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
-                <!-- Título -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones</h2>
-                <p class="lead fw-normal text-muted mb-5 ttNorms">Consulta tus sesiones programadas para estar al tanto de tus citas y seguir tu progreso.</p>
-                <!-- Tabla de pacientes -->
-                <div class="custom-table-container shadow" style="height: 500px;">
-                    <div class="table-responsive">
-                        <table class="table table-striped custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora Inicio/Hora Fin</th>
-                                    <th>CI Paciente</th>
-                                    <th>Nombre(s)</th>
-                                    <th>Apellidos</th>
-                                    <th>Descripción de la Sesión</th>
-                                    <th>Diagnòstico</th>
-                                    <th>Archivos Adjuntos</th>
-                                    <th>Estado de la Sesión</th>
-                                    <th>Estado de Pago</th>
-                                    <th>Pagar Sesión</th>
-                                    <th>Cancelar Sesión</th>
+                    <!-- Título -->
+                    <h2 class="display-3 text-center lh-1 mb-5 font-alt">Listado de Psicólogos</h2>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Registro 1 -->
-                                <tr>
-                                    <td>2024-05-05</td>
-                                    <td>09:00 - 10:00</td>
-                                    <td>1234567</td>
-                                    <td>Juan</td>
-                                    <td>Pérez</td>
-                                    <td>Sesión de terapia individual</td>
-                                    <td>Ansiedad leve</td>
-                                    <td>Informe.pdf</td>
-                                    <td>Pendiente</td>
-                                    <td>Pendiente</td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-money-bill text-success" title="Pagar"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar"></i>
-                                    </td>
+                    <!-- Formulario emergente para registrar psicólogo -->
+                    <div class="modal fade" id="formularioRegistroModal" tabindex="-1" aria-labelledby="formularioRegistroModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title font-alt">Registrar Psicólogo</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="nombres" class="form-label">Nombres<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="nombres">
+                                                <div id="error-nombres" class="text-danger d-none">Este campo es obligatorio</div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="apellidos" class="form-label">Apellidos<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="apellidos">
+                                                <div id="error-apellidos" class="text-danger d-none">Este campo es obligatorio</div>
+                                            </div>
+                                        </div>
 
-                                </tr>
-                                <!-- Registro 2 -->
-                                <tr>
-                                    <td>2024-05-06</td>
-                                    <td>14:00 - 15:00</td>
-                                    <td>1234567</td>
-                                    <td>Juan</td>
-                                    <td>Pérez</td>
-                                    <td>Terapia de pareja</td>
-                                    <td>Problemas de comunicación</td>
-                                    <td>None</td>
-                                    <td>Terminada</td>
-                                    <td>Realizado</td>
-                                </tr>
-                                <!-- Registro 3 -->
-                                <tr>
-                                    <td>2024-05-07</td>
-                                    <td>16:00 - 17:00</td>
-                                    <td>1234567</td>
-                                    <td>Juan</td>
-                                    <td>Pérez</td>
-                                    <td>Consulta psicológica</td>
-                                    <td>Estrés laboral</td>
-                                    <td>Informe.docx</td>
-                                    <td>Cancelada</td>
-                                    <td>Cancelado</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                        <div class="mb-3">
+                                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                                            <input type="date" class="form-control" id="fechaNacimiento">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="fechaFuncion" class="form-label">Fecha función título provisión nacional</label>
+                                            <input type="date" class="form-control" id="fechaFuncion">
+                                        </div>
 
-            </div>
-        </div>
+                                        <div class="mb-3">
+                                            <label for="universidad" class="form-label">Universidad</label>
+                                            <input type="text" class="form-control" id="universidad">
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="ciudadResidencia" class="form-label">Ciudad de Residencia</label>
+                                                <input type="text" class="form-control" id="ciudadResidencia">
+                                            </div>
+                                            <div class="col">
+                                                <label for="paisResidencia" class="form-label">País de Residencia</label>
+                                                <input type="text" class="form-control" id="paisResidencia">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="ci" class="form-label">Carnet de identidad o equivalente</label>
+                                            <input type="text" class="form-control" id="ci">
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="contrasena" class="form-label">Contraseña</label>
+                                                <input type="password" class="form-control" id="contrasena">
+                                            </div>
+                                            <div class="col">
+                                                <label for="confirmarContrasena" class="form-label">Confirmar Contraseña</label>
+                                                <input type="password" class="form-control" id="confirmarContrasena">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="archivos" class="form-label">Archivos</label>
+                                            <input type="file" id="archivos" class="form-control" name="archivos[]" multiple>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="descripcionCV">Descripción de CV:</label><br>
+                                            <textarea id="descripcioncv" name="descripcionCV" class="form-control"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="correoElectronico" class="form-label">Correo Electrónico</label>
+                                            <input type="email" class="form-control" id="correoElectronico">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="telefono" class="form-label">Número de Teléfono</label>
+                                            <input type="tel" class="form-control" id="telefono" placeholder="Ingrese su número de teléfono" style="width: 312px;">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta</label>
+                                            <select id="metodoConfirmacion" class="form-select">
+                                                <option value="correo">Correo Electrónico</option>
+                                                <option value="sms">SMS</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="preguntaSeguridad1" class="form-label">Pregunta de Seguridad</label>
+                                            <input type="text" class="form-control" id="preguntaSeguridad1">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="preguntaSeguridad2" class="form-label">Respuesta de Seguridad</label>
+                                            <input type="text" class="form-control" id="preguntaSeguridad2">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" onclick="mostrarErrorPsicologo()">Cancelar</button>
+                                            <!--<button type="button" class="btn btn-primary" onclick="registrarPsicologo()">Registrar Psicólogo</button>-->
+                                            <button type="button" class="btn btn-primary" onclick="validarFormulario()">Registrar Psicólogo</button>
 
-    </section>
-</main>
+                                        </div>
+                                    </form>
 
-<div id="notification-container" class="notification-container">
-    <div class="notification">
-        <div class="notification-header">
-            <i class="fas fa-info-circle"></i> Información
-            <button id="close-btn">&times;</button>
-        </div>
-        <div class="notification-body">
-            Usted tiene una sesión pendiente de pago
-        </div>
-        <div class="notification-footer">
-            <button id="go-btn">
-                Ir <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
+                                    <!-- Validar campo vacio-->
+                                    <script>
+                                        function validarFormulario() {
+                                            var nombres = document.getElementById("nombres").value.trim();
+                                            var apellidos = document.getElementById("apellidos").value.trim();
 
-    </div>
-</div>
+                                            if (nombres === "") {
+                                                document.getElementById("error-nombres").classList.remove("d-none");
+                                            } else {
+                                                document.getElementById("error-nombres").classList.add("d-none");
+                                            }
 
-<!-- Modal de Pago -->
-<div class="modal fade" id="pagoModal" tabindex="-1" aria-labelledby="pagoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-alt" id="pagoModalLabel">Pagar Sesión</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Pestañas -->
-                <ul class="nav nav-tabs custom-tabs" id="pagoTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pagoQR-tab" data-bs-toggle="tab" data-bs-target="#pagoQR" type="button" role="tab" aria-controls="pagoQR" aria-selected="true">Pago QR</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cuentaBancaria-tab" data-bs-toggle="tab" data-bs-target="#cuentaBancaria" type="button" role="tab" aria-controls="cuentaBancaria" aria-selected="false">Pago Cuenta Bancaria</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pagoEfectivo-tab" data-bs-toggle="tab" data-bs-target="#pagoEfectivo" type="button" role="tab" aria-controls="pagoEfectivo" aria-selected="false">Pago en Efectivo</button>
-                    </li>
-                </ul>
+                                            if (apellidos === "") {
+                                                document.getElementById("error-apellidos").classList.remove("d-none");
+                                            } else {
+                                                document.getElementById("error-apellidos").classList.add("d-none");
+                                            }
 
-                <!-- Contenido de las pestañas -->
-                <div class="tab-content mt-4" id="pagoTabsContent">
-                    <!-- Pestaña Pago por QR -->
-                    <div class="tab-pane fade show active" id="pagoQR" role="tabpanel" aria-labelledby="pagoQR-tab">
-                        <div class="text-center">
-                            <h4 class="mb-4 font-alt">Pago por Código QR</h4>
-                            <p class="mt-4">Por favor, escanea el código de pago a continuación y sube el comprobante correspondiente para confirmar tu transacción.</p>
-                            <img src="{{ asset('images/qr_real.jpeg') }}" alt="QR de Pago" class="img-fluid mb-4" style="max-height: 300px;">
-                            <!-- Campo para subir el comprobante de pago -->
-                            <div class="mb-3">
-                                <h5 for="comprobantePagoQR" class="font-alt mb-2">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
-                                <input type="file" class="form-control" id="comprobantePagoQR">
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
-                        </div>
-                    </div>
-                    <!-- Pestaña Cuenta Bancaria -->
-                    <div class="tab-pane fade" id="cuentaBancaria" role="tabpanel" aria-labelledby="cuentaBancaria-tab">
-                        <div class="text-center">
-                            <h4 class="mb-4 font-alt">Pago por Cuenta Bancaria</h4>
-                            <p class="mt-4">Por favor, realiza el pago a esta cuenta bancaria y sube el comprobante de pago para confirmar tu transacción.</p>
-                            <p><strong>Número de Cuenta:</strong> 4001-3356-418</p>
-                            <p><strong>Banco:</strong> Banco FIE</p>
-                            <p><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
-                            <p><strong>A nombre de:</strong> Fundación Educar Para La Vida</p>
-                            <p><strong>NIT:</strong> 16-943-002-8</p>
-                            <div class="mb-3">
-                                <h5 for="comprobantePagoBanco" class="mb-2 font-alt">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
-                                <input type="file" class="form-control" id="comprobantePagoBanco">
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
-                        </div>
-                    </div>
-                    <!-- Pestaña Pago en Efectivo -->
-                    <div class="tab-pane fade" id="pagoEfectivo" role="tabpanel" aria-labelledby="pagoEfectivo-tab">
-                        <div class="text-center">
-                            <h4 class="mb-4 font-alt">Pago en Efectivo</h4>
-                            <div class="rounded p-3 mb-3" style="background-color: #f0f0f0; border: 1px solid #ced4da;">
-                                <div class="d-flex justify-content-between">
-                                    <div>Costo de la sesión:</div>
-                                    <div>Bs. 100</div>
+                                            // Aquí puedes agregar más validaciones para otros campos si es necesario
+
+                                            // Si todos los campos requeridos están completos, puedes enviar el formulario
+                                            if (nombres !== "" && apellidos !== "") {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                                                    text: 'El psicólogo se ha registrado exitosamente.',
+                                                    confirmButtonColor: '#3085d6',
+                                                    confirmButtonText: 'OK',
+                                                    customClass: {
+                                                        title: 'swal-title', // Clase CSS para el título personalizado
+                                                    },
+                                                    // Permite que el HTML se muestre en la notificación
+                                                    allowHtml: true
+                                                });
+                                                //document.getElementById("registroForm").submit();
+                                            }
+                                        }
+                                    </script>
+
                                 </div>
                             </div>
-                            <p>Por favor, tenga en cuenta que puede pagar la sesión en efectivo en el momento de la consulta. Además, asegúrese de tener el monto exacto disponible al momento del pago.</p>
+                        </div>
+                    </div>
+
+                    <script>
+                        function mostrarFormulario() {
+                            $('#formularioRegistroModal').modal('show');
+                        }
+                    </script>
+                    <script>
+                        var input = document.querySelector("#telefono");
+                        window.intlTelInput(input, {
+                            initialCountry: "auto",
+                            separateDialCode: true,
+                            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js",
+                        });
+                    </script>
+
+                    <div class="text-end mb-3">
+                        <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="mostrarFormulario()" style="font-size: 20px; padding: 12px 14px;">
+                            <i class="bi bi-person-plus-fill fs-4 me-2"></i> Agregar Psicólogo
+                        </button>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                        </div>
+                    </div>
+                    <!-- Filtros y barra de búsqueda -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <select class="form-select" id="filtroTipo">
+                                <option value="todos">Todos</option>
+                                <option value="mayor">Paciente Mayor</option>
+                                <option value="menor">Paciente Menor de Edad</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="filtroNombre" placeholder="Nombre Psicólogo/a">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filtroCI" placeholder="CI del Psicólogo/a">
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" onclick="filtrarPacientes()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+
+                    <!-- Tabla de psicólogos -->
+                    <div class="custom-table-container shadow" style="height: 500px;">
+
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>CI</th>
+                                        <th>Nombre Completo Psicólogo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Filas de ejemplo (rellena con datos reales cuando conectes a la base de datos) -->
+                                    <tr>
+                                        <td>1234567</td>
+                                        <td>Elias Pérez</td>
+                                        <td>Activo</td>
+                                        <td class="action-icons">
+                                            <!-- Botón desplegable con opciones -->
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div class="btn-group me-2">
+                                                    <button type="button" class="btn custom-dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Estado
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Cambiar a Activo</a></li>
+                                                        <li><a class="dropdown-item" href="#">Cambiar a Ausente Temporalmente</a></li>
+                                                        <li><a class="dropdown-item" href="#">Cambiar a Inactivo</a></li>
+                                                        <li><a class="dropdown-item" href="#">Ver CV</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- Botones de editar y eliminar -->
+                                                <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editarSesion()" title="Editar Sesión"></i>
+                                                <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="confirmarEliminarPsicologo('Elias Pérez')" title="Eliminar Sesión"></i>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>6434344</td>
+                                        <td>Tito Castillo</td>
+                                        <td>Ausente Temporalmente</td>
+                                        <td class="action-icons">
+                                            <!-- Contenedor flex para alinear el botón y los íconos -->
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <!-- Botón desplegable con opciones -->
+                                                <div class="btn-group me-2">
+                                                    <button type="button" class="btn custom-dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Estado
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Cambiar a Activo</a></li>
+                                                        <li><a class="dropdown-item" href="#">Cambiar a Ausente Temporalmente</a></li>
+                                                        <li><a class="dropdown-item" href="#">Cambiar a Inactivo</a></li>
+                                                        <li><a class="dropdown-item" href="#">Ver CV</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- Botones de editar y eliminar -->
+                                                <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editarSesion()" title="Editar Sesión"></i>
+                                                <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="confirmarEliminarPsicologo('Tito Castillo')" title="Eliminar Sesión"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </section>
+    </main>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationIcon = document.getElementById('notificationIcon');
+            const notificationContainer = document.getElementById('notificationContainer');
+            const markReadBtn = document.getElementById('markReadBtn');
+            const notificationItems = document.querySelectorAll('.notification-item');
 
+            notificationIcon.addEventListener('click', function() {
+                notificationContainer.classList.toggle('show');
+            });
 
-<script>
+            markReadBtn.addEventListener('click', function() {
+                notificationItems.forEach(item => {
+                    item.classList.remove('bg-light');
+                });
+            });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtener referencias a elementos DOM
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationContainer = document.getElementById('notificationContainer');
-        const markReadBtn = document.getElementById('markReadBtn');
-        const notificationItems = document.querySelectorAll('.notification-item');
-        const pagarIcon = document.querySelector('.fas.fa-money-bill');
-
-        notificationIcon.addEventListener('click', function() {
-            notificationContainer.classList.toggle('show');
-        });
-
-        markReadBtn.addEventListener('click', function() {
+            // Agregar evento clic a cada notificación
             notificationItems.forEach(item => {
-                item.classList.remove('bg-light');
+                item.addEventListener('click', function() {
+                    item.classList.remove('bg-light');
+                });
             });
         });
+    </script>
 
-        // Agregar evento clic a cada notificación
-        notificationItems.forEach(item => {
-            item.addEventListener('click', function() {
-                item.classList.remove('bg-light');
+    <script>
+        function registrarPsicologo() {
+            Swal.fire({
+                icon: 'success',
+                title: '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                text: 'El psicólogo se ha registrado exitosamente.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
             });
-        });
+        }
+    </script>
+    <script>
+        function mostrarErrorPsicologo() {
+            Swal.fire({
+                icon: 'error',
+                title: '<h2 class="text-center mb-4 font-alt">Error</h2>',
+                text: 'Se ha producido un error al registrar psicólogo.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
+            });
+        }
+    </script>
+    <script>
+        function confirmarEliminarPsicologo(nombre) {
+            Swal.fire({
+                title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro?</h2>',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
+                        'El psicólogo ' + nombre + ' ha sido eliminado.',
+                        'success'
+                    )
+                }
+            });
+        }
+    </script>
 
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
 
-        // Evento para abrir el modal al hacer clic en el icono de pagar
-        pagarIcon.addEventListener('click', function() {
-            $('#pagoModal').modal('show'); // Bootstrap Modal
-        });
-    });
-
-</script>
-
-<script>
-    function confirmarPago() {
-        Swal.fire({
-            icon: 'success',
-            title: '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
-            text: 'El pago se realizó exitosamente',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-            customClass: {
-                title: 'swal-title', // Clase CSS para el título personalizado
-            },
-            // Permite que el HTML se muestre en la notificación
-            allowHtml: true
-        });
-    }
-</script>
-<script>
-    function confirmarCancelar(nombre) {
-        Swal.fire({
-            title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
-            html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Si cancelas la sesión, por favor dinos el motivo:</p>
-                   <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, cancelar',
-            cancelButtonText: 'No',
-            customClass: {
-                title: 'swal-title', // Clase CSS para el título personalizado
-            },
-            // Permite que el HTML se muestre en la notificación
-            allowHtml: true,
-            preConfirm: () => {
-                return document.getElementById('justificacion').value;
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const justificacion = result.value;
-                Swal.fire(
-                    '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                    `La sesión ha sido cancelada.<br>Justificación: ${justificacion}`,
-                    'success'
-                )
-            }
-        });
-    }
-</script>
-
-<!-- Enlaces a los scripts JS -->
-<script src="{{asset('./vendors/base/vendor.bundle.base.js')}}"></script>
-<script src="{{asset('./vendors/chart.js/Chart.min.js')}}"></script>
-<script src="{{asset('./js/jquery.cookie.js')}}" type="text/javascript"></script>
-<script src="{{asset('./js/off-canvas.js')}}"></script>
-<script src="{{asset('./js/hoverable-collapse.js')}}"></script>
-<script src="{{asset('./js/template.js')}}"></script>
-<script src="{{asset('./js/todolist.js')}}"></script>
-<script src="{{asset('./js/dashboard.js')}}"></script>
-
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
-
-<script src="js/hoverDescription.js"></script>
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<!-- * *                               SB Forms JS                               * *-->
-<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
+    <script src="js/hoverDescription.js"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <!-- * *                               SB Forms JS                               * *-->
+    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </body>
 </html>
 
-</body>
-</html>
+
+

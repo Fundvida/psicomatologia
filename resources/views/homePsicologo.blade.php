@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>SISTEMA DE PSICOLOGÍA</title>
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -263,6 +265,7 @@
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -326,65 +329,6 @@
 
         setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
     });
-</script>
-
-<script>
-    // function createNotification(message) {
-    //     const container = document.getElementById('notification-container');
-    //     const template = document.getElementById('notification-template');
-
-    //     const clone = template.content.cloneNode(true);
-    //     const notificationBody = clone.querySelector('.notification-body');
-    //     notificationBody.innerHTML = message; // Asignar el contenido HTML al cuerpo de la notificación
-
-    //     container.appendChild(clone);
-    // }
-    //     document.addEventListener('DOMContentLoaded', function () {
-    //         const container = document.getElementById('notification-container');
-    //         const template = document.getElementById('notification-template');
-
-    //         // Función para cerrar una notificación
-    //         function closeNotification(notification) {
-    //             notification.remove();
-    //         }
-
-    //         // Botón cerrar notificación
-    //         container.addEventListener('click', function (event) {
-    //             if (event.target.classList.contains('close-btn')) {
-    //                 closeNotification(event.target.closest('.notification'));
-    //             }
-    //         });
-
-    //         // Ejemplo de uso
-    //         document.getElementById('add-notification').addEventListener('click', function () {
-    //             createNotification('Nueva notificación');
-    //         });
-    //     });
-
-    //     $(document).ready(function() {
-    //     $.ajax({
-    //         url: '/psicologo/getNotificaciones',
-    //         type: 'GET',
-    //         dataType: 'json',
-    //         success: function(data) {
-    //             console.log("notificaciones aqui");
-    //             console.log(data)
-    //             data.forEach(function(notification) {
-    //                 const horaInicio = notification.fecha_hora_inicio.split(' ')[1].split(':').slice(0, 2).join(':');
-    //                 const horaFin = notification.fecha_hora_fin.split(' ')[1].split(':').slice(0, 2).join(':');
-    //                 const horaRango = `${horaInicio} - ${horaFin}`;
-
-    //                 const message = `<h5 class="d-inline">Fecha: </h5> ${notification.fecha_hora_inicio.split(' ')[0]} <br>
-    //                              <h5 class="d-inline">Hora: </h5> ${horaRango}<br>
-    //                              <h5 class="d-inline">Descripcion: </h5><p>${notification.descripcion_sesion}</p>`;
-    //                 createNotification(message);
-    //             });
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error(error);
-    //         }
-    //     });
-    // });
 </script>
 </body>
 </html>

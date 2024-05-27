@@ -39,6 +39,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
 
     <style>
         /* Estilos adicionales para responsividad */
@@ -303,7 +304,7 @@
                         <input type="hidden" id="psicologo_id" name="psicologo_id" value="">
                         <div class="mb-3">
                             <label for="especialidad" class="form-label">Especialidad <span class="text-danger">*</span></label>
-                            <select id="especialidad" name="especialidad" class="form-select" required>
+                            <select id="especialidad" name="especialidad[]" multiple required>
                                 <option value="Terapia Adultos">Terapia Adultos</option>
                                 <option value="Terapia Adolecentes/Jóvenes">Terapia Adolecentes/Jóvenes</option>
                                 <option value="Terapia Adultos Mayores">Terapia Adultos Mayores</option>
@@ -414,7 +415,32 @@
                             <i class="bi bi-person-plus-fill me-2"></i> Agregar Psicologo
                         </button>
                     </div>
-                    <!-- Tabla de pacientes -->
+
+                    <!-- Filtros y barra de búsqueda -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <select class="form-select" id="filtroTipo">
+                                <option value="todos">Todos</option>
+                                <option value="mayor">Paciente Mayor</option>
+                                <option value="menor">Paciente Menor de Edad</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="filtroNombre" placeholder="Nombre Psicólogo/a">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filtroCI" placeholder="CI del Psicólogo/a">
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" onclick="filtrarPacientes()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Tabla de Psicologos -->
                     <div class="custom-table-container shadow" style="height: 500px;">
                         <div class="table-responsive">
                             <table class="table table-striped custom-table">
@@ -428,15 +454,6 @@
                                 </thead>
                                 <tbody id="psicologos-body">
                                     
-                                    <!-- Registro 1 -->
-                                    <tr>
-                                        <td>Jessica</td>
-                                        <td>Lopez</td>
-                                        <td>Manuel</td>
-                                        <td>Torrez</td>
-                                        <td>Pendiente</td>
-                                        <td>Pendiente</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -496,6 +513,10 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+        new MultiSelectTag('especialidad')  // id
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -532,6 +553,7 @@
             document.getElementById("divConfirmarContrasena").style.display = "block";
 
             document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
+            document.getElementById("psicologo_id").value = "";
             document.getElementById("nombres").value = "";
             document.getElementById("apellidos").value = "";
             document.getElementById("fechaNacimiento").value = "";
@@ -648,7 +670,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: "Éxito!",
-                text: "Paciente registrado exitosamente!",
+                text: "Psicologo registrado exitosamente!",
                 icon: "success"
             });
         });
@@ -659,7 +681,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: "Éxito!",
-                text: "Paciente actualizado exitosamente!",
+                text: "Psicologo actualizado exitosamente!",
                 icon: "success"
             });
         });

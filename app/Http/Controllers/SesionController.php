@@ -17,6 +17,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use App\Models\Pago;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notificacion;
 
 class SesionController extends Controller
 {
@@ -124,14 +125,22 @@ class SesionController extends Controller
                 throw new Exception("Error assigning sesión: " . $e->getMessage());
             }
             $pago = new Pago();
-                if ($sesion->id != null) {
-                    $pago->servicio = $request->input('servicio');
-                    $pago->sesion_id = $sesion->id;
-                    $pago->institucion='';
-                    $pago->convenio='';
-                    $pago->isTerminado = 0;
-                    $pago->save();
-                }
+            if ($sesion->id != null) {
+                $pago->servicio = $request->input('servicio');
+                $pago->sesion_id = $sesion->id;
+                $pago->institucion='';
+                $pago->convenio='';
+                $pago->isTerminado = 0;
+                $pago->save();
+            }
+
+            $psicologo_selected = Psicologo::where('id', $sesion->psicologo_id)->first();
+            Notificacion::create([
+                'descripcion' => 'Usted tiene una nueva sesión programada.',
+                'user_id' => $psicologo_selected->user_id,
+                'sesion_id' => $sesion->id,
+            ]);
+
             // return $user;
             return response()->json([
                 'message' => 'Sesión registrada exitosamente',
