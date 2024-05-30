@@ -18,6 +18,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\Pago;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notificacion;
+use Illuminate\Support\Facades\Validator;
 
 class SesionController extends Controller
 {
@@ -293,7 +294,16 @@ class SesionController extends Controller
     }
 
     public function psicologoSesiones (){
-        return view('psicologoSesiones');
+        $user = Auth::user();
+        $psicologo_id = Psicologo::where('user_id', $user->id)->value('id');
+
+        // estado= ACTIVO, isAlta = 0
+        $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
+                            ->join('users', 'pacientes.user_id', '=', 'users.id')
+                            ->where('pacientes.psicologo_id', $psicologo_id)
+                            ->get();
+
+        return view('psicologoSesiones', compact('pacientes'));
     }
 
     public function psicologoSesionesProgramadas (){
@@ -308,8 +318,164 @@ class SesionController extends Controller
             ->join('users', 'pacientes.user_id', '=', 'users.id')
             ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
             ->where('sesions.psicologo_id', $psicologo->id)
+            ->orderBy('sesion_id', 'desc')
             ->get();
 
         return response()->json($sessions);
+    }
+
+    public function nuevaSesion (Request $request) {
+        // id_horario_dia" value="1" 1: mañana, 2: tarde 
+        if($request->id_horario_dia == 1){
+            $horaInicio = $request->horaInicio;
+            $horaFin = $request->horaFin;
+            $fechaAgenda = $request->fechaAgendaManiana;
+        } else {
+            $horaInicio = $request->horaInicioT;
+            $horaFin = $request->horaFinT;
+            $fechaAgenda = $request->fechaAgendaTarde;
+        }
+
+        $diaSinTilde = getDateLiteral($fechaAgenda);
+
+        $psicologo = Psicologo::where('user_id', $request->user_id)->first();
+
+        $horario = Horario::where('dia', $diaSinTilde)
+            ->where('psicologo_id', $psicologo->id)
+            ->first();
+
+        if($request->id_horario_dia == 1 && $horario->isDisponibleManiana == 0) { // MAÑANA
+            //return "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la mañana";
+            return response()->json(['error' => "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la mañana"], 400);
+        } elseif ($request->id_horario_dia == 2 && $horario->isDisponibleTarde == 0){ // TARDE
+            //return "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la tarde";
+            return response()->json(['error' => "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la tarde"], 400);
+        }
+
+        if($request->id_horario_dia == 1){
+            $validator = Validator::make($request->all(), [
+                'horaInicio' => 'required|date_format:H:i',
+                'horaFin' => 'required|date_format:H:i'
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'horaInicioT' => 'required|date_format:H:i',
+                'horaFinT' => 'required|date_format:H:i'
+            ]);
+        }
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Validar que la horaInicio y horaFin estén dentro del rango permitido
+        $horaInicioTimestamp = strtotime($horaInicio);
+        $horaFinTimestamp = strtotime($horaFin);
+        if($request->id_horario_dia == 1){
+            $horaInicioManianaValidate = strtotime($horario->hora_inicio_maniana);
+            $horaFinTardeValidate = strtotime($horario->hora_fin_maniana);
+        } else {
+            $horaInicioManianaValidate = strtotime($horario->hora_inicio_tarde);
+            $horaFinTardeValidate = strtotime($horario->hora_fin_tarde);
+        }
+
+        if ($horaInicioTimestamp < $horaInicioManianaValidate || $horaFinTimestamp > $horaFinTardeValidate) {
+            if($request->id_horario_dia == 1){ // MAÑANA
+                // return "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
+                // . $horario->hora_inicio_maniana . ' y fin ' . $horario->hora_fin_maniana;
+                return response()->json(['error' => "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
+                . $horario->hora_inicio_maniana . ' y fin ' . $horario->hora_fin_maniana], 400);
+            } else { // TARDE
+                // return "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
+                // . $horario->hora_inicio_tarde . ' y fin ' . $horario->hora_fin_tarde;
+                return response()->json(['error' => "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
+                . $horario->hora_inicio_tarde . ' y fin ' . $horario->hora_fin_tarde], 400);
+            }
+        }
+
+        if($request->id_horario_dia == 1){
+            $paciente_id = $request->paciente_id_m;
+        }else {
+            $paciente_id = $request->paciente_id_t; 
+        }
+
+        // verificar si un paciente tiene una sesion pendiente, si tiene una pendiente el psicologo no puede programar
+        // una con ese paciente
+        $past_sesion = Sesion::where('paciente_id', $paciente_id)->latest()->first();
+        $paciente_user_id = Paciente::where('id', $paciente_id)
+                            ->select('user_id')
+                            ->first();
+        if($past_sesion){
+            if($past_sesion->estado!='activo' && $past_sesion->estado!='Activa' && ($past_sesion->estado=='Cancelado' ||$past_sesion->estado=='Terminada')){
+                // registra sesion
+                //return response()->json($request);
+                $servicio = Pago::where('sesion_id', $past_sesion->id)
+                            ->select('servicio')
+                            ->first();
+
+                $sesion = new Sesion();
+
+                $sesion->estado = 'activo';
+                $sesion->pago_confirmado = 0;
+                $sesion->paciente_id = $paciente_id;
+                $sesion->psicologo_id= $psicologo->id;
+                $sesion->descripcion_sesion= $request->desc_sesion;
+                $sesion->solicitante = $psicologo->id;
+                $sesion->fecha_hora_inicio = $fechaAgenda . ' ' . $horaInicio . ':00';
+                $sesion->fecha_hora_fin = $fechaAgenda . ' ' . $horaFin . ':00';
+
+                $sesion->save();
+
+                // Notificacion::create([
+                //     'descripcion' => 'Usted tiene una nueva sesión programada.',
+                //     'user_id' => $paciente_user_id,
+                //     'sesion_id' => $sesion->id,
+                // ]);
+
+                $pago = new Pago();
+                $pago->servicio = $servicio;
+                $pago->sesion_id = $sesion->id;
+                $pago->institucion='';
+                $pago->convenio='';
+                $pago->isTerminado = 0;
+
+                $pago->save();
+                
+            } else {
+                return response()->json(['error' => "El paciente tiene una sesion pendiente, no puedes programar una nueva sesion hasta que dicha sesión culmine."], 400);
+                //return "el paciente tiene una sesion pendiente, no puedes programar una nueva sesion hasta que la sesion culmine";
+            }
+        }else {
+            $sesion = new Sesion();
+
+            $sesion->estado = 'activo';
+            $sesion->pago_confirmado = 0;
+            $sesion->paciente_id = $paciente_id;
+            $sesion->psicologo_id= $psicologo->id;
+            $sesion->descripcion_sesion= $request->desc_sesion;
+            $sesion->solicitante = $psicologo->id;
+            $sesion->fecha_hora_inicio = $fechaAgenda . ' ' . $horaInicio . ':00';
+            $sesion->fecha_hora_fin = $fechaAgenda . ' ' . $horaFin . ':00';
+            $sesion->save();
+
+            // Notificacion::create([
+            //     'descripcion' => 'Usted tiene una nueva sesión programada.',
+            //     'user_id' => $paciente_user_id,
+            //     'sesion_id' => $sesion->id,
+            // ]);
+
+            $pago = new Pago();
+            $pago->servicio = "Primera consulta"; // TODO Arreglar
+            $pago->sesion_id = $sesion->id;
+            $pago->institucion='';
+            $pago->convenio='';
+            $pago->isTerminado = 0;
+
+            $pago->save();
+        }
+
+        //return response()->json($request);
     }
 }

@@ -10,6 +10,8 @@ use App\Models\Notificacion;
 use App\Models\Psicologo;
 use App\Models\Sesion;
 use Illuminate\Support\Facades\Log;
+use App\Models\Pago;
+use App\Models\Paciente;
 
 class FileController extends Controller
 {
@@ -34,10 +36,10 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        // return response()->json([
-        //     'psicologo_id' => $psicologo_id,
-        //     'user_id' => $user_id,
-        // ]); 
+        $sesion = Sesion::where('id', $request->id_sesion)->first();
+        $sesion->pago_confirmado = 1;
+        $sesion->save();
+
         $request->validate([
             'file' => 'required|image|max:2048'
         ]);
@@ -98,16 +100,49 @@ class FileController extends Controller
     }
 
     public function getComprobanteXPaciente($sesion_id){
-         // Busca el registro en la tabla files
          $file = File::where('sesion_id', $sesion_id)->first();
+         $pago = Pago::where('sesion_id', $sesion_id)->first();
 
          if ($file) {
             Log::info('Ruta de la imagen: ' . $file->url);
-             // Asegúrate de que $file->ruta_imagen contiene la ruta relativa correcta
+             
              $url = asset($file->url);
-             return response()->json(['url' => $url]);
+             return response()->json([
+                'url' => $url,
+                'isTerminado' => $pago->isTerminado
+            ]);
          } else {
              return response()->json(['error' => 'Comprobante no encontrado'], 404);
          }
+    }
+
+    public function confirmarComprobante($sesion_id){
+        $pago = Pago::where('sesion_id', $sesion_id)->first();
+        $pago->isTerminado = 1;
+        $pago->save();
+
+        $sesion = Sesion::where('id', $sesion_id)->first();
+        $paciente = Paciente::where('id', $sesion->paciente_id)->first();
+        
+        Notificacion::create([
+            'descripcion' => 'Comprobante aprobado exitosamente!',
+            'user_id' => $paciente->user_id,
+            'sesion_id' => $sesion_id,
+        ]);
+    }
+
+    public function rechazarComprobante($sesion_id){
+
+        $sesion = Sesion::where('id', $sesion_id)->first();
+        $sesion->pago_confirmado = 0;
+        $sesion->save();
+
+        $paciente = Paciente::where('id', $sesion->paciente_id)->first();
+        
+        Notificacion::create([
+            'descripcion' => 'Comprobante rechazado vuelva a subir su comprobante.',
+            'user_id' => $paciente->user_id,
+            'sesion_id' => $sesion_id,
+        ]);
     }
 }

@@ -13,6 +13,7 @@ use App\Models\Sesion;
 use App\Models\Especialidad;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 
 class PsicologoController extends Controller
@@ -334,12 +335,36 @@ class PsicologoController extends Controller
         return view('listaPsicologo', compact('psicologos'));
     }
 
-    public function getPsicologosL (){
-        $psicologos = User::join('psicologos', 'users.id', '=', 'psicologos.user_id')
-                    ->where('psicologos.estado', 'ACTIVO')
-                    ->select('users.*', 'psicologos.*')
-                    ->get();
+    // public function getPsicologosL (){
+    //     $psicologos = User::join('psicologos', 'users.id', '=', 'psicologos.user_id')
+    //                 ->where('psicologos.estado', 'ACTIVO')
+    //                 ->select('users.*', 'psicologos.*')
+    //                 ->get();
 
+    //     return response()->json($psicologos);
+    // }
+    public function getPsicologosL(Request $request) {
+        $query = User::join('psicologos', 'users.id', '=', 'psicologos.user_id')
+                        ->where('psicologos.estado', 'ACTIVO');
+    
+        // Aplicar filtros si están presentes en la solicitud
+        if ($request->filled('nombre')) {
+            $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+        }
+    
+        if ($request->filled('ci')) {
+            $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+        }
+    
+        // Filtrar por tipo de psicólogo/a
+        if ($request->filled('tipo')) {
+            if ($request->tipo !== 'todos') {
+                $query->where('psicologos.tipo', $request->tipo);
+            }
+        }
+    
+        $psicologos = $query->select('users.*', 'psicologos.*')->get();
+    
         return response()->json($psicologos);
     }
 
@@ -357,4 +382,42 @@ class PsicologoController extends Controller
             
         return response()->json($resultados);
     }
+
+    public function getPsicologoNombre (Request $request){
+        $term = $request->get('term');
+
+        $querys = User::where('name', 'like', '%' . $term . '%')
+                ->whereHas('psicologo')
+                ->get();
+
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label'=> $query->name
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getPsicologoCi (Request $request){
+        $term = $request->get('term');
+
+        $querys = User::where('ci', 'like', '%' . $term . '%')
+                ->whereHas('psicologo')
+                ->get();
+
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label'=> $query->ci
+            ];
+        }
+
+        return $data;
+    }
+
+    
+
+
 }

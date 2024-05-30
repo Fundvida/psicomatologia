@@ -166,8 +166,27 @@ Route::get('/test', function () {
 
 
 
-Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']);
-Route::post('/notificaciones/mark-all-read', [NotificacionController::class, 'markAllAsRead']);
+Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']); // TODO agregar restricciones todos los users incluidos
+Route::post('/notificaciones/mark-all-read', [NotificacionController::class, 'markAllAsRead']); // TODO agregar restricciones todos los users incluidos
+
+// Filtros de busqueda
+Route::get('/search/psicologo/nombre', [PsicologoController::class, 'getPsicologoNombre'])
+    ->name('search.psicologo.nombre');
+Route::get('/search/psicologo/ci', [PsicologoController::class, 'getPsicologoCi'])
+    ->name('search.psicologo.ci');
+
+Route::get('/search/paciente/nombre', [PacienteController::class, 'getPacienteNombre'])
+    ->name('search.paciente.nombre');
+Route::get('/search/paciente/ci', [PacienteController::class, 'getPacienteCi'])
+    ->name('search.paciente.ci');
+
+// Confirmar comprobante
+Route::get('/confirmar/comprobante/{sesion_id}', [FileController::class, 'confirmarComprobante']);
+Route::get('/rechazar/comprobante/{sesion_id}', [FileController::class, 'rechazarComprobante']);
+
+// Validar horarios
+Route::post('/psicologo/newsesion', [SesionController::class, 'nuevaSesion'])
+    ->name('psicologo.create.sesion');
 
 Route::get('/comprobante/{sesion_id}', [FileController::class, 'getComprobanteXPaciente']);
 

@@ -181,25 +181,51 @@ class PacienteController extends Controller
         return view('listaPacienteXPsicologo');
     }
 
-    public function listaPacienteXRol (){
+    public function listaPacienteXRol (Request $request){
         $user = Auth::user();
         $psicologo = Psicologo::where('user_id', $user->id)->first();
 
         $roles = $user->getRoleNames(); // Obtiene los roles del usuario autenticado
         $nombreRol = $roles->isNotEmpty() ? $roles->first() : 'Sin rol';
 
-        if($psicologo){
-            $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
-                  ->where('pacientes.psicologo_id', $psicologo->id) 
-                  ->where('pacientes.estado', 'ACTIVO')
-                  ->select('users.*', 'pacientes.*') 
-                  ->get();
-        } else {
-            $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
-                  ->where('pacientes.estado', 'ACTIVO')
-                  ->select('users.*', 'pacientes.*') 
-                  ->get();
+        $query = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+                 ->where('pacientes.estado', 'ACTIVO');
+
+        if ($psicologo) {
+            $query->where('pacientes.psicologo_id', $psicologo->id);
         }
+
+        // Aplicar filtros si están presentes en la solicitud
+        if ($request->filled('nombre')) {
+            $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+        }
+
+        if ($request->filled('ci')) {
+            $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+        }
+
+        // if ($request->tipo !== 'todos') {
+        //     if ($request->tipo == 'mayor') {
+        //         $query->where('pacientes.tipo_paciente', 'mayor');
+        //     } elseif ($request->tipo == 'menor') {
+        //         $query->where('pacientes.tipo_paciente', 'menor');
+        //     }
+        // }
+
+        $datos = $query->select('users.*', 'pacientes.*')->get();
+
+        // if($psicologo){
+        //     $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+        //           ->where('pacientes.psicologo_id', $psicologo->id) 
+        //           ->where('pacientes.estado', 'ACTIVO')
+        //           ->select('users.*', 'pacientes.*') 
+        //           ->get();
+        // } else {
+        //     $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+        //           ->where('pacientes.estado', 'ACTIVO')
+        //           ->select('users.*', 'pacientes.*') 
+        //           ->get();
+        // }
 
         // return response()->json($datos);
         $respuesta = [
@@ -207,5 +233,39 @@ class PacienteController extends Controller
             'rol' => $nombreRol
         ];
         return response()->json($respuesta);
+    }
+
+    public function getPacienteNombre (Request $request){
+        $term = $request->get('term');
+
+        $querys = User::where('name', 'like', '%' . $term . '%')
+                ->whereHas('paciente')
+                ->get();
+
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label'=> $query->name
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getPacienteCi (Request $request){
+        $term = $request->get('term');
+
+        $querys = User::where('ci', 'like', '%' . $term . '%')
+                ->whereHas('paciente')
+                ->get();
+
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label'=> $query->ci
+            ];
+        }
+
+        return $data;
     }
 }

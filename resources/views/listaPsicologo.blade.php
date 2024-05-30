@@ -40,6 +40,7 @@
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+    <link rel="stylesheet" href="{{ asset('vendors/jquery-ui/jquery-ui.min.css') }}">
 
     <style>
         /* Estilos adicionales para responsividad */
@@ -514,39 +515,113 @@
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('vendors/jquery-ui/jquery-ui.min.js') }}"></script>
     <script>
         new MultiSelectTag('especialidad')  // id
+
+        $('#filtroNombre').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('search.psicologo.nombre') }}",
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
+                    }
+                });
+            }
+        });
+
+        $('#filtroCI').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('search.psicologo.ci') }}",
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
+                    }
+                });
+            }
+        });
     </script>
 
     <script>
         $(document).ready(function() {
-            $.ajax({
-                url: '/admin/listaPsicologos',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                //console.log(data);
-                $('#psicologos-body').empty();
-                
-                // Recorrer los datos y agregar filas a la tabla
-                $.each(data, function(index, psicologo) {
+            function cargarPsicologos() {
+                var tipo = $('#filtroTipo').val();
+                var nombre = $('#filtroNombre').val();
+                var ci = $('#filtroCI').val();
 
-                    $('#psicologos-body').append(`
-                        <tr>
-                            <td>${psicologo.ci}</td>
-                            <td>${psicologo.name} ${psicologo.apellidos}</td>
-                            <td>${psicologo.estado}</td>
-                            <td class="action-icons"> 
-                                <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editar(${psicologo.id})" title="Editar Psicologo"></i>
-                                <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${psicologo.id})" title="Eliminar Sesión"></i>
-                            </td>
-                        </tr>
-                    `);
+                $.ajax({
+                    url: '/admin/listaPsicologos',
+                    type: 'GET',
+                    data: {
+                        tipo: tipo,
+                        nombre: nombre,
+                        ci: ci
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        //console.log(data);
+                        $('#psicologos-body').empty();
+
+                        $.each(data, function(index, psicologo) {
+                            $('#psicologos-body').append(`
+                                <tr>
+                                    <td>${psicologo.ci}</td>
+                                    <td>${psicologo.name} ${psicologo.apellidos}</td>
+                                    <td>${psicologo.estado}</td>
+                                    <td class="action-icons"> 
+                                        <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editar(${psicologo.id})" title="Editar Psicologo"></i>
+                                        <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${psicologo.id})" title="Eliminar Sesión"></i>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    }
                 });
+            }
 
-                }
-            });
+            cargarPsicologos();
+
+            window.filtrarPacientes = function() {
+                cargarPsicologos();
+            }
         });
+        // $(document).ready(function() {
+        //     $.ajax({
+        //         url: '/admin/listaPsicologos',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         success: function(data) {
+        //         //console.log(data);
+        //         $('#psicologos-body').empty();
+                
+        //         // Recorrer los datos y agregar filas a la tabla
+        //         $.each(data, function(index, psicologo) {
+
+        //             $('#psicologos-body').append(`
+        //                 <tr>
+        //                     <td>${psicologo.ci}</td>
+        //                     <td>${psicologo.name} ${psicologo.apellidos}</td>
+        //                     <td>${psicologo.estado}</td>
+        //                     <td class="action-icons"> 
+        //                         <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editar(${psicologo.id})" title="Editar Psicologo"></i>
+        //                         <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${psicologo.id})" title="Eliminar Sesión"></i>
+        //                     </td>
+        //                 </tr>
+        //             `);
+        //         });
+
+        //         }
+        //     });
+        // });
 
         function limpiar() {
             document.getElementById("divContrasena").style.display = "block";

@@ -136,6 +136,59 @@
             background-color: #cc848a;
             border-color: #cc848a;
         }
+
+        /* Estilos para el calendario */
+        .agregar-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .custom-checkboxes .form-check-input {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .custom-checkboxes .form-check-label {
+            font-size: 16px;
+            padding-top: 3px;
+        }
+
+        .custom-checkboxes .form-check-inline {
+            margin-right: 20px;
+        }
+
+        /* Estilos del formulario */
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group-text {
+            background-color: #7f8dba;
+            border-color: #ddd;
+        }
+
+        .form-control {
+            border-color: #ddd;
+        }
+
+        .btn-primary {
+            background-color: #edb1b5;
+            border-color: #edb1b5;
+        }
+
+        .btn-primary:hover {
+            background-color: #cc848a;
+            border-color: #cc848a;
+        }
+
         /* NOTIFICACION */
 
         .notification-container {
@@ -263,6 +316,136 @@
     <!-- Menú lateral -->
     @include('components.sidebar-user')
 
+    <div class="modal fade" id="formularioRegistroModal" tabindex="-1" aria-labelledby="formularioRegistroModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-alt" id="crearHorarioModalLabel">Agregar Horario de Atención</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Pestañas para alternar entre mañana y tarde -->
+                    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="manana-tab" data-bs-toggle="tab" data-bs-target="#manana" type="button" role="tab" aria-controls="manana" aria-selected="true">Turno Mañana</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tarde-tab" data-bs-toggle="tab" data-bs-target="#tarde" type="button" role="tab" aria-controls="tarde" aria-selected="false">Turno Tarde</button>
+                        </li>
+                    </ul>
+                    <!-- Contenido de las pestañas -->
+                    <div class="tab-content " id="myTabContent">
+                        <div class="tab-pane fade show active mt-4" id="manana" role="tabpanel" aria-labelledby="manana-tab">
+                            <!-- Contenido para horario de atención de la mañana -->
+                            <form id="sesion-form-m" action="{{ route('psicologo.create.sesion') }}" method="POST">
+                                @csrf
+
+                                <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}">
+                                <input type="hidden" name="id_horario_dia" value="1"><!-- 1: mañana, 2: tarde -->
+                                
+                                <!-- Campos del formulario para horario de la mañana -->
+                                <div class="form-group">
+                                    <label for="horaInicio" class="form-label" style="font-size: 18px; margin-bottom: 20px;">Horario de Atención Turno Mañana</label>
+                                    <div class="mb-3">
+                                        <label for="paciente_id_m" class="form-label">CI Paciente <span class="text-danger">*</span></label>
+                                        <select id="paciente_id_m" name="paciente_id_m" class="form-select" required>
+                                            <option value=""></option>
+                                            @foreach ($pacientes as $paciente)
+                                                <option value="{{ $paciente->paciente_id }}" data-name="{{ $paciente->name }} {{ $paciente->apellidos }}">{{ $paciente->ci }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Paciente nombre</label>
+                                        <input type="text" id="paciente_nombre_m" class="form-control" placeholder="Paciente no seleccionado" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="desc_sesion">Nota adicional de sesion: <span class="text-secondary">(opcional)</span></label><br>
+                                        <textarea id="desc_sesion" name="desc_sesion" class="form-control"></textarea>
+                                    </div>
+                                    <label>Duración de la sesión: <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>
+                                        </div>
+                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="00:00" max="11:59">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
+                                        </div>
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="00:00" max="11:59">
+                                    </div>
+                                    <div id="time-error-maniana" class="text-danger" style="display:none;">La hora de inicio debe ser menor que la hora de fin.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fechaAgendaManiana" class="form-label">Fecha: <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="fechaAgendaManiana" name="fechaAgendaManiana" required>
+                                    <div id="date-error-maniana" class="text-danger" style="display:none;">La fecha debe ser mayor a la fecha actual.</div>
+                                </div>
+                                <!-- Botones de guardar y cancelar para horario de la mañana -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary" id="submit-button-maniana">Guardar Horario</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade mt-4" id="tarde" role="tabpanel" aria-labelledby="tarde-tab">
+                            <!-- Contenido para horario de atención de la tarde -->
+                            <form id="sesion-form-t" action="{{ route('psicologo.create.sesion') }}" method="POST">
+                                @csrf
+
+                                <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}">
+                                <input type="hidden" name="id_horario_dia" value="2">
+                                <!-- Campos del formulario para horario de la tarde -->
+                                <div class="form-group">
+                                    <label for="horaInicioT" class="form-label" style="font-size: 18px; margin-bottom: 20px;">Horario de Atención Turno Tarde</label>
+                                    <div class="mb-3">
+                                        <label for="paciente_id_t" class="form-label">CI Paciente <span class="text-danger">*</span></label>
+                                        <select id="paciente_id_t" name="paciente_id_t" class="form-select" required>
+                                            @foreach ($pacientes as $paciente)
+                                                <option value="{{ $paciente->paciente_id }}" data-name="{{ $paciente->name }} {{ $paciente->apellidos }}">{{ $paciente->ci }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Paciente nombre</label>
+                                        <input type="text" id="paciente_nombre_t" class="form-control" placeholder="Paciente no seleccionado" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descripcionCV">Nota adicional de sesion: <span class="text-secondary">(opcional)</span></label><br>
+                                        <textarea id="descripcionCV" name="descripcionCV" class="form-control"></textarea>
+                                    </div>
+                                    <label>Duración de la sesión: <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>
+                                        </div>
+                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicioT" name="horaInicioT">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
+                                        </div>
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFinT" name="horaFinT">
+                                    </div>
+                                    <div id="time-error-tarde" class="text-danger" style="display:none;">La hora de inicio debe ser menor que la hora de fin.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="fechaAgendaTarde" class="form-label">Fecha: <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="fechaAgendaTarde" name="fechaAgendaTarde" required>
+                                    <div id="date-error-tarde" class="text-danger" style="display:none;">La fecha debe ser mayor a la fecha actual.</div>
+                                </div>
+                                <!-- Botones de guardar y cancelar para horario de la tarde -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary" id="submit-button-tarde">Guardar Horario</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contenido principal -->
     <main class="main-content ">
         <section class="py-1 d-flex justify-content-center align-items-center" id="sesiones">
@@ -272,7 +455,11 @@
                     <!-- Título -->
                     <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
                     <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes.</p>
-                    
+                    <div class="text-end mb-3">
+                        <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="limpiar()">
+                            <i class="bi bi-person-plus-fill me-2"></i> Programar nueva Sesión
+                        </button>
+                    </div>
                     <div class="row mb-3">
                     <div class="col-md-12">
                         <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
@@ -314,12 +501,10 @@
                                         <th>Archivos Adjuntos</th>
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
-                                        <th>Registrar Sesión</th>
                                         <th>Editar Sesión</th>
                                         <th>Cancelar Sesión</th>
                                         <th>Ver Comprobante</th>
-                                        <th>Información Paciente</th>
-
+                                        <th>Detalle de la sesión</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
@@ -335,24 +520,6 @@
         </section>
     </main>
 
-    <div id="notification-container" class="notification-container">
-        <div class="notification">
-            <div class="notification-header">
-                <i class="fas fa-info-circle"></i> Información
-                <button id="close-btn">&times;</button>
-            </div>
-            <div class="notification-body">
-                Usted tiene nuevas sesiones programadas!
-            </div>
-            <div class="notification-footer">
-                <button id="go-btn">
-                    Ir <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-
-        </div>
-    </div>
-
     <!-- Modal de Comprobante de Pago -->
     <div class="modal fade" id="modalComprobantePago" tabindex="-1" aria-labelledby="modalComprobantePagoLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -362,14 +529,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="imagenComprobante" src="" alt="Comprobante de Pago" style="max-width: 100%;">
+                    <input type="hidden" id="sesion_id" name="sesion_id" value="">
+
+                    <div class="my-5">
+                        <img id="imagenComprobante" src="" alt="Comprobante de Pago" style="max-width: 100%;">
+                    </div>
+
+                    <div id="btn-confirm-comprobante">
+                        <button type="button" onclick="aceptarComprobante()" class="btn btn-success btn-lg">Aceptar</button>
+                        <button type="button" onclick="rechazarComprobante()" class="btn btn-danger btn-lg">Rechazar</button>
+                    </div>
+
                     <p id="mensajeError" style="display: none;">El paciente aun no subio su comprobante.</p>
+                    <p id="mensajeValidado" class="fw-bold text-success" style="display: none;">Comprobante validado.</p>
                 </div>
-                <div class="modal-footer justify-content-center font-alt">
+                <!-- <div class="modal-footer justify-content-center font-alt">
                     <button type="button" id="btnDescargar" class="btn btn-primary" onclick="confirmarPago()" style="font-size: 20px;">
                         <i class="bi bi-download" style="font-size: 24px;"></i> DESCARGAR
-                    </button>
-                </div>
+                    </button> 
+                </div> -->
             </div>
         </div>
     </div>
@@ -459,27 +637,41 @@
     <script>
 
         function verComprobante(sesion_id) {
-            console.log(sesion_id);
 
             fetch(`/comprobante/${sesion_id}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     if (data.url) {
+                        console.log(data.isTerminado + "fasdflkjsfl")
                         var imagenComprobante = document.getElementById("imagenComprobante");
                         imagenComprobante.src = data.url;
 
                         document.getElementById("mensajeError").style.display = "none";
                         document.getElementById("imagenComprobante").style.display = "block; max-width: 100%;";
-                        document.getElementById("btnDescargar").setAttribute("type", "button");
+                        if(data.isTerminado === 0){
+                            document.getElementById("btn-confirm-comprobante").style.display = "block"
+                            document.getElementById("mensajeValidado").style.display = "none"
+                        }else{
+                            document.getElementById("btn-confirm-comprobante").style.display = "none"
+                            document.getElementById("mensajeValidado").style.display = "block"
+                        }
+                        //document.getElementById("btnDescargar").setAttribute("type", "button");
+
+                        document.querySelector('#sesion_id').value = sesion_id;
 
                         var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
                         modal.show();
                     } else {
-                        console.error('Error al obtener el comprobante:', data.error);
-
+                        //console.error('Error al obtener el comprobante:', data.error);
+                        document.getElementById("mensajeValidado").style.display = "none"
+                        document.getElementById("btn-confirm-comprobante").style.display = "none"
                         document.getElementById("mensajeError").style.display = "block";
                         document.getElementById("imagenComprobante").style.display = "none";
-                        document.getElementById("btnDescargar").setAttribute("type", "hidden");
+                        //document.getElementById("btn-confirm-comprobante").style.display = "hidden"
+                        //document.getElementById("btnDescargar").setAttribute("type", "hidden");
+
+                        document.querySelector('#sesion_id').value = '';
 
                         var modal = new bootstrap.Modal(document.getElementById('modalComprobantePago'));
                         modal.show();
@@ -548,8 +740,9 @@
                 var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
                 var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
                 var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                var estado_sesion = sesiones.calificacion? 'Realizado': 'Pendiente';
+                var estado_sesion = sesiones.calificacion? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
                 var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
+                var icon_edit_sesion = sesiones.estado == 'activo'? '<i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>':'<i class="fas fa-check-circle"></i>';
 
                 $('#sesiones-body').append(`
                     <tr>
@@ -564,10 +757,7 @@
                         <td>${estado_sesion}</td>
                         <td>${estado_pago}</td>
                         <td class="action-icons">
-                            <i class="fas fa-pen text-success" onclick="registrarSesion()" title="Registrar Sesión"></i>
-                        </td>
-                        <td class="action-icons">
-                            <i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>
+                            ${icon_edit_sesion}   
                         </td>
                         <td class="action-icons">
                             ${icon_cancel}
@@ -598,7 +788,6 @@
     }
 
     function confirmarCancelar(sesion_id){
-        console.log(sesion_id);
         Swal.fire({
             title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
             html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, explícale al paciente el motivo de la cancelación:</p>
@@ -674,6 +863,176 @@
         loadNotifications();
 
         setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+    });
+
+    function aceptarComprobante(){
+        var sesion_id = document.querySelector('#sesion_id').value;
+        $.ajax({
+            url: '/confirmar/comprobante/'+sesion_id,
+            type: 'GET',
+            success: function(data) {
+                console.log("exito!!!!  ");
+                Swal.fire(
+                    '<h2 class="text-center mb-4 font-alt">Exito</h2>',
+                    `Confirmación de comprobante exitosa`,
+                    'success'
+                )
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        }); 
+    }
+    
+    function rechazarComprobante(){
+        var sesion_id = document.querySelector('#sesion_id').value;
+        $.ajax({
+            url: '/rechazar/comprobante/'+sesion_id,
+            type: 'GET',
+            success: function(data) {
+                console.log("exito!!!!  ");
+                Swal.fire(
+                    '<h2 class="text-center mb-4 font-alt">Exito</h2>',
+                    `Se envio notificación al paciente para que regule su comprobante.`,
+                    'success'
+                )
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        }); 
+    }
+
+    function limpiar() {
+        // document.getElementById("divConfirmarContrasena").style.display = "block";
+        // document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
+        // document.getElementById("psicologo_id").value = "";
+        $('#formularioRegistroModal').modal('show');
+    }
+
+    document.getElementById('submit-button-maniana').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el envío del formulario por defecto
+        validar_fecha('fechaAgendaManiana');
+        validar_hora('horaInicio', 'horaFin', 1);
+
+        let form = $('#sesion-form-m');
+        let formData = form.serialize();
+
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: formData,
+            success: function(response) {
+                Swal.fire(
+                    '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                    `Sesion registrada con exito!!!`,
+                    'success'
+                )
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+            },
+            error: function(response) {
+                Swal.fire({
+                    title: "Error",
+                    text: response.responseJSON.error,
+                    icon: "error"
+                });
+            }
+        });
+    });
+
+    // document.getElementById('submit-button-maniana').addEventListener('click', function(event) {
+    //     validar_fecha('fechaAgendaManiana');
+    //     validar_hora('horaInicio','horaFin', 1);
+    // });
+
+    document.getElementById('submit-button-tarde').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el envío del formulario por defecto
+        validar_fecha('fechaAgendaTarde');
+        validar_hora('horaInicioT','horaFinT', 2);
+
+        let form = $('#sesion-form-t');
+        let formData = form.serialize();
+
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: formData,
+            success: function(response) {
+                Swal.fire(
+                    '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                    `Sesion registrada con exito!!!`,
+                    'success'
+                )
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+            },
+            error: function(response) {
+                Swal.fire({
+                    title: "Error",
+                    text: response.responseJSON.error,
+                    icon: "error"
+                });
+            }
+        });
+    });
+
+    // document.getElementById('submit-button-tarde').addEventListener('click', function(event) {
+    //     validar_fecha('fechaAgendaTarde');
+    //     validar_hora('horaInicioT','horaFinT', 2);
+    // });
+
+    function validar_fecha (horario){
+        const fechaAgenda = document.getElementById(horario).value;
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        if (fechaAgenda <= currentDate) {
+            event.preventDefault();
+            if(horario == 'fechaAgendaManiana'){
+                document.getElementById('date-error-maniana').style.display = 'block';
+            } else {
+                document.getElementById('date-error-tarde').style.display = 'block';
+            }
+            
+        } else {
+            document.getElementById('date-error-maniana').style.display = 'none';
+            document.getElementById('date-error-tarde').style.display = 'none';
+        }
+    }
+
+    function validar_hora (hora_inicio, hora_fin , param){
+        const horaInicio = document.getElementById(hora_inicio).value;
+        const horaFin = document.getElementById(hora_fin).value;
+
+        if (horaInicio >= horaFin) {
+            event.preventDefault();
+            if(param == 1){
+                document.getElementById('time-error-maniana').style.display = 'block';
+            } else {
+                document.getElementById('time-error-tarde').style.display = 'block';
+            }
+        } else {
+            document.getElementById('time-error-maniana').style.display = 'none';
+            document.getElementById('time-error-tarde').style.display = 'none';
+        }
+    }
+
+    document.getElementById('paciente_id_m').addEventListener('change', function() {
+        var pacienteNombre = this.options[this.selectedIndex].getAttribute('data-name');
+        document.getElementById('paciente_nombre_m').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
+    });
+
+    document.getElementById('paciente_id_t').addEventListener('change', function() {
+        var pacienteNombre = this.options[this.selectedIndex].getAttribute('data-name');
+        document.getElementById('paciente_nombre_t').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
     });
 </script>
 </body>

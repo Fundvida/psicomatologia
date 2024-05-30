@@ -39,6 +39,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/es.js"></script>
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <link rel="stylesheet" href="{{ asset('vendors/jquery-ui/jquery-ui.min.css') }}">
 
     <style>
         /* Estilos adicionales para responsividad */
@@ -436,15 +437,6 @@
                                 </thead>
                                 <tbody id="pacientes-body">
                                     
-                                    <!-- Registro 1 -->
-                                    <!-- <tr>
-                                        <td>Jessica</td>
-                                        <td>Lopez</td>
-                                        <td>Manuel</td>
-                                        <td>Torrez</td>
-                                        <td>Pendiente</td>
-                                        <td>Pendiente</td>
-                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -504,78 +496,171 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('vendors/jquery-ui/jquery-ui.min.js') }}"></script>
 
     <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: '/psicologo/getPacientes',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    console.log('asdf')
-                    console.log(data);
-        
-                    var pacientes = data.datos;
-                    var rol = data.rol;
-                    var titleElement = document.getElementById('title-user');
-
-                    console.log('Rol del usuario:', rol);
-                    if(rol == 'Administrador'){
-                        titleElement.textContent = 'Listado de todos los Pacientes';
-                    } else if (rol == 'Psicologo'){
-                        titleElement.textContent = 'Listado de Paciente Designados';
+        $('#filtroNombre').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('search.paciente.nombre') }}",
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
                     }
+                });
+            }
+        });
 
-                    $('#pacientes-body').empty();
-                    $.each(pacientes, function(index, paciente) {
-                        var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
-                        var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
+        $('#filtroCI').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('search.paciente.ci') }}",
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
+                    }
+                });
+            }
+        });
+    </script>
 
-                        $('#pacientes-body').append(`
-                            <tr>
-                                <td>${paciente_ci}</td>
-                                <td>${paciente.name} ${paciente.apellidos}</td>
-                                <td>${paciente.telefono}</td>
-                                <td>${paciente.tipo_paciente}</td>
-                                <td>${f_nacimiento}</td>
-                                <td class="action-icons"> 
-                                    <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
-                                    <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
-                                </td>
-                            </tr>
-                        `);
-                    });
-                }
-            });
+    <script>
+        // $(document).ready(function() {
+        //     $.ajax({
+        //         url: '/psicologo/getPacientes',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         success: function(data) {
+        //             console.log(data);
+        
+        //             var pacientes = data.datos;
+        //             var rol = data.rol;
+        //             var titleElement = document.getElementById('title-user');
+
+        //             console.log('Rol del usuario:', rol);
+        //             if(rol == 'Administrador'){
+        //                 titleElement.textContent = 'Listado de todos los Pacientes';
+        //             } else if (rol == 'Psicologo'){
+        //                 titleElement.textContent = 'Listado de Paciente Designados';
+        //             }
+
+        //             $('#pacientes-body').empty();
+        //             $.each(pacientes, function(index, paciente) {
+        //                 var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
+        //                 var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
+        //                 var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 
+
+        //                 $('#pacientes-body').append(`
+        //                     <tr>
+        //                         <td>${paciente_ci}</td>
+        //                         <td>${paciente.name} ${paciente.apellidos}</td>
+        //                         <td>${paciente.telefono}</td>
+        //                         <td>${paciente_tipo}</td>
+        //                         <td>${f_nacimiento}</td>
+        //                         <td class="action-icons"> 
+        //                             <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
+        //                             <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
+        //                         </td>
+        //                     </tr>
+        //                 `);
+        //             });
+        //         }
+        //     });
+        // });
+
+        $(document).ready(function() {
+            cargarPacientes();
+
+            function cargarPacientes() {
+                var tipo = $('#filtroTipo').val();
+                var nombre = $('#filtroNombre').val();
+                var ci = $('#filtroCI').val();
+
+                $.ajax({
+                    url: '/psicologo/getPacientes', 
+                    type: 'GET',
+                    data: {
+                        tipo: tipo,
+                        nombre: nombre,
+                        ci: ci
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        var pacientes = data.datos;
+                        var rol = data.rol;
+                        var titleElement = document.getElementById('title-user');
+
+                        console.log('Rol del usuario:', rol);
+                        if(rol == 'Administrador'){
+                            titleElement.textContent = 'Listado de todos los Pacientes';
+                        } else if (rol == 'Psicologo'){
+                            titleElement.textContent = 'Listado de Paciente Designados';
+                        }
+
+                        $('#pacientes-body').empty();
+                        $.each(pacientes, function(index, paciente) {
+                            var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
+                            var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
+                            var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 
+
+                            $('#pacientes-body').append(`
+                                <tr>
+                                    <td>${paciente_ci}</td>
+                                    <td>${paciente.name} ${paciente.apellidos}</td>
+                                    <td>${paciente.telefono}</td>
+                                    <td>${paciente_tipo}</td>
+                                    <td>${f_nacimiento}</td>
+                                    <td class="action-icons"> 
+                                        <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
+                                        <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    }
+                });
+            }
+
+            window.filtrarPacientes = function() {
+                cargarPacientes();
+            }
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-        // Función para cargar las notificaciones
-        function loadNotifications() {
-            fetch('/notificaciones')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    const notificationBody = document.getElementById('notificationBody');
-                    notificationBody.innerHTML = '';
+            // Función para cargar las notificaciones
+            function loadNotifications() {
+                fetch('/notificaciones')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        const notificationBody = document.getElementById('notificationBody');
+                        notificationBody.innerHTML = '';
 
-                    data.forEach(notification => {
-                        const notificationItem = document.createElement('div');
-                        notificationItem.className = 'notification-item-container mb-2';
-                        notificationItem.innerHTML = `
-                            <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                                ${notification.descripcion}
-                            </button>
-                        `;
-                        notificationBody.appendChild(notificationItem);
+                        data.forEach(notification => {
+                            const notificationItem = document.createElement('div');
+                            notificationItem.className = 'notification-item-container mb-2';
+                            notificationItem.innerHTML = `
+                                <button class="notification-item rounded bg-light py-2 px-3 border-0">
+                                    ${notification.descripcion}
+                                </button>
+                            `;
+                            notificationBody.appendChild(notificationItem);
+                        });
                     });
-                });
-        }
+            }
 
-        loadNotifications();
+            loadNotifications();
 
-        setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
-    });
+            setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+        });
 
         function limpiar() {
             document.getElementById("btnAddOrEdit").textContent = "Registrar Paciente";

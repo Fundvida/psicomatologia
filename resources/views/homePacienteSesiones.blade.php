@@ -471,7 +471,7 @@
             $('input[name="tipo_doc"]').val(tipo_doc);
             $('input[name="id_sesion"]').val(id_sesion);
             $('#pagoModal').modal('show');
-            console.log(id_sesion);
+            //console.log(id_sesion);
         }
     </script>
 
@@ -601,7 +601,12 @@
                         if(sesion.estado == "Cancelado"){
                             row.append($('<td>').text("No concluida")); 
                         }else{
-                            row.append($('<td>').text(sesion.estado));      // estado de la sesion
+                            if(sesion.calificacion){ // TODO para que una sesion se concluya sesion.calificacion != null
+                                row.append($('<td>').text("Realizado"));
+                            } else {
+                                row.append($('<td>').text("No realizado"));
+                            }
+                            //row.append($('<td>').text(sesion.estado));      // estado de la sesion
                         }
 
                         if(sesion.estado != "activo" && sesion.estado != "Activa" ){
@@ -631,37 +636,6 @@
             });
         });
 
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     // Obtener referencias a elementos DOM
-        //     const notificationIcon = document.getElementById('notificationIcon');
-        //     const notificationContainer = document.getElementById('notificationContainer');
-        //     const markReadBtn = document.getElementById('markReadBtn');
-        //     const notificationItems = document.querySelectorAll('.notification-item');
-        //     const pagarIcon = document.querySelector('.fas.fa-money-bill');
-
-        //     notificationIcon.addEventListener('click', function() {
-        //         notificationContainer.classList.toggle('show');
-        //     });
-
-        //     markReadBtn.addEventListener('click', function() {
-        //         notificationItems.forEach(item => {
-        //             item.classList.remove('bg-light');
-        //         });
-        //     });
-
-        //     // Agregar evento clic a cada notificación
-        //     notificationItems.forEach(item => {
-        //         item.addEventListener('click', function() {
-        //             item.classList.remove('bg-light');
-        //         });
-        //     });
-
-
-        //     // Evento para abrir el modal al hacer clic en el icono de pagar
-        //     pagarIcon.addEventListener('click', function() {
-        //         $('#pagoModal').modal('show'); // Bootstrap Modal
-        //     });
-        // });
     </script>
 </body>
 
