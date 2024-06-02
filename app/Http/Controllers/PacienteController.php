@@ -117,7 +117,7 @@ class PacienteController extends Controller
     {
         $user = Auth::user();
         $paciente = Paciente::where('user_id', $user->id)->first();
-        $sesiones = $paciente->sesiones;
+        $sesiones = $paciente->sesiones()->orderBy('created_at', 'desc')->get();
         $pagos = [];
 
         foreach ($sesiones as $sesion) {

@@ -347,10 +347,8 @@ class SesionController extends Controller
             ->first();
 
         if($request->id_horario_dia == 1 && $horario->isDisponibleManiana == 0) { // MAÑANA
-            //return "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la mañana";
             return response()->json(['error' => "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la mañana"], 400);
         } elseif ($request->id_horario_dia == 2 && $horario->isDisponibleTarde == 0){ // TARDE
-            //return "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la tarde";
             return response()->json(['error' => "Error en tu horario marcaste que no estas disponible el dia " . $diaSinTilde . " por la tarde"], 400);
         }
 
@@ -385,13 +383,9 @@ class SesionController extends Controller
 
         if ($horaInicioTimestamp < $horaInicioManianaValidate || $horaFinTimestamp > $horaFinTardeValidate) {
             if($request->id_horario_dia == 1){ // MAÑANA
-                // return "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
-                // . $horario->hora_inicio_maniana . ' y fin ' . $horario->hora_fin_maniana;
                 return response()->json(['error' => "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
                 . $horario->hora_inicio_maniana . ' y fin ' . $horario->hora_fin_maniana], 400);
             } else { // TARDE
-                // return "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
-                // . $horario->hora_inicio_tarde . ' y fin ' . $horario->hora_fin_tarde;
                 return response()->json(['error' => "Error los horario inicio " . $horaInicio . ' y fin ' . $horaFin . ' no estan entre el rango establecido que es inicio ' 
                 . $horario->hora_inicio_tarde . ' y fin ' . $horario->hora_fin_tarde], 400);
             }
@@ -412,7 +406,7 @@ class SesionController extends Controller
         $paciente_user_id = (int) $paciente_user->user_id;
 
         if($past_sesion){
-            if($past_sesion->estado!='activo' && $past_sesion->estado!='Activa' && ($past_sesion->estado=='Cancelado' ||$past_sesion->estado=='Terminada')){
+            if($past_sesion->estado!='activo' && $past_sesion->estado!='Activa' && ($past_sesion->estado=='Cancelado' || $past_sesion->estado=='Terminada')){
                 // registra sesion
                 //return response()->json($request);
                 $servicio = Pago::where('sesion_id', $past_sesion->id)

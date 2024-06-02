@@ -553,7 +553,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    const notificationContainer = document.getElementById('notification-container');
+                    //const notificationContainer = document.getElementById('notification-container');
                     var pagosPendientes = 0;
 
                     var tbody = $('#table-sesiones');
@@ -595,11 +595,11 @@
                             //closeNotification();
                         }
 
-                        if(pagosPendientes > 0){
-                            notificationContainer.style.display = 'block';
-                        }else {
-                            notificationContainer.style.display = 'none';
-                        }
+                        // if(pagosPendientes > 0){
+                        //     notificationContainer.style.display = 'block';
+                        // }else {
+                        //     notificationContainer.style.display = 'none';
+                        // }
                         
                         $('#table-sesiones').append(row);
                     });
@@ -607,6 +607,57 @@
             });
         });
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationIcon = document.getElementById('notificationIcon');
+            const notificationContainer = document.getElementById('notificationContainer');
+            const markReadBtn = document.getElementById('markReadBtn');
+            const notificationItems = document.querySelectorAll('.notification-item');
+
+            notificationIcon.addEventListener('click', function() {
+                notificationContainer.classList.toggle('show');
+            });
+
+            markReadBtn.addEventListener('click', function() {
+                notificationItems.forEach(item => {
+                    item.classList.remove('bg-light');
+                });
+            });
+
+            // Agregar evento clic a cada notificación
+            notificationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    item.classList.remove('bg-light');
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Función para cargar las notificaciones
+            function loadNotifications() {
+                fetch('/notificaciones')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        const notificationBody = document.getElementById('notificationBody');
+                        notificationBody.innerHTML = '';
+
+                        data.forEach(notification => {
+                            const notificationItem = document.createElement('div');
+                            notificationItem.className = 'notification-item-container mb-2';
+                            notificationItem.innerHTML = `
+                                <button class="notification-item rounded bg-light py-2 px-3 border-0">
+                                    ${notification.descripcion}
+                                </button>
+                            `;
+                            notificationBody.appendChild(notificationItem);
+                        });
+                    });
+            }
+
+            loadNotifications();
+
+            setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+        });
     </script>
 </body>
 

@@ -743,10 +743,10 @@
                 var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
                 var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
                 var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                var estado_sesion = sesiones.calificacion? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
+                var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
                 var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
                 var icon_edit_sesion = sesiones.estado == 'activo'? '<i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>':'<i class="fas fa-check-circle"></i>';
-                console.log(sesiones.isTerminado, 'afsñdlfkj')
+                
                 if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
                     icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
                 } else {
