@@ -109,7 +109,7 @@ Route::post('/psicologoHorarioDia', [PsicologoController::class, 'editHorarioXdi
     ->name('psicologo.editHorario_x_dia');
 
 Route::get('/psicologo/getHorario', [PsicologoController::class, 'getHorario'])
-    ->middleware('can:psicologo.disponible')
+    //->middleware('can:psicologo.disponible')
     ->name('psicologo.disponible');
 
 Route::post('/psicologo/inhabilitarHorario', [PsicologoController::class, 'inhabilitarHorario'])

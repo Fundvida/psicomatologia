@@ -137,6 +137,8 @@ class FileController extends Controller
         $sesion->pago_confirmado = 0;
         $sesion->save();
 
+        $file = File::where('sesion_id', $sesion_id)->delete();
+
         $paciente = Paciente::where('id', $sesion->paciente_id)->first();
         
         Notificacion::create([

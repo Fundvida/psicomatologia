@@ -29,9 +29,27 @@ class LoginController extends Controller
         if ($user->hasRole('Administrador')) {
             return redirect()->route('home');
         } elseif ($user->hasRole('Psicologo')) {
-            return redirect()->route('homePsicologo');
+            $psicologo = Psicologo::where('user_id', $user->id)->first();
+            if ($psicologo && $psicologo->estado == "ACTIVO") {
+                return redirect()->route('homePsicologo');
+            } else {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Usuario inactivo. Contacte al administrador.',
+                ]);
+            }
+            //return redirect()->route('homePsicologo');
         } else if ($user->hasRole('Paciente')) {
-            return redirect()->route('homePaciente');
+            $paciente = Paciente::where('user_id', $user->id)->first();
+            if ($paciente && $paciente->estado == "ACTIVO") {
+                return redirect()->route('homePaciente');
+            } else {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Usuario inactivo. Contacte al administrador.',
+                ]);
+            }
+            //return redirect()->route('homePaciente');
         }
     }
 

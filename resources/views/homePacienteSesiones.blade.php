@@ -310,26 +310,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="table-sesiones">
-                                    <!-- Registro 1 -->
-                                    <!-- <tr>
-                                        <td>2024-05-05</td>
-                                        <td>09:00 - 10:00</td>
-                                        <td>1234567</td>
-                                        <td>Juan</td>
-                                        <td>Pérez</td>
-                                        <td>Sesión de terapia individual</td>
-                                        <td>Ansiedad leve</td>
-                                        <td>Informe.pdf</td>
-                                        <td>Pendiente</td>
-                                        <td>Pendiente</td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-money-bill text-success" title="Pagar"></i>
-                                        </td>
-                                        <td class="action-icons">
-                                            <i class="fas fa-times-circle text-danger" onclick="confirmarCancelar('')" title="Cancelar"></i>
-                                        </td>
-
-                                    </tr> -->
 
                                 </tbody>
                             </table>
@@ -385,11 +365,6 @@
                                 <h4 class="mb-4 font-alt">Pago por Código QR</h4>
                                 <p class="mt-4">Por favor, escanea el código de pago a continuación y sube el comprobante correspondiente para confirmar tu transacción.</p>
                                 <img src="{{ asset('images/qr_real.jpeg') }}" alt="QR de Pago" class="img-fluid mb-4" style="max-height: 300px;">
-                                <!-- Campo para subir el comprobante de pago -->
-                                <!-- <div class="mb-3">
-                                    <h5 for="comprobantePago" class="font-alt mb-2">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
-                                    <input type="file" class="form-control" id="file" name="file">
-                                </div> -->
                             </div>
                         </div>
                         <!-- Pestaña Cuenta Bancaria -->
@@ -404,10 +379,6 @@
                                 <p><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
                                 <p><strong>A nombre de:</strong> Fundación Educar Para La Vida</p>
                                 <p><strong>NIT:</strong> 16-943-002-8</p>
-                                <!-- <div class="mb-3">
-                                    <h5 for="comprobantePago" class="mb-2 font-alt">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
-                                    <input type="file" class="form-control" id="file" name="file">
-                                </div> -->
                             </div>
                         </div>
 

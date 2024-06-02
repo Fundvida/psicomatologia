@@ -104,12 +104,13 @@ class PacienteController extends Controller
     {
         Log::info('Solicitud recibida para eliminar paciente', $request->all());
         $paciente = Paciente::findOrFail($request->paciente_id);
+
+        Sesion::where('paciente_id', $paciente->id)->delete();
+
         $paciente->estado = "INACTIVO";
         $paciente->motivo = $request->justificacion;
         
         $paciente->save();
-
-        //return redirect()->route('listaPaciente')->with('resultado', "eliminado");
     }
 
     public function listarSesiones()

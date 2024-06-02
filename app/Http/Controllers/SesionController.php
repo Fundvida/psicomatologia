@@ -301,6 +301,8 @@ class SesionController extends Controller
         $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
                             ->join('users', 'pacientes.user_id', '=', 'users.id')
                             ->where('pacientes.psicologo_id', $psicologo_id)
+                            ->where('pacientes.estado', '=', 'ACTIVO')
+                            ->where('pacientes.isAlta', '=', '0')
                             ->get();
 
         return view('psicologoSesiones', compact('pacientes'));
@@ -404,9 +406,11 @@ class SesionController extends Controller
         // verificar si un paciente tiene una sesion pendiente, si tiene una pendiente el psicologo no puede programar
         // una con ese paciente
         $past_sesion = Sesion::where('paciente_id', $paciente_id)->latest()->first();
-        $paciente_user_id = Paciente::where('id', $paciente_id)
-                            ->select('user_id')
-                            ->first();
+        $paciente_user = Paciente::where('id', $paciente_id)
+                        ->select('user_id')
+                        ->first();
+        $paciente_user_id = (int) $paciente_user->user_id;
+
         if($past_sesion){
             if($past_sesion->estado!='activo' && $past_sesion->estado!='Activa' && ($past_sesion->estado=='Cancelado' ||$past_sesion->estado=='Terminada')){
                 // registra sesion
@@ -428,11 +432,11 @@ class SesionController extends Controller
 
                 $sesion->save();
 
-                // Notificacion::create([
-                //     'descripcion' => 'Usted tiene una nueva sesión programada.',
-                //     'user_id' => $paciente_user_id,
-                //     'sesion_id' => $sesion->id,
-                // ]);
+                $notificacion = new Notificacion();
+                $notificacion->descripcion = 'Usted tiene una nueva sesión programada.';
+                $notificacion->user_id = $paciente_user_id;
+                $notificacion->sesion_id = $sesion->id;
+                $notificacion->save();
 
                 $pago = new Pago();
                 $pago->servicio = $servicio;
@@ -460,11 +464,11 @@ class SesionController extends Controller
             $sesion->fecha_hora_fin = $fechaAgenda . ' ' . $horaFin . ':00';
             $sesion->save();
 
-            // Notificacion::create([
-            //     'descripcion' => 'Usted tiene una nueva sesión programada.',
-            //     'user_id' => $paciente_user_id,
-            //     'sesion_id' => $sesion->id,
-            // ]);
+            $notificacion = new Notificacion();
+            $notificacion->descripcion = 'Usted tiene una nueva sesión programada.';
+            $notificacion->user_id = $paciente_user_id;
+            $notificacion->sesion_id = $sesion->id;
+            $notificacion->save();
 
             $pago = new Pago();
             $pago->servicio = "Primera consulta"; // TODO Arreglar

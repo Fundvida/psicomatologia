@@ -341,10 +341,6 @@
                                         <label for="contrasena" class="form-label">Contraseña <span class="text-danger">*</span></label>
                                         <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                                     </div>
-                                    <div class="col" id="divConfirmarContrasena">
-                                        <label for="confirmarContrasena" class="form-label">Confirmar Contraseña <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" required>
-                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="correoElectronico" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
@@ -532,48 +528,6 @@
     </script>
 
     <script>
-        // $(document).ready(function() {
-        //     $.ajax({
-        //         url: '/psicologo/getPacientes',
-        //         type: 'GET',
-        //         dataType: 'json',
-        //         success: function(data) {
-        //             console.log(data);
-        
-        //             var pacientes = data.datos;
-        //             var rol = data.rol;
-        //             var titleElement = document.getElementById('title-user');
-
-        //             console.log('Rol del usuario:', rol);
-        //             if(rol == 'Administrador'){
-        //                 titleElement.textContent = 'Listado de todos los Pacientes';
-        //             } else if (rol == 'Psicologo'){
-        //                 titleElement.textContent = 'Listado de Paciente Designados';
-        //             }
-
-        //             $('#pacientes-body').empty();
-        //             $.each(pacientes, function(index, paciente) {
-        //                 var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
-        //                 var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
-        //                 var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 
-
-        //                 $('#pacientes-body').append(`
-        //                     <tr>
-        //                         <td>${paciente_ci}</td>
-        //                         <td>${paciente.name} ${paciente.apellidos}</td>
-        //                         <td>${paciente.telefono}</td>
-        //                         <td>${paciente_tipo}</td>
-        //                         <td>${f_nacimiento}</td>
-        //                         <td class="action-icons"> 
-        //                             <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
-        //                             <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
-        //                         </td>
-        //                     </tr>
-        //                 `);
-        //             });
-        //         }
-        //     });
-        // });
 
         $(document).ready(function() {
             cargarPacientes();
@@ -666,7 +620,7 @@
             document.getElementById("btnAddOrEdit").textContent = "Registrar Paciente";
             document.getElementById("title_modal").textContent = "Registrar Paciente";
             document.getElementById("divContrasena").style.display = "block";
-            document.getElementById("divConfirmarContrasena").style.display = "block";
+            //document.getElementById("divConfirmarContrasena").style.display = "block";
             
             $('#paciente_id').val('');
             $('#tipoUsuario').val('');

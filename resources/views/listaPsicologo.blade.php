@@ -8,7 +8,7 @@
     <title>LISTADO DE PSICOLOGOS</title>
 
     <!-- Enlaces a los estilos CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
     <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('./css/style.css')}}">
@@ -355,10 +355,6 @@
                                 <label for="contrasena" class="form-label">Contraseña <span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                             </div>
-                            <div class="col" id="divConfirmarContrasena">
-                                <label for="confirmarContrasena" class="form-label">Confirmar Contraseña <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" required>
-                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="archivos" class="form-label">Archivos <span class="text-danger">*</span></label>
@@ -490,6 +486,16 @@
                 });
             });
         });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dateInput = document.getElementById('fechaNacimiento');
+            const today = new Date();
+            const year = today.getFullYear() - 18;
+            const month = today.getMonth() + 1; // Los meses son de 0 a 11
+            const day = today.getDate();
+            const maxDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+            dateInput.max = maxDate;
+        });
     </script>
 
     <!-- Enlaces a los scripts JS -->
@@ -594,38 +600,10 @@
                 cargarPsicologos();
             }
         });
-        // $(document).ready(function() {
-        //     $.ajax({
-        //         url: '/admin/listaPsicologos',
-        //         type: 'GET',
-        //         dataType: 'json',
-        //         success: function(data) {
-        //         //console.log(data);
-        //         $('#psicologos-body').empty();
-                
-        //         // Recorrer los datos y agregar filas a la tabla
-        //         $.each(data, function(index, psicologo) {
-
-        //             $('#psicologos-body').append(`
-        //                 <tr>
-        //                     <td>${psicologo.ci}</td>
-        //                     <td>${psicologo.name} ${psicologo.apellidos}</td>
-        //                     <td>${psicologo.estado}</td>
-        //                     <td class="action-icons"> 
-        //                         <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editar(${psicologo.id})" title="Editar Psicologo"></i>
-        //                         <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${psicologo.id})" title="Eliminar Sesión"></i>
-        //                     </td>
-        //                 </tr>
-        //             `);
-        //         });
-
-        //         }
-        //     });
-        // });
 
         function limpiar() {
             document.getElementById("divContrasena").style.display = "block";
-            document.getElementById("divConfirmarContrasena").style.display = "block";
+            //document.getElementById("divConfirmarContrasena").style.display = "block";
 
             document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
             document.getElementById("psicologo_id").value = "";
@@ -638,7 +616,7 @@
             document.getElementById("paisResidencia").value = "";
             document.getElementById("ci").value = "";
             document.getElementById("contrasena").value = "";
-            document.getElementById("confirmarContrasena").value = "";
+            //document.getElementById("confirmarContrasena").value = "";
             document.getElementById("archivos").value = "";
             document.getElementById("descripcionCV").value = "";
             document.getElementById("correoElectronico").value = "";
@@ -653,9 +631,9 @@
             console.log(psicologoId);
             document.getElementById("btnAddOrEdit").textContent = "Editar Psicologo";
             document.getElementById("divContrasena").style.display = "none";
-            document.getElementById("divConfirmarContrasena").style.display = "none";
+            //document.getElementById("divConfirmarContrasena").style.display = "none";
             document.getElementById("contrasena").removeAttribute("required");
-            document.getElementById("confirmarContrasena").removeAttribute("required");
+            //document.getElementById("confirmarContrasena").removeAttribute("required");
 
             $('#formularioRegistroModal').modal('show');
             $.ajax({

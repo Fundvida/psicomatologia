@@ -14,6 +14,7 @@ use App\Models\Especialidad;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Paciente;
 
 
 class PsicologoController extends Controller
@@ -141,12 +142,15 @@ class PsicologoController extends Controller
     {
         Log::info('Solicitud recibida para eliminar psicólogo', $request->all());
         $psicologo = Psicologo::findOrFail($request->psicologo_id);
+
+        Sesion::where('psicologo_id', $psicologo->id)->delete();
+
+        Paciente::where('psicologo_id', $psicologo->id)->update(['psicologo_id' => null]);
+
         $psicologo->estado = "INACTIVO";
         $psicologo->motivo = $request->justificacion;
 
         $psicologo->save();
-
-        //return redirect()->route('listaPsicologo')->with('resultado', "eliminado");
     }
 
     protected function convertValidationExceptionToResponse(ValidationException $exception, $request)
