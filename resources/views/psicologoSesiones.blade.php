@@ -372,7 +372,7 @@
                                         <div class="input-group-append">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="00:00" max="11:59" step="3600">
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="00:00" max="11:59" step="3600" readonly>
                                     </div>
                                     <div id="time-error-maniana" class="text-danger" style="display:none;">La hora de inicio debe ser menor que la hora de fin.</div>
                                     <div id="error-message" class="text-danger" style="display: none;">La diferencia entre las horas debe ser de exactamente una hora.</div>
@@ -586,42 +586,46 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editarSesionForm">
+                    <form id="editarSesionForm" action="{{ route('psicologo.edit.sesion') }}" method="POST">
+                    @csrf
+                        <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}">
+                        <input type="hidden" name="sesion_id_" id="sesion_id_">
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="editarFechaSesion" class="form-label">Fecha de la Sesión<span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="editarFechaSesion" placeholder="YYYY-MM-DD" required>
+                                <input type="date" class="form-control" id="editarFechaSesion" name="editarFechaSesion"  placeholder="YYYY-MM-DD" required>
+                                <div id="date-error-edit" class="text-danger" style="display:none;">La fecha debe ser mayor a la fecha actual.</div>
                             </div>
                             <div class="col">
                                 <label for="editarHoraInicio" class="form-label">Hora Inicio<span class="text-danger">*</span></label>
-                                <input type="time" class="form-control" id="editarHoraInicio" placeholder="HH:MM" required>
+                                <input type="time" class="form-control" id="editarHoraInicio" name="editarHoraInicio" placeholder="HH:MM" required>
                             </div>
                             <div class="col">
-                                <label for="editarHoraFin" class="form-label">Hora Fin<span class="text-danger">*</span></label>
-                                <input type="time" class="form-control" id="editarHoraFin" placeholder="HH:MM" required>
+                                <label for="editarHoraFin" class="form-label">Hora Fin</label>
+                                <input type="time" class="form-control" id="editarHoraFin" name="editarHoraFin" placeholder="HH:MM" readonly>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="editarCIPaciente" class="form-label">CI Paciente<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editarCIPaciente" placeholder="Número de CI" required>
+                                <label for="editarCIPaciente" class="form-label">CI Paciente</label>
+                                <input type="text" class="form-control" id="editarCIPaciente" placeholder="Número de CI" readonly>
                             </div>
                             <div class="col">
-                                <label for="editarNombrePaciente" class="form-label">Nombre(s)<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editarNombrePaciente" placeholder="Nombre(s) del paciente" required>
+                                <label for="editarNombrePaciente" class="form-label">Nombre(s)</label>
+                                <input type="text" class="form-control" id="editarNombrePaciente" placeholder="Nombre(s) del paciente" readonly>
                             </div>
                             <div class="col">
-                                <label for="editarApellidosPaciente" class="form-label">Apellidos<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="editarApellidosPaciente" placeholder="Apellidos del paciente" required>
+                                <label for="editarApellidosPaciente" class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" id="editarApellidosPaciente" placeholder="Apellidos del paciente" readonly>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="editarDescripcionSesion" class="form-label">Descripción de la Sesión<span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="editarDescripcionSesion" rows="3" placeholder="Detalles de la sesión" required></textarea>
+                            <textarea class="form-control" id="editarDescripcionSesion" name="editarDescripcionSesion" rows="3" placeholder="Detalles de la sesión" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="editarDiagnostico" class="form-label">Diagnóstico<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editarDiagnostico" placeholder="Diagnóstico del paciente" required>
+                            <input type="text" class="form-control" id="editarDiagnostico" name="editarDiagnostico" placeholder="Diagnóstico del paciente" required>
                         </div>
                         <div class="mb-3">
                             <label for="editarArchivosAdjuntos" class="form-label">Archivos Adjuntos</label>
@@ -638,17 +642,13 @@
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="editarEstadoPago" class="form-label">Estado de Pago<span class="text-danger">*</span></label>
-                                <select class="form-select" id="editarEstadoPago" required>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Realizado">Realizado</option>
-                                    <option value="Cancelado">Cancelado</option>
-                                </select>
+                                <label for="editarEstadoPago" class="form-label">Estado de Pago</label>
+                                <input type="text" class="form-control" id="editarDiagnostico" readonly>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" onclick="guardarCambiosSesion()">Editar Sesión</button>
+                            <button type="submit" class="btn btn-primary" id="btn-sesion-edit">Editar Sesión</button>
                         </div>
                     </form>
                 </div>
@@ -840,389 +840,473 @@
 
     </script>
 
-<script>
-    $(document).ready(function() {
-        function cargarSesiones(){
-            var fecha = $('#filtroFecha').val();
-            var nombre = $('#filtroNombre').val();
-            var ci = $('#filtroCI').val();
-            
-            $.ajax({
-                url: '/psicologo/getSesiones',
-                type: 'GET',
-                data: {
-                    fecha: fecha,
-                    nombre: nombre,
-                    ci: ci
-                },
-                dataType: 'json',
-                success: function(data) {
-                    console.log(data);
-                    $('#sesiones-body').empty();
+    <script>
+        $(document).ready(function() {
+            function cargarSesiones(){
+                var fecha = $('#filtroFecha').val();
+                var nombre = $('#filtroNombre').val();
+                var ci = $('#filtroCI').val();
                 
-                    // Recorrer los datos y agregar filas a la tabla
-                    $.each(data, function(index,sesiones) {
-                        var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
-                        var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
-                        var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
-                        var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
-                        var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                        var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
-                        var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
-                        var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion('${fechaInicio}', '${horaInicio}' , '${horaFin}', ${paciente_ci}, '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
-                        :'<i class="fas fa-check-circle"></i>';
-                        
-                        if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
-                            icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
-                        } else {
-                            icon_cancel = `<i class="fas fa-times-circle text-secondary" title="Cancelar Sesión"></i>`;
-                        }
-
+                $.ajax({
+                    url: '/psicologo/getSesiones',
+                    type: 'GET',
+                    data: {
+                        fecha: fecha,
+                        nombre: nombre,
+                        ci: ci
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#sesiones-body').empty();
                     
-                        $('#sesiones-body').append(`
-                            <tr>
-                                <td>${fechaInicio}</td>
-                                <td>${horaInicio} - ${horaFin}</td>
-                                <td>${paciente_ci}</td>
-                                <td>${sesiones.name}</td>
-                                <td>${sesiones.apellidos}</td>
-                                <td>${sesiones.descripcion_sesion}</td>
-                                <td>None</td>
-                                <td>None</td>
-                                <td>${estado_sesion}</td>
-                                <td>${estado_pago}</td>
-                                <td class="action-icons">
-                                    ${icon_edit_sesion}   
-                                </td>
-                                <td class="action-icons">
-                                    ${icon_cancel}
-                                </td>
-                                <td class="action-icons">
-                                    <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
-                                </td>
-                                <td class="action-icons">
-                                    <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
-                                </td>
-                            </tr>
-                        `);
-                    });
+                        // Recorrer los datos y agregar filas a la tabla
+                        $.each(data, function(index,sesiones) {
+                            console.log(sesiones);
+                            var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
+                            var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
+                            var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
+                            var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
+                            var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
+                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
+                            var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
+                            var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , '${horaFin}', ${paciente_ci}, '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
+                            :'<i class="fas fa-check-circle"></i>';
+                            
+                            if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
+                                icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
+                            } else {
+                                icon_cancel = `<i class="fas fa-times-circle text-secondary" title="Cancelar Sesión"></i>`;
+                            }
 
-                },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al obtener sesiones:', textStatus, errorThrown);
+                        
+                            $('#sesiones-body').append(`
+                                <tr>
+                                    <td>${fechaInicio}</td>
+                                    <td>${horaInicio} - ${horaFin}</td>
+                                    <td>${paciente_ci}</td>
+                                    <td>${sesiones.name}</td>
+                                    <td>${sesiones.apellidos}</td>
+                                    <td>${sesiones.descripcion_sesion}</td>
+                                    <td>None</td>
+                                    <td>None</td>
+                                    <td>${estado_sesion}</td>
+                                    <td>${estado_pago}</td>
+                                    <td class="action-icons">
+                                        ${icon_edit_sesion}   
+                                    </td>
+                                    <td class="action-icons">
+                                        ${icon_cancel}
+                                    </td>
+                                    <td class="action-icons">
+                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
+                                    </td>
+                                    <td class="action-icons">
+                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+
+                    },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error al obtener sesiones:', textStatus, errorThrown);
+                }
+                });
             }
+
+            cargarSesiones();
+            window.filtrarPacientes = function() {
+                cargarSesiones();
+            }
+        });
+
+        function registrarSesion(){
+            console.log('registrar sesion');
+        }
+
+        function editarSesion(sesion_id,fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
+            document.getElementById('sesion_id_').value = sesion_id;
+            document.getElementById('editarFechaSesion').value = fecha;
+            document.getElementById('editarHoraInicio').value = horaInicio;
+            document.getElementById('editarHoraFin').value = horaFin;
+            document.getElementById('editarCIPaciente').value = ci;
+            document.getElementById('editarNombrePaciente').value = nombre;
+            document.getElementById('editarApellidosPaciente').value = apellidos;
+            document.getElementById('editarDescripcionSesion').value = descripcion;
+            document.getElementById('editarDiagnostico').value = diagnostico;
+            document.getElementById('archivosActuales').textContent = archivos;
+            document.getElementById('editarEstadoSesion').value = estadoSesion;
+            //document.getElementById('editarEstadoPago').value = estadoPago;
+
+            // Abrir el modal
+            var modal = new bootstrap.Modal(document.getElementById('editarSesionModal'));
+            modal.show();
+        }
+
+        function confirmarCancelar(sesion_id){
+            Swal.fire({
+                title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
+                html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, explícale al paciente el motivo de la cancelación:</p>
+                    <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'No',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true,
+                preConfirm: () => {
+                    return document.getElementById('justificacion').value;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const justificacion = result.value;
+                    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        $.ajax({
+                            url: '/paciente/cancelarSesion',
+                            type: 'POST',
+                            data: {
+                                'sesion_id': sesion_id,
+                                '_token': token,
+                                'justificacion': justificacion
+                            },
+                            success: function(data) {
+                                console.log("exito!!!!  ");
+                                Swal.fire(
+                                    '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
+                                    `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
+                                    'success'
+                                )
+                                setTimeout(function() {
+                                    window.location.reload();
+                                }, 3000);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        }); 
+                }
             });
         }
 
-        cargarSesiones();
-        window.filtrarPacientes = function() {
-            cargarSesiones();
-        }
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Función para cargar las notificaciones
+            function loadNotifications() {
+                fetch('/notificaciones')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        const notificationBody = document.getElementById('notificationBody');
+                        notificationBody.innerHTML = '';
 
-    function registrarSesion(){
-        console.log('registrar sesion');
-    }
-
-    function editarSesion(fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
-        console.log(fecha);
-        document.getElementById('editarFechaSesion').value = fecha;
-        document.getElementById('editarHoraInicio').value = horaInicio;
-        document.getElementById('editarHoraFin').value = horaFin;
-        document.getElementById('editarCIPaciente').value = ci;
-        document.getElementById('editarNombrePaciente').value = nombre;
-        document.getElementById('editarApellidosPaciente').value = apellidos;
-        document.getElementById('editarDescripcionSesion').value = descripcion;
-        document.getElementById('editarDiagnostico').value = diagnostico;
-        document.getElementById('archivosActuales').textContent = archivos;
-        document.getElementById('editarEstadoSesion').value = estadoSesion;
-        document.getElementById('editarEstadoPago').value = estadoPago;
-
-        // Abrir el modal
-        var modal = new bootstrap.Modal(document.getElementById('editarSesionModal'));
-        modal.show();
-    }
-
-    function confirmarCancelar(sesion_id){
-        Swal.fire({
-            title: '<h2 class="text-center mb-2 font-alt">¿Estás seguro de Cancelar la Sesión?</h2>',
-            html: `<p class="lead fw-normal text-muted mb-2 ttNorms" style="line-height: 1.5em;">Por favor, explícale al paciente el motivo de la cancelación:</p>
-                   <input id="justificacion" class="swal2-input" placeholder="Escriba aquí..." type="text">`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, cancelar',
-            cancelButtonText: 'No',
-            customClass: {
-                title: 'swal-title', // Clase CSS para el título personalizado
-            },
-            // Permite que el HTML se muestre en la notificación
-            allowHtml: true,
-            preConfirm: () => {
-                return document.getElementById('justificacion').value;
+                        data.forEach(notification => {
+                            const notificationItem = document.createElement('div');
+                            notificationItem.className = 'notification-item-container mb-2';
+                            notificationItem.innerHTML = `
+                                <button class="notification-item rounded bg-light py-2 px-3 border-0">
+                                    ${notification.descripcion}
+                                </button>
+                            `;
+                            notificationBody.appendChild(notificationItem);
+                        });
+                    });
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const justificacion = result.value;
-                var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    $.ajax({
-                        url: '/paciente/cancelarSesion',
-                        type: 'POST',
-                        data: {
-                            'sesion_id': sesion_id,
-                            '_token': token,
-                            'justificacion': justificacion
-                        },
-                        success: function(data) {
-                            console.log("exito!!!!  ");
-                            Swal.fire(
-                                '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                                `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
-                                'success'
-                            )
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 3000);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error);
-                        }
-                    }); 
+
+            loadNotifications();
+
+            setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+        });
+
+        function aceptarComprobante(){
+            var sesion_id = document.querySelector('#sesion_id').value;
+            $.ajax({
+                url: '/confirmar/comprobante/'+sesion_id,
+                type: 'GET',
+                success: function(data) {
+                    console.log("exito!!!!  ");
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Exito</h2>',
+                        `Confirmación de comprobante exitosa`,
+                        'success'
+                    )
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            }); 
+        }
+        
+        function rechazarComprobante(){
+            var sesion_id = document.querySelector('#sesion_id').value;
+            $.ajax({
+                url: '/rechazar/comprobante/'+sesion_id,
+                type: 'GET',
+                success: function(data) {
+                    console.log("exito!!!!  ");
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Exito</h2>',
+                        `Se envio notificación al paciente para que regule su comprobante.`,
+                        'success'
+                    )
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            }); 
+        }
+
+        function limpiar() {
+            // document.getElementById("divConfirmarContrasena").style.display = "block";
+            // document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
+            // document.getElementById("psicologo_id").value = "";
+            $('#formularioRegistroModal').modal('show');
+        }
+
+        document.getElementById('btn-sesion-edit').addEventListener('click', function(event){
+            event.preventDefault(); 
+            const fechaAgenda = document.getElementById('editarFechaSesion').value;
+            const currentDate = new Date().toISOString().split('T')[0];
+            if(fechaAgenda <= currentDate){
+                document.getElementById('date-error-edit').style.display = 'block';
+            }else{
+                document.getElementById('date-error-edit').style.display = 'none';
+                let form = $('#editarSesionForm');
+                let formData = form.serialize();
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: formData,
+                    success: function(response) {
+                        console.log(response);
+                        Swal.fire(
+                            '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                            `Sesion actualizada con exito!!!`,
+                            'success'
+                        )
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 3000);
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: "Error",
+                            text: response.responseJSON.error,
+                            icon: "error"
+                        });
+                    }
+                });
             }
         });
-    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Función para cargar las notificaciones
-        function loadNotifications() {
-            fetch('/notificaciones')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    const notificationBody = document.getElementById('notificationBody');
-                    notificationBody.innerHTML = '';
+        document.getElementById('submit-button-maniana').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario por defecto
+            //validar_fecha('fechaAgendaManiana');
+            const fechaAgenda = document.getElementById('fechaAgendaManiana').value;
+            const currentDate = new Date().toISOString().split('T')[0];
 
-                    data.forEach(notification => {
-                        const notificationItem = document.createElement('div');
-                        notificationItem.className = 'notification-item-container mb-2';
-                        notificationItem.innerHTML = `
-                            <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                                ${notification.descripcion}
-                            </button>
-                        `;
-                        notificationBody.appendChild(notificationItem);
-                    });
-                });
-        }
+            if (fechaAgenda <= currentDate) {
+                document.getElementById('date-error-maniana').style.display = 'block';
+            } else {
+                document.getElementById('date-error-maniana').style.display = 'none';
+                document.getElementById('date-error-tarde').style.display = 'none';
+                var horaInicio = document.getElementById('horaInicio').value;
+                var horaFin = document.getElementById('horaFin').value;
+                var errorMessage = document.getElementById('error-message');
 
-        loadNotifications();
+                if (horaInicio >= horaFin) {
+                    event.preventDefault();
+                    document.getElementById('time-error-maniana').style.display = 'block';
+                } else {
+                    document.getElementById('time-error-maniana').style.display = 'none';
+                    document.getElementById('time-error-tarde').style.display = 'none';
+                    var inicio = horaInicio;
+                    var fin = horaFin;
 
-        setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
-    });
+                    if (inicio && fin) {
+                        const [inicioHours, inicioMinutes] = inicio.split(':').map(Number);
+                        const [finHours, finMinutes] = fin.split(':').map(Number);
 
-    function aceptarComprobante(){
-        var sesion_id = document.querySelector('#sesion_id').value;
-        $.ajax({
-            url: '/confirmar/comprobante/'+sesion_id,
-            type: 'GET',
-            success: function(data) {
-                console.log("exito!!!!  ");
-                Swal.fire(
-                    '<h2 class="text-center mb-4 font-alt">Exito</h2>',
-                    `Confirmación de comprobante exitosa`,
-                    'success'
-                )
-                setTimeout(function() {
-                    window.location.reload();
-                }, 3000);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
+                        const inicioTotalMinutes = inicioHours * 60 + inicioMinutes;
+                        const finTotalMinutes = finHours * 60 + finMinutes;
+
+                        const difference = (finTotalMinutes - inicioTotalMinutes) / 60;
+
+                        if (difference !== 1) {
+                            errorMessage.style.display = 'block';
+                        } else {
+                            errorMessage.style.display = 'none';
+                            let form = $('#sesion-form-m');
+                            let formData = form.serialize();
+
+                            $.ajax({
+                                url: form.attr('action'),
+                                method: form.attr('method'),
+                                data: formData,
+                                success: function(response) {
+                                    Swal.fire(
+                                        '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                                        `Sesion registrada con exito!!!`,
+                                        'success'
+                                    )
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 3000);
+                                },
+                                error: function(response) {
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: response.responseJSON.error,
+                                        icon: "error"
+                                    });
+                                }
+                            });
+                        }
+                    }
+                    
+                }
             }
-        }); 
-    }
-    
-    function rechazarComprobante(){
-        var sesion_id = document.querySelector('#sesion_id').value;
-        $.ajax({
-            url: '/rechazar/comprobante/'+sesion_id,
-            type: 'GET',
-            success: function(data) {
-                console.log("exito!!!!  ");
-                Swal.fire(
-                    '<h2 class="text-center mb-4 font-alt">Exito</h2>',
-                    `Se envio notificación al paciente para que regule su comprobante.`,
-                    'success'
-                )
-                setTimeout(function() {
-                    window.location.reload();
-                }, 3000);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        }); 
-    }
+        });
 
-    function limpiar() {
-        // document.getElementById("divConfirmarContrasena").style.display = "block";
-        // document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
-        // document.getElementById("psicologo_id").value = "";
-        $('#formularioRegistroModal').modal('show');
-    }
+        document.getElementById('submit-button-tarde').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario por defecto
+            const fechaAgenda = document.getElementById('fechaAgendaTarde').value;
+            const currentDate = new Date().toISOString().split('T')[0];
 
-    document.getElementById('submit-button-maniana').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevenir el envío del formulario por defecto
-        //validar_fecha('fechaAgendaManiana');
-        const fechaAgenda = document.getElementById('fechaAgendaManiana').value;
-        const currentDate = new Date().toISOString().split('T')[0];
-
-        if (fechaAgenda <= currentDate) {
-            document.getElementById('date-error-maniana').style.display = 'block';
-        } else {
-            document.getElementById('date-error-maniana').style.display = 'none';
-            document.getElementById('date-error-tarde').style.display = 'none';
-            var horaInicio = document.getElementById('horaInicio').value;
-            var horaFin = document.getElementById('horaFin').value;
-            var errorMessage = document.getElementById('error-message');
-
-            if (horaInicio >= horaFin) {
+            if (fechaAgenda <= currentDate) {
                 event.preventDefault();
-                document.getElementById('time-error-maniana').style.display = 'block';
+                document.getElementById('date-error-tarde').style.display = 'block';            
             } else {
-                document.getElementById('time-error-maniana').style.display = 'none';
-                document.getElementById('time-error-tarde').style.display = 'none';
-                var inicio = horaInicio;
-                var fin = horaFin;
+                document.getElementById('date-error-maniana').style.display = 'none';
+                document.getElementById('date-error-tarde').style.display = 'none';
+            
+                var param = 2
+                const horaInicio = document.getElementById('horaInicioT').value;
+                const horaFin = document.getElementById('horaFinT').value;
+                var errorMessage = document.getElementById('error-message-T');
 
-                if (inicio && fin) {
-                    console.log('hola');
-                    const [inicioHours, inicioMinutes] = inicio.split(':').map(Number);
-                    const [finHours, finMinutes] = fin.split(':').map(Number);
+                if (horaInicio >= horaFin) {
+                    document.getElementById('time-error-tarde').style.display = 'block';
+                } else {
+                    document.getElementById('time-error-maniana').style.display = 'none';
+                    document.getElementById('time-error-tarde').style.display = 'none';
+                    var inicio = horaInicio;
+                    var fin = horaFin;
 
-                    const inicioTotalMinutes = inicioHours * 60 + inicioMinutes;
-                    const finTotalMinutes = finHours * 60 + finMinutes;
+                    if (inicio && fin) {
+                        const [inicioHours, inicioMinutes] = inicio.split(':').map(Number);
+                        const [finHours, finMinutes] = fin.split(':').map(Number);
 
-                    const difference = (finTotalMinutes - inicioTotalMinutes) / 60;
+                        const inicioTotalMinutes = inicioHours * 60 + inicioMinutes;
+                        const finTotalMinutes = finHours * 60 + finMinutes;
 
-                    if (difference !== 1) {
-                        errorMessage.style.display = 'block';
-                    } else {
-                        errorMessage.style.display = 'none';
-                        let form = $('#sesion-form-m');
-                        let formData = form.serialize();
+                        const difference = (finTotalMinutes - inicioTotalMinutes) / 60;
 
-                        $.ajax({
-                            url: form.attr('action'),
-                            method: form.attr('method'),
-                            data: formData,
-                            success: function(response) {
-                                Swal.fire(
-                                    '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
-                                    `Sesion registrada con exito!!!`,
-                                    'success'
-                                )
-                                setTimeout(function() {
-                                    window.location.reload();
-                                }, 3000);
-                            },
-                            error: function(response) {
-                                Swal.fire({
-                                    title: "Error",
-                                    text: response.responseJSON.error,
-                                    icon: "error"
-                                });
-                            }
-                        });
+                        if (difference !== 1) {
+                            errorMessage.style.display = 'block';
+                        } else {
+                            errorMessage.style.display = 'none';
+                            let form = $('#sesion-form-t');
+                            let formData = form.serialize();
+
+                            $.ajax({
+                                url: form.attr('action'),
+                                method: form.attr('method'),
+                                data: formData,
+                                success: function(response) {
+                                    Swal.fire(
+                                        '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                                        `Sesion registrada con exito!!!`,
+                                        'success'
+                                    )
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 3000);
+                                },
+                                error: function(response) {
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: response.responseJSON.error,
+                                        icon: "error"
+                                    });
+                                }
+                            });
+                        }
                     }
+
+                    
                 }
-                
             }
-        }
-    });
+        });
 
-    document.getElementById('submit-button-tarde').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevenir el envío del formulario por defecto
-        const fechaAgenda = document.getElementById('fechaAgendaTarde').value;
-        const currentDate = new Date().toISOString().split('T')[0];
+        document.getElementById('paciente_id_m').addEventListener('change', function() {
+            var pacienteNombre = this.options[this.selectedIndex].getAttribute('data-name');
+            document.getElementById('paciente_nombre_m').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
+        });
 
-        if (fechaAgenda <= currentDate) {
-            event.preventDefault();
-            document.getElementById('date-error-tarde').style.display = 'block';            
-        } else {
-            document.getElementById('date-error-maniana').style.display = 'none';
-            document.getElementById('date-error-tarde').style.display = 'none';
-        
-            var param = 2
-            const horaInicio = document.getElementById('horaInicioT').value;
-            const horaFin = document.getElementById('horaFinT').value;
-            var errorMessage = document.getElementById('error-message-T');
+        document.getElementById('paciente_id_t').addEventListener('change', function() {
+            var pacienteNombre = this.options[this.selectedIndex].getAttribute('data-name');
+            document.getElementById('paciente_nombre_t').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
+        });
 
-            if (horaInicio >= horaFin) {
-                document.getElementById('time-error-tarde').style.display = 'block';
-            } else {
-                document.getElementById('time-error-maniana').style.display = 'none';
-                document.getElementById('time-error-tarde').style.display = 'none';
-                var inicio = horaInicio;
-                var fin = horaFin;
-
-                if (inicio && fin) {
-                    const [inicioHours, inicioMinutes] = inicio.split(':').map(Number);
-                    const [finHours, finMinutes] = fin.split(':').map(Number);
-
-                    const inicioTotalMinutes = inicioHours * 60 + inicioMinutes;
-                    const finTotalMinutes = finHours * 60 + finMinutes;
-
-                    const difference = (finTotalMinutes - inicioTotalMinutes) / 60;
-
-                    if (difference !== 1) {
-                        errorMessage.style.display = 'block';
-                    } else {
-                        errorMessage.style.display = 'none';
-                        let form = $('#sesion-form-t');
-                        let formData = form.serialize();
-
-                        $.ajax({
-                            url: form.attr('action'),
-                            method: form.attr('method'),
-                            data: formData,
-                            success: function(response) {
-                                Swal.fire(
-                                    '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
-                                    `Sesion registrada con exito!!!`,
-                                    'success'
-                                )
-                                setTimeout(function() {
-                                    window.location.reload();
-                                }, 3000);
-                            },
-                            error: function(response) {
-                                Swal.fire({
-                                    title: "Error",
-                                    text: response.responseJSON.error,
-                                    icon: "error"
-                                });
-                            }
-                        });
-                    }
-                }
-
-                
+        // Función para actualizar la hora de editarHoraFin
+        function actualizarHoraFin2() {
+            var horaInicio = document.getElementById("editarHoraInicio").value;
+            
+            var horaInicioSplit = horaInicio.split(":");
+            var hora = parseInt(horaInicioSplit[0]);
+            var minuto = parseInt(horaInicioSplit[1]);
+            
+            hora = hora + 1;
+            
+            if (hora > 23) {
+                hora = hora - 24;
             }
+            
+            hora = (hora < 10 ? "0" : "") + hora;
+            minuto = (minuto < 10 ? "0" : "") + minuto;
+            
+            var nuevaHora = hora + ":" + minuto;
+            
+            document.getElementById("editarHoraFin").value = nuevaHora;
         }
-    });
 
-    document.getElementById('paciente_id_m').addEventListener('change', function() {
-        var pacienteNombre = this.options[this.selectedIndex].getAttribute('data-name');
-        document.getElementById('paciente_nombre_m').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
-    });
+        function actualizarHoraFin() {
+            var horaInicio = document.getElementById("horaInicio").value;
+            
+            var horaInicioSplit = horaInicio.split(":");
+            var hora = parseInt(horaInicioSplit[0]);
+            var minuto = parseInt(horaInicioSplit[1]);
+            
+            hora = hora + 1;
+            
+            if (hora > 23) {
+                hora = hora - 24;
+            }
+            
+            hora = (hora < 10 ? "0" : "") + hora;
+            minuto = (minuto < 10 ? "0" : "") + minuto;
+            
+            var nuevaHora = hora + ":" + minuto;
+            
+            document.getElementById("horaFin").value = nuevaHora;
+        }
 
-    document.getElementById('paciente_id_t').addEventListener('change', function() {
-        var pacienteNombre = this.options[this.selectedIndex].getAttribute('data-name');
-        document.getElementById('paciente_nombre_t').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
-    });
-</script>
+        document.getElementById("editarHoraInicio").addEventListener("change", actualizarHoraFin2);
+
+        document.getElementById("horaInicio").addEventListener("change", actualizarHoraFin);
+
+    </script>
 </body>
 </html>
 

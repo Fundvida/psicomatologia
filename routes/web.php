@@ -193,5 +193,8 @@ Route::get('/rechazar/comprobante/{sesion_id}', [FileController::class, 'rechaza
 Route::post('/psicologo/newsesion', [SesionController::class, 'nuevaSesion'])
     ->name('psicologo.create.sesion');
 
+Route::post('/psicologo/editsesion', [SesionController::class, 'editarSesion'])
+    ->name('psicologo.edit.sesion');
+
 Route::get('/comprobante/{sesion_id}', [FileController::class, 'getComprobanteXPaciente']);
 
