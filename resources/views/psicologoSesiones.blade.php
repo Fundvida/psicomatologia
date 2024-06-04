@@ -577,6 +577,85 @@
         </div>
     </div>
 
+    <!-- Modal para editar sesión -->
+    <div class="modal fade" id="editarSesionModal" tabindex="-1" aria-labelledby="editarSesionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title font-alt">Editar Sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editarSesionForm">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="editarFechaSesion" class="form-label">Fecha de la Sesión<span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="editarFechaSesion" placeholder="YYYY-MM-DD" required>
+                            </div>
+                            <div class="col">
+                                <label for="editarHoraInicio" class="form-label">Hora Inicio<span class="text-danger">*</span></label>
+                                <input type="time" class="form-control" id="editarHoraInicio" placeholder="HH:MM" required>
+                            </div>
+                            <div class="col">
+                                <label for="editarHoraFin" class="form-label">Hora Fin<span class="text-danger">*</span></label>
+                                <input type="time" class="form-control" id="editarHoraFin" placeholder="HH:MM" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="editarCIPaciente" class="form-label">CI Paciente<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editarCIPaciente" placeholder="Número de CI" required>
+                            </div>
+                            <div class="col">
+                                <label for="editarNombrePaciente" class="form-label">Nombre(s)<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editarNombrePaciente" placeholder="Nombre(s) del paciente" required>
+                            </div>
+                            <div class="col">
+                                <label for="editarApellidosPaciente" class="form-label">Apellidos<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editarApellidosPaciente" placeholder="Apellidos del paciente" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarDescripcionSesion" class="form-label">Descripción de la Sesión<span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="editarDescripcionSesion" rows="3" placeholder="Detalles de la sesión" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarDiagnostico" class="form-label">Diagnóstico<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editarDiagnostico" placeholder="Diagnóstico del paciente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarArchivosAdjuntos" class="form-label">Archivos Adjuntos</label>
+                            <input type="file" class="form-control" id="editarArchivosAdjuntos" multiple>
+                            <small class="form-text text-muted">Archivos actuales: <span id="archivosActuales"></span></small>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="editarEstadoSesion" class="form-label">Estado de la Sesión<span class="text-danger">*</span></label>
+                                <select class="form-select" id="editarEstadoSesion" required>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Terminada">Terminada</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="editarEstadoPago" class="form-label">Estado de Pago<span class="text-danger">*</span></label>
+                                <select class="form-select" id="editarEstadoPago" required>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Realizado">Realizado</option>
+                                    <option value="Cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" onclick="guardarCambiosSesion()">Editar Sesión</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -724,77 +803,144 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('vendors/jquery-ui/jquery-ui.min.js') }}"></script>
 
+    <script>
+        $('#filtroNombre').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('search.sesion.nombre') }}",
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        response(data)
+                    }
+                });
+            }
+        });
+
+        $('#filtroCI').autocomplete({
+            source: function(request, response){
+                $.ajax({
+                    url: "{{ route('search.sesion.ci') }}",
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data){
+                        console.log(data);
+                        response(data)
+                    }
+                });
+            }
+        });
+
+    </script>
 
 <script>
     $(document).ready(function() {
-        $.ajax({
-            url: '/psicologo/getSesiones',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
-                $('#sesiones-body').empty();
+        function cargarSesiones(){
+            var fecha = $('#filtroFecha').val();
+            var nombre = $('#filtroNombre').val();
+            var ci = $('#filtroCI').val();
             
-            // Recorrer los datos y agregar filas a la tabla
-            $.each(data, function(index,sesiones) {
-                var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
-                var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
-                var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
-                var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
-                var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
-                var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
-                var icon_edit_sesion = sesiones.estado == 'activo'? '<i class="fas fa-edit text-primary" onclick="editarSesion()" title="Editar Sesión"></i>':'<i class="fas fa-check-circle"></i>';
+            $.ajax({
+                url: '/psicologo/getSesiones',
+                type: 'GET',
+                data: {
+                    fecha: fecha,
+                    nombre: nombre,
+                    ci: ci
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#sesiones-body').empty();
                 
-                if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
-                    icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
-                } else {
-                    icon_cancel = `<i class="fas fa-times-circle text-secondary" title="Cancelar Sesión"></i>`;
-                }
+                    // Recorrer los datos y agregar filas a la tabla
+                    $.each(data, function(index,sesiones) {
+                        var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
+                        var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
+                        var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
+                        var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
+                        var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
+                        var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
+                        var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
+                        var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion('${fechaInicio}', '${horaInicio}' , '${horaFin}', ${paciente_ci}, '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
+                        :'<i class="fas fa-check-circle"></i>';
+                        
+                        if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
+                            icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
+                        } else {
+                            icon_cancel = `<i class="fas fa-times-circle text-secondary" title="Cancelar Sesión"></i>`;
+                        }
 
-               
-                $('#sesiones-body').append(`
-                    <tr>
-                        <td>${fechaInicio}</td>
-                        <td>${horaInicio} - ${horaFin}</td>
-                        <td>${paciente_ci}</td>
-                        <td>${sesiones.name}</td>
-                        <td>${sesiones.apellidos}</td>
-                        <td>${sesiones.descripcion_sesion}</td>
-                        <td>None</td>
-                        <td>None</td>
-                        <td>${estado_sesion}</td>
-                        <td>${estado_pago}</td>
-                        <td class="action-icons">
-                            ${icon_edit_sesion}   
-                        </td>
-                        <td class="action-icons">
-                            ${icon_cancel}
-                        </td>
-                        <td class="action-icons">
-                            <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
-                        </td>
-                        <td class="action-icons">
-                            <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
-                        </td>
-                    </tr>
-                `);
+                    
+                        $('#sesiones-body').append(`
+                            <tr>
+                                <td>${fechaInicio}</td>
+                                <td>${horaInicio} - ${horaFin}</td>
+                                <td>${paciente_ci}</td>
+                                <td>${sesiones.name}</td>
+                                <td>${sesiones.apellidos}</td>
+                                <td>${sesiones.descripcion_sesion}</td>
+                                <td>None</td>
+                                <td>None</td>
+                                <td>${estado_sesion}</td>
+                                <td>${estado_pago}</td>
+                                <td class="action-icons">
+                                    ${icon_edit_sesion}   
+                                </td>
+                                <td class="action-icons">
+                                    ${icon_cancel}
+                                </td>
+                                <td class="action-icons">
+                                    <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
+                                </td>
+                                <td class="action-icons">
+                                    <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error al obtener sesiones:', textStatus, errorThrown);
+            }
             });
-
-            },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error al obtener sesiones:', textStatus, errorThrown);
         }
-        });
+
+        cargarSesiones();
+        window.filtrarPacientes = function() {
+            cargarSesiones();
+        }
     });
 
     function registrarSesion(){
         console.log('registrar sesion');
     }
 
-    function editarSesion(){
-        console.log('editar sesion');
+    function editarSesion(fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
+        console.log(fecha);
+        document.getElementById('editarFechaSesion').value = fecha;
+        document.getElementById('editarHoraInicio').value = horaInicio;
+        document.getElementById('editarHoraFin').value = horaFin;
+        document.getElementById('editarCIPaciente').value = ci;
+        document.getElementById('editarNombrePaciente').value = nombre;
+        document.getElementById('editarApellidosPaciente').value = apellidos;
+        document.getElementById('editarDescripcionSesion').value = descripcion;
+        document.getElementById('editarDiagnostico').value = diagnostico;
+        document.getElementById('archivosActuales').textContent = archivos;
+        document.getElementById('editarEstadoSesion').value = estadoSesion;
+        document.getElementById('editarEstadoPago').value = estadoPago;
+
+        // Abrir el modal
+        var modal = new bootstrap.Modal(document.getElementById('editarSesionModal'));
+        modal.show();
     }
 
     function confirmarCancelar(sesion_id){

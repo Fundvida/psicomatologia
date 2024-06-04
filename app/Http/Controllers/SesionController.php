@@ -308,20 +308,39 @@ class SesionController extends Controller
         return view('psicologoSesiones', compact('pacientes'));
     }
 
-    public function psicologoSesionesProgramadas (){
+    public function psicologoSesionesProgramadas (Request $request){
         $user = Auth::user();
         $psicologo = Psicologo::where('user_id', $user->id)->first();
 
-        $sessions = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
+        // $sessions = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
+        // 'sesions.calificacion', 'sesions.fecha_hora_inicio', 'sesions.fecha_hora_fin', 'sesions.id as sesion_id',
+        //     'users.ci', 'users.name', 'users.apellidos', 
+        //     'pagos.isTerminado', 'pacientes.id as id_paciente')
+        //     ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+        //     ->join('users', 'pacientes.user_id', '=', 'users.id')
+        //     ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+        //     ->where('sesions.psicologo_id', $psicologo->id)
+        //     ->orderBy('sesion_id', 'desc')
+        //     ->get();
+        $query = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
         'sesions.calificacion', 'sesions.fecha_hora_inicio', 'sesions.fecha_hora_fin', 'sesions.id as sesion_id',
-            'users.ci', 'users.name', 'users.apellidos', 
-            'pagos.isTerminado', 'pacientes.id as id_paciente')
-            ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
-            ->join('users', 'pacientes.user_id', '=', 'users.id')
-            ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
-            ->where('sesions.psicologo_id', $psicologo->id)
-            ->orderBy('sesion_id', 'desc')
-            ->get();
+        'users.ci', 'users.name', 'users.apellidos', 
+        'pagos.isTerminado', 'pacientes.id as id_paciente')
+        ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+        ->join('users', 'pacientes.user_id', '=', 'users.id')
+        ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+        ->where('sesions.psicologo_id', $psicologo->id);
+
+        // Aplicar filtros si están presentes en la solicitud
+        if ($request->filled('nombre')) {
+            $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+        }
+
+        if ($request->filled('ci')) {
+            $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+        }
+
+        $sessions = $query->orderBy('sesion_id', 'desc')->get();
 
         return response()->json($sessions);
     }
@@ -475,5 +494,53 @@ class SesionController extends Controller
         }
 
         //return response()->json($request);
+    }
+
+    public function getSesionPacienteNombre (Request $request){
+        $term = $request->get('term');
+        $user = Auth::user();
+        $psicologo = Psicologo::where('user_id', $user->id)->first();
+
+        $querys = Sesion::select('users.name')
+            ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+            ->join('users', 'pacientes.user_id', '=', 'users.id')
+            ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+            ->where('users.name', 'like', '%'.$term.'%')
+            ->where('sesions.psicologo_id', $psicologo->id)
+            ->orderBy('sesion_id', 'desc')
+            ->get();
+
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label'=> $query->name
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getSesionPacienteCi (Request $request){
+        $term = $request->get('term');
+        $user = Auth::user();
+        $psicologo = Psicologo::where('user_id', $user->id)->first();
+
+        $querys = Sesion::select('users.ci')
+            ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+            ->join('users', 'pacientes.user_id', '=', 'users.id')
+            ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+            ->where('users.ci', 'like', '%'.$term.'%')
+            ->where('sesions.psicologo_id', $psicologo->id)
+            ->orderBy('sesion_id', 'desc')
+            ->get();
+
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label'=> $query->ci
+            ];
+        }
+
+        return $data;
     }
 }

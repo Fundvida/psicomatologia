@@ -591,7 +591,7 @@
                             row.append(actionIconsPago);
                             pagosPendientes++;
                         } else {
-                            row.append('<td>Realizado</td>');
+                            row.append('<td class="text-success">Realizado</td>');
                             //closeNotification();
                         }
 

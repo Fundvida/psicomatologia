@@ -180,6 +180,11 @@ Route::get('/search/paciente/nombre', [PacienteController::class, 'getPacienteNo
 Route::get('/search/paciente/ci', [PacienteController::class, 'getPacienteCi'])
     ->name('search.paciente.ci');
 
+Route::get('/search/sesion/nombre', [SesionController::class, 'getSesionPacienteNombre'])
+    ->name('search.sesion.nombre');
+Route::get('/search/sesion/ci', [SesionController::class, 'getSesionPacienteCi'])
+    ->name('search.sesion.ci');
+
 // Confirmar comprobante
 Route::get('/confirmar/comprobante/{sesion_id}', [FileController::class, 'confirmarComprobante']);
 Route::get('/rechazar/comprobante/{sesion_id}', [FileController::class, 'rechazarComprobante']);
