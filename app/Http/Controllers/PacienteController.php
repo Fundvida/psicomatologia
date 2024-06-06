@@ -269,4 +269,31 @@ class PacienteController extends Controller
 
         return $data;
     }
+
+    public function bloquear($paciente_id){
+        $paciente = Paciente::where('id', $paciente_id)->first();
+        $paciente->psicologo_id = null;
+
+        $paciente_user = User::where('id', $paciente->user_id)->first();
+
+        $paciente_user->contador_bloqueos += 1;
+
+        if ($paciente_user->contador_bloqueos > 2) {
+            $paciente->estado = "INACTIVO";
+
+            $administradores = User::role('Administrador')->get();
+            // Crear la notificación para cada administrador
+            foreach ($administradores as $admin) {
+                Notificacion::create([
+                    'descripcion' => 'Se hizo un bloqueo permanente al paciente ' . $paciente_user->name . ' ' . $paciente_user->apellidos . ', con CI: ' . $paciente_user->ci,
+                    'user_id' => $admin->id
+                ]);
+            }
+        }
+
+        $paciente->save();
+        $paciente_user->save();
+
+        return response()->json($paciente_user);
+    }
 }

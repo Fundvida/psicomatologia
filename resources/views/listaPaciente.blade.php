@@ -292,88 +292,88 @@
     @include('components.sidebar-user')
 
     <div class="modal fade" id="formularioRegistroModal" tabindex="-1" aria-labelledby="formularioRegistroModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title font-alt" id="title_modal">Registrar Paciente</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-alt" id="title_modal">Registrar Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('paciente.store') }}" method="POST">
+                        @csrf
+
+                        <input type="hidden" id="paciente_id" name="paciente_id" value="">
+                        <div class="mb-3">
+                            <label for="tipoUsuario" class="form-label">Tipo de paciente <span class="text-danger">*</span></label>
+                            <select id="tipoUsuario" name="tipoUsuario" class="form-select" required>
+                                <option value="mayor">Paciente Mayor</option>
+                                <option value="menor">Paciente Menor de Edad</option>
+                            </select>
                         </div>
-                        <div class="modal-body">
-                            <form action="{{ route('paciente.store') }}" method="POST">
-                                @csrf
-
-                                <input type="hidden" id="paciente_id" name="paciente_id" value="">
-                                <div class="mb-3">
-                                    <label for="tipoUsuario" class="form-label">Tipo de paciente <span class="text-danger">*</span></label>
-                                    <select id="tipoUsuario" name="tipoUsuario" class="form-select" required>
-                                        <option value="mayor">Paciente Mayor</option>
-                                        <option value="menor">Paciente Menor de Edad</option>
-                                    </select>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="nombres" name="nombres" required>
-                                    </div>
-                                    <div class="col">
-                                        <label for="apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="apellidos" name="apellidos" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
-                                    </div>
-                                    <div class="col">
-                                        <label for="ocupacion" class="form-label">Ocupación <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="ocupacion" name="ocupacion" required>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="numeroCI" class="form-label">Número de CI <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="numeroCI" name="numeroCI" required>
-                                </div>
-
-                                <div class="row mb-3" id="divContrasena">
-                                    <div class="col">
-                                        <label for="contrasena" class="form-label">Contraseña <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" id="contrasena" name="contrasena" required>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="correoElectronico" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="correoElectronico" name="correoElectronico" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="telefono" class="form-label">Número de Teléfono <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" style="width: 312px;" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta <span class="text-danger">*</span></label>
-                                    <select id="metodoConfirmacion" name="metodoConfirmacion" class="form-select" required>
-                                        <option value="correo">Correo Electrónico</option>
-                                        <option value="sms">SMS</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="preguntaSeguridad" class="form-label">Pregunta de Seguridad <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="preguntaSeguridad" name="preguntaSeguridad" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="respuestaSeguridad" class="form-label">Respuesta de pregunta <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" id="btnAddOrEdit" class="btn btn-primary">Registrar Paciente</button>
-                                </div>
-                            </form>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nombres" name="nombres" required>
+                            </div>
+                            <div class="col">
+                                <label for="apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
+                            </div>
+                            <div class="col">
+                                <label for="ocupacion" class="form-label">Ocupación <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ocupacion" name="ocupacion" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="numeroCI" class="form-label">Número de CI <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="numeroCI" name="numeroCI" required>
+                        </div>
+
+                        <div class="row mb-3" id="divContrasena">
+                            <div class="col">
+                                <label for="contrasena" class="form-label">Contraseña <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="contrasena" name="contrasena" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="correoElectronico" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="correoElectronico" name="correoElectronico" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Número de Teléfono <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" style="width: 312px;" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta <span class="text-danger">*</span></label>
+                            <select id="metodoConfirmacion" name="metodoConfirmacion" class="form-select" required>
+                                <option value="correo">Correo Electrónico</option>
+                                <option value="sms">SMS</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="preguntaSeguridad" class="form-label">Pregunta de Seguridad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="preguntaSeguridad" name="preguntaSeguridad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="respuestaSeguridad" class="form-label">Respuesta de pregunta <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" id="btnAddOrEdit" class="btn btn-primary">Registrar Paciente</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+    </div>
 
     <!-- Contenido principal -->
     <main class="main-content ">
@@ -547,12 +547,12 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         var pacientes = data.datos;
                         var rol = data.rol;
                         var titleElement = document.getElementById('title-user');
 
-                        console.log('Rol del usuario:', rol);
+                        //console.log('Rol del usuario:', rol);
                         if(rol == 'Administrador'){
                             titleElement.textContent = 'Listado de todos los Pacientes';
                         } else if (rol == 'Psicologo'){
@@ -564,6 +564,10 @@
                             var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
                             var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
                             var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 
+                            var actions_icons = rol == "Administrador"? `<i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
+                                        <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>`
+                                        :   `<i class="fa-solid fa-user-lock text-danger" style="font-size: 22px;" onclick="confirmarBloqueoPaciente(${paciente.id})" title="Bloquear Paciente"></i>
+                                            <i class="fa-solid fa-hospital-user" style="font-size: 22px; color: #1D5776" onclick="confirmarDarAlta(${paciente.id})" title="Dar de Alta"></i>`;
 
                             $('#pacientes-body').append(`
                                 <tr>
@@ -573,8 +577,7 @@
                                     <td>${paciente_tipo}</td>
                                     <td>${f_nacimiento}</td>
                                     <td class="action-icons"> 
-                                        <i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
-                                        <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>
+                                        ${actions_icons}
                                     </td>
                                 </tr>
                             `);
@@ -732,6 +735,72 @@
                 }
             });
         }
+
+        function confirmarBloqueoPaciente(paciente_id){
+            Swal.fire({
+                title: '<h2 class="text-center mb-4 font-alt">¿Estás seguro de Bloquear al Paciente?</h2>',
+                text: "El paciente desaparecerá de tu lista de pacientes designados.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, bloquear',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/psicologo/' + paciente_id + '/bloquear',
+                        type: 'GET',
+                        success: function(response) {
+                            console.log(response);
+                            Swal.fire(
+                                '<h2 class="text-center mb-4 font-alt">Bloqueado/a</h2>',
+                                'El paciente sido bloqueado/a.',
+                                'success'
+                            )
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmarDarAlta (id){
+            Swal.fire({
+                title: '<h2 class="text-center mb-4 font-alt">¿Confirmar Alta del Paciente?</h2>',
+                text: "¡Esta acción no se puede deshacer!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, dar alta',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Alta de Paciente Confirmada</h2>',
+                        'El paciente ' + nombre + ' ha sido dado/a de alta.',
+                        'success'
+                    )
+                }
+            });
+        }
+
     </script>
     @if(session('resultado') === 'registrado')
     <script>

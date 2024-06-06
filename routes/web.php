@@ -198,3 +198,6 @@ Route::post('/psicologo/editsesion', [SesionController::class, 'editarSesion'])
 
 Route::get('/comprobante/{sesion_id}', [FileController::class, 'getComprobanteXPaciente']);
 
+// BLOQUEAR PACIENTE
+Route::get('/psicologo/{id}/bloquear', [PacienteController::class, 'bloquear'])
+    ->name('psicologo.bloquear.paciente'); 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('descripcion');
             $table->foreignId('user_id');
-            $table->foreignId('sesion_id');
+            $table->foreignId('sesion_id')->nullable();
             $table->timestamps();
             $table->boolean('leido')->default(false);
         });
