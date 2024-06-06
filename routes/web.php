@@ -201,3 +201,7 @@ Route::get('/comprobante/{sesion_id}', [FileController::class, 'getComprobanteXP
 // BLOQUEAR PACIENTE
 Route::get('/psicologo/{id}/bloquear', [PacienteController::class, 'bloquear'])
     ->name('psicologo.bloquear.paciente'); 
+
+// DAR DE ALTA
+Route::get('/psicologo/{id}/alta', [PacienteController::class, 'darAlta'])
+    ->name('psicologo.darDeAlta.paciente'); 

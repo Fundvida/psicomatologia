@@ -775,7 +775,7 @@
             });
         }
 
-        function confirmarDarAlta (id){
+        function confirmarDarAlta (paciente_id){
             Swal.fire({
                 title: '<h2 class="text-center mb-4 font-alt">¿Confirmar Alta del Paciente?</h2>',
                 text: "¡Esta acción no se puede deshacer!",
@@ -792,11 +792,24 @@
                 allowHtml: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                        '<h2 class="text-center mb-4 font-alt">Alta de Paciente Confirmada</h2>',
-                        'El paciente ' + nombre + ' ha sido dado/a de alta.',
-                        'success'
-                    )
+                    $.ajax({
+                        url: '/psicologo/' + paciente_id + '/alta',
+                        type: 'GET',
+                        success: function(response) {
+                            console.log(response);
+                            Swal.fire(
+                                '<h2 class="text-center mb-4 font-alt">Alta de Paciente Confirmada/a</h2>',
+                                'El paciente seleccionado a sido dado de alta',
+                                'success'
+                            )
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
                 }
             });
         }

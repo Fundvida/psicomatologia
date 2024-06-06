@@ -296,4 +296,29 @@ class PacienteController extends Controller
 
         return response()->json($paciente_user);
     }
+
+    public function darAlta($paciente_id){
+        $paciente = Paciente::where('id', $paciente_id)->first();
+        $paciente->isAlta = 1; // 1 = isAlta = SI, 0 = isAlta = NO 
+        $paciente->psicologo_id = null;
+        $paciente->save();
+
+        $paciente_user = User::where('id', $paciente->user_id)->first();
+
+        $administradores = User::role('Administrador')->get();
+        // Crear la notificación para cada administrador
+        foreach ($administradores as $admin) {
+            Notificacion::create([
+                'descripcion' => 'El paciente ' . $paciente_user->name . ' ' . $paciente_user->apellidos . ', con CI: ' . $paciente_user->ci . " ha sido dado de alta.",
+                'user_id' => $admin->id
+            ]);
+        }
+
+        Notificacion::create([
+            'descripcion' => "Fuiste dado de alta!",
+            'user_id' => $paciente->user_id
+        ]);
+
+        return response()->json("paciente alta con id " . $paciente_id);
+    }
 }
