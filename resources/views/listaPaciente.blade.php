@@ -42,6 +42,9 @@
     <link rel="stylesheet" href="{{ asset('vendors/jquery-ui/jquery-ui.min.css') }}">
 
     <style>
+        .hidden {
+            display: none;
+        }
         /* Estilos adicionales para responsividad */
         .container {
             padding-right: 15px;
@@ -310,6 +313,28 @@
                                 <option value="menor">Paciente Menor de Edad</option>
                             </select>
                         </div>
+
+                        <div class="row mb-3 hidden" id="data_uno">
+                            <div class="col">
+                                <label for="nombres_tutor" class="form-label">Nombre tutor <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nombres_tutor" name="nombres_tutor" required>
+                            </div>
+                            <div class="col">
+                                <label for="apellidos_tutor" class="form-label">Apellido tutor <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="apellidos_tutor" name="apellidos_tutor" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 hidden" id="data_dos">
+                            <div class="col">
+                                <label for="nombres_tutor" class="form-label">CI tutor <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nombres_tutor" name="nombres_tutor" required>
+                            </div>
+                            <div class="col">
+                                <label for="fechaNacimientoTutor" class="form-label">Fecha de nacimiento tutor <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="fechaNacimientoTutor" name="fechaNacimientoTutor" required>
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
@@ -455,6 +480,8 @@
             const fechaNacimiento = document.getElementById('fechaNacimiento');
             const formattedFechaNacimiento = document.getElementById('formattedFechaNacimiento');
 
+            const fechaNacimientoTutor = document.getElementById('fechaNacimientoTutor');
+
             notificationIcon.addEventListener('click', function() {
                 notificationContainer.classList.toggle('show');
             });
@@ -479,6 +506,8 @@
                 const today = new Date();
                 const currentYear = today.getFullYear();
                 const tipo = tipoUsuario.value;
+                const data_uno = document.getElementById('data_uno');
+                const data_dos = document.getElementById('data_dos');
 
                 let minDate, maxDate;
 
@@ -487,11 +516,24 @@
                     maxDate = new Date(currentYear - 80, today.getMonth(), today.getDate());
                     fechaNacimiento.min = maxDate.toDateString().split('T')[0];
                     fechaNacimiento.max = minDate.toISOString().split('T')[0];
+                    data_uno.classList.add('hidden');
+                    data_uno.required = false;
+                    data_dos.classList.add('hidden');
+                    data_dos.required = false;
                 } else if (tipo === 'menor') {
                     minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
                     maxDate = new Date(currentYear - 3, today.getMonth(), today.getDate());
                     fechaNacimiento.min = minDate.toISOString().split('T')[0];
                     fechaNacimiento.max = maxDate.toISOString().split('T')[0];
+
+                    minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
+                    maxDate = new Date(currentYear - 80, today.getMonth(), today.getDate());
+                    fechaNacimientoTutor.min = maxDate.toDateString().split('T')[0];
+                    fechaNacimientoTutor.max = fechaNacimiento.max = minDate.toISOString().split('T')[0];
+                    data_uno.classList.remove('hidden');
+                    data_uno.required = true;
+                    data_dos.classList.remove('hidden');
+                    data_dos.required = true;
                 }
 
                 fechaNacimiento.value = '';
@@ -683,10 +725,10 @@
         function editar(paciente_id) {
             document.getElementById("title_modal").textContent = "Editar Paciente";
             document.getElementById("divContrasena").style.display = "none";
-            document.getElementById("divConfirmarContrasena").style.display = "none";
+            //document.getElementById("divConfirmarContrasena").style.display = "none";
             document.getElementById("btnAddOrEdit").textContent = "Actualizar Paciente";
             document.getElementById("contrasena").removeAttribute("required");
-            document.getElementById("confirmarContrasena").removeAttribute("required");
+            //document.getElementById("confirmarContrasena").removeAttribute("required");
 
             console.log(paciente_id, "   hgkgkhjg");
             $('#formularioRegistroModal').modal('show');
