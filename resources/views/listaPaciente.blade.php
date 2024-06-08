@@ -451,6 +451,10 @@
             const markReadBtn = document.getElementById('markReadBtn');
             const notificationItems = document.querySelectorAll('.notification-item');
 
+            const tipoUsuario = document.getElementById('tipoUsuario');
+            const fechaNacimiento = document.getElementById('fechaNacimiento');
+            const formattedFechaNacimiento = document.getElementById('formattedFechaNacimiento');
+
             notificationIcon.addEventListener('click', function() {
                 notificationContainer.classList.toggle('show');
             });
@@ -467,6 +471,34 @@
                     item.classList.remove('bg-light');
                 });
             });
+
+
+            tipoUsuario.addEventListener('change', updateFechaNacimiento);
+
+            function updateFechaNacimiento() {
+                const today = new Date();
+                const currentYear = today.getFullYear();
+                const tipo = tipoUsuario.value;
+
+                let minDate, maxDate;
+
+                if (tipo === 'mayor') {
+                    minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
+                    maxDate = new Date(currentYear - 80, today.getMonth(), today.getDate());
+                    fechaNacimiento.min = maxDate.toDateString().split('T')[0];
+                    fechaNacimiento.max = minDate.toISOString().split('T')[0];
+                } else if (tipo === 'menor') {
+                    minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
+                    maxDate = new Date(currentYear - 3, today.getMonth(), today.getDate());
+                    fechaNacimiento.min = minDate.toISOString().split('T')[0];
+                    fechaNacimiento.max = maxDate.toISOString().split('T')[0];
+                }
+
+                fechaNacimiento.value = '';
+                formattedFechaNacimiento.value = '';
+            }
+            // Inicializa los valores cuando la página carga
+            updateFechaNacimiento();
         });
     </script>
 
