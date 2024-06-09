@@ -43,7 +43,8 @@ class Horario extends Model
         'hora_inicio_tarde',
         'hora_fin_tarde',
         'dia',
-        'isDisponible',
+        'isDisponibleManiana',
+		'isDisponibleTarde',
     ];
 
 	public function psicologo()

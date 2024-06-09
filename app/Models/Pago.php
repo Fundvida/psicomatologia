@@ -15,6 +15,7 @@ class Pago extends Model
         'convenio',
         'sesion_id',
         'isTerminado',
+        'pago_tipo',
     ];
 
     // Relación

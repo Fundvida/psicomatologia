@@ -8,7 +8,7 @@
                     <i class="bi bi-person"></i> Nombre(s)
                 </label>
                 <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre">
-                <span class="" id="nombreError"></span>
+                <span class="error-form" id="nombreError"></span>
             </div>
         </div>
         <div class="col-md-6">
@@ -17,7 +17,7 @@
                     <i class="bi bi-person"></i> Apellidos
                 </label>
                 <input type="text" class="form-control" id="apellidos" placeholder="Ingrese su apellido">
-                <span class="" id="apellidosError"></span>
+                <span class="error-form" id="apellidosError"></span>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
                     <i class="bi bi-envelope"></i> Email
                 </label>
                 <input type="email" class="form-control" id="email" placeholder="Ingrese su correo electrónico">
-                <span class="" id="emailError"></span>
+                <span class="error-form" id="emailError"></span>
             </div>
         </div>
         <div class="col-md-6">
@@ -38,7 +38,7 @@
                     <i class="bi bi-phone"></i> Número de Celular
                 </label>
                 <input type="tel" class="form-control" id="telefono" placeholder="Ingrese su número de teléfono">
-                <span class="" id="telefonoError"></span>
+                <span class="error-form" id="telefonoError"></span>
             </div>
         </div>
     </div>
@@ -55,8 +55,9 @@
                     <button class="btn btn-outline-secondary" type="button" id="toggle-password">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <span class="" id="passwordError"></span>
+                    
                 </div>
+                <span class="error-form" id="passwordError"></span>
             </div>
         </div>
         <div class="col-md-6">
@@ -70,8 +71,9 @@
                     <button class="btn btn-outline-secondary" type="button" id="toggle-password">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <span class="" id="passwordConfirmationError"></span>
+                    
                 </div>
+                <span class="error-form" id="passwordConfirmationError"></span>
             </div>
         </div>
     </div>

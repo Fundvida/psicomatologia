@@ -36,7 +36,7 @@
 
             </tbody>
         </table>
-        <span class="" id="psicologoSeleccionError"></span>
+        <span class="error-form" id="psicologoSeleccionError"></span>
     </div>
 
 </div>

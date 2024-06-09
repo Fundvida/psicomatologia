@@ -1,10 +1,12 @@
-var currentTab = 0;
+let currentTab = 0;
 const buttonServicio = {
     id: '',
     text: ''
 };
 const psicologos = [];
+let selectedHorarios = [];
 let selectedPsicologo = [];
+let tipoPago = '';
 let dataToSend = {
     name: '',
     apellidos: '',
@@ -13,10 +15,24 @@ let dataToSend = {
     telefono: '',
     servicio: '',
     psicologo_id: '',
+    fecha_hora_inicio: '',
+    fecha_hora_fin: '',
+    turno: '',
+    dia: '',
     adicional_info: '',
+    pago_tipo: '',
 }
 tabShow(currentTab);
 
+const guardarHorario = (turno, dia, hora_inicio, hora_fin) => {
+    selectedHorarios = {
+        turno: turno,
+        dia: dia,
+        fecha_hora_inicio: hora_inicio,
+        fecha_hora_fin: hora_fin,
+    };
+    console.log(selectedHorarios);
+}
 function tabShow(n) {
     var x = document.getElementsByClassName("step");
     x[n].style.display = "block";
@@ -24,6 +40,33 @@ function tabShow(n) {
         document.getElementById("prevBtn").style.display = "none";
     } else {
         document.getElementById("prevBtn").style.display = "inline";
+    }
+    if (n == 3) {
+        displayCalendar(selectedPsicologo?.id);
+        console.log("bonito");
+    }
+    if (n == 6) {
+
+        nombreR = document.getElementById('nombreR');
+        apellidoR = document.getElementById('apellidoR');
+        emailR = document.getElementById('emailR');
+        celularR = document.getElementById('celularR');
+        servicioR = document.getElementById('servicioR');
+        psicologoR = document.getElementById('psicologoR');
+        horarioR = document.getElementById('horarioR');
+        pagoR = document.getElementById('pagoR');
+        descripcionR = document.getElementById('descripcionR');
+        nombreR.textContent = dataToSend.name;
+        apellidoR.textContent = dataToSend.apellidos;
+        emailR.textContent = dataToSend.email;
+        celularR.textContent = dataToSend.telefono;
+        servicioR.textContent = dataToSend.servicio;
+        psicologoR.textContent = selectedPsicologo.name + " " +
+            selectedPsicologo.apellidos;
+        horarioR.textContent = formatDateRange(dataToSend.fecha_hora_inicio,
+            dataToSend.fecha_hora_fin);
+        pagoR.textContent = dataToSend.pago_tipo;
+        descripcionR.textContent = dataToSend.adicional_info;
     }
     if (n == (x.length - 1)) {
         document.getElementById("nextBtn").innerHTML = "Enviar";
@@ -62,9 +105,82 @@ function nextPrev(n) {
                 console.log(currentTab);
                 break;
             case 3:
+                error = validateHorarioSelection();
+                if (error) {
+                    let timerInterval;
+                    Swal.fire({
+                        title: "Debe Seleccionar un Horario!",
+                        html: `<span style="color: #713d81;">Elija uno de los 
+                        <b>horarios</b> disponibles.</span>`,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        confirmButtonText: "Está bien",
+                        padding: "1em",
+                        color: "#edb1b5",
+                        confirmButtonColor: "#edb1b5",
+                        confirmButtonText: `<i class="fa fa-thumbs-up">
+                        </i> Está Bien!`,
+                        confirmButtonAriaLabel: "Thumbs up, super!",
+                        didOpen: () => {
+                            // Swal.showLoading();
+                            const timer = Swal.getPopup().querySelector("b");
+                            timerInterval = setInterval(() => {
+                                // timer.textContent = `${Swal.getTimerLeft()}`;
+                            }, 1000);
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval);
+                        },
+                        showClass: {
+                            popup: `
+                              animate__animated
+                              animate__fadeInUp
+                              animate__faster
+                            `
+                        },
+                        hideClass: {
+                            popup: `
+                              animate__animated
+                              animate__fadeOutDown
+                              animate__faster
+                            `
+                        }
+                    }).then((result) => {
+                        /* Read more about handling dismissals below */
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            console.log("se cerró el mensaje de sweet alert");
+                        }
+                    });
+                } else {
+                    dataToSend = {
+                        ...dataToSend,
+                        fecha_hora_inicio: selectedHorarios.fecha_hora_inicio,
+                        fecha_hora_fin: selectedHorarios.fecha_hora_fin,
+                        turno: selectedHorarios.turno,
+                        dia: selectedHorarios.dia,
+                    }
+                }
                 console.log(currentTab);
                 break;
             case 4:
+                console.log(currentTab);
+                const infoAdicional = document.getElementById('info_adicional').value;
+                dataToSend = { ...dataToSend, adicional_info: infoAdicional }
+                break;
+            case 5:
+                error = validatePagoSelection(tipoPago);
+                if (!error) {
+
+                    dataToSend = {
+                        ...dataToSend,
+                        psicologo_id: selectedPsicologo?.id,
+                        servicio: buttonServicio.text,
+                        pago_tipo: tipoPago,
+                    };
+                }
+                console.log(currentTab);
+                break;
+            case 6:
                 console.log(currentTab);
                 break;
             default:
@@ -73,13 +189,7 @@ function nextPrev(n) {
         }
     if (currentTab + n >= x.length) {
         error = true;
-        const infoAdicional = document.getElementById('info_adicional').value;
-        dataToSend = {
-            ...dataToSend,
-            psicologo_id: selectedPsicologo?.id,
-            servicio: buttonServicio.text,
-            adicional_info: infoAdicional
-        };
+
         console.log(dataToSend);
         sendDataSesion();
     }
@@ -152,9 +262,9 @@ function fetchPsicologo(servicio = '') {
     formData.append('especialidad', buttonServicio.text);
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     formData.append('_token', csrfToken);
-    for (const entry of formData.entries()) {
-        console.log(entry[0], entry[1]);
-    }
+    // for (const entry of formData.entries()) {
+    //     console.log(entry[0], entry[1]);
+    // }
     fetch('/getpsicologos', {
         method: 'POST',
         headers: {
@@ -242,9 +352,9 @@ function sendDataSesion() {
         formData.append(key, dataToSend[key]);
     });
     formData.append('_token', csrfToken);
-    for (const entry of formData.entries()) {
-        console.log(entry[0], entry[1]);
-    }
+    // for (const entry of formData.entries()) {
+    //     console.log(entry[0], entry[1]);
+    // }
     fetch('/savedatasesion', {
         method: 'POST',
         headers: {
@@ -279,9 +389,9 @@ function checkUserMail() {
     formData.append('email', email);
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     formData.append('_token', csrfToken);
-    for (const entry of formData.entries()) {
-        console.log(entry[0], entry[1]);
-    }
+    // for (const entry of formData.entries()) {
+    //     console.log(entry[0], entry[1]);
+    // }
 
     fetch('/checkemail', {
         method: 'POST',
@@ -393,11 +503,41 @@ function validatePsicologoSelection() {
     if (selectedPsicologo.length <= 0) {
         document.getElementById('psicologoSeleccionError').textContent = 'Seleccione un psicologo por favor.';
         error = true;
-        return error;
     }
+    return error;
+}
+function validateHorarioSelection() {
+    let error = false;
+    document.getElementById('horarioSeleccionError').textContent = '';
+    if (selectedHorarios.length <= 0) {
+        document.getElementById('horarioSeleccionError').textContent = 'Seleccione un Horario por favor.';
+        error = true;
+    }
+    return error;
 }
 
+function validatePagoSelection(pagoSelection = '') {
+    let error = false;
+    error = validateEmpty(pagoSelection)
+    if (error) {
+        document.getElementById('pagoSeleccionError').textContent = 'Seleccione un Tipo de Pago por favor.';
+    }
+    return error;
+}
 function handleButtonServicioClick(button, buttonText = 'temporal') {
     buttonServicio.id = button.id;
     buttonServicio.text = buttonText;
 }
+
+function formatDateRange(startDateStr, endDateStr) {
+    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    const startDate = new Date(startDateStr);
+    const endDate = new Date(endDateStr);
+
+    const formattedStartDate = `${startDate.getDate()}-${months[startDate.getMonth()]}-${startDate.getFullYear()} de ${startDate.getHours()}:${('0' + startDate.getMinutes()).slice(-2)}`;
+    const formattedEndDate = `${endDate.getHours()}:${('0' + endDate.getMinutes()).slice(-2)}`;
+
+    return `${formattedStartDate} a ${formattedEndDate}`;
+}
+

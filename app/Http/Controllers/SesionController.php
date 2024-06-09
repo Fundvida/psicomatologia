@@ -73,7 +73,12 @@ class SesionController extends Controller
                     'psicologo_id' => 'required',
                     'servicio' => 'required|string',
                     'telefono' => 'required',
-
+                    'fecha_hora_inicio'=>'required|date',
+                    'fecha_hora_fin'=>'required|date',
+                    'turno'=>'required|string',
+                    'dia'=>'required|string',
+                    'pago_tipo'=>'string',
+                    'adicional_info'=>'string',
                 ]);
             } catch (ValidationException $exception) {
                 return $this->convertValidationExceptionToResponse($exception, $request);
@@ -117,8 +122,8 @@ class SesionController extends Controller
                     $sesion->psicologo_id= $request->input('psicologo_id');
                     $sesion->descripcion_sesion=$request->input('adicional_info');
                     $sesion->solicitante= $paciente->id;
-                    $sesion->fecha_hora_inicio = "2024-05-22 15:44:18";
-                    $sesion->fecha_hora_fin = "2024-05-22 15:44:18";
+                    $sesion->fecha_hora_inicio = $request->input('fecha_hora_inicio');
+                    $sesion->fecha_hora_fin =$request->input('fecha_hora_fin');
 
                     $sesion->save();
                 }
@@ -132,6 +137,7 @@ class SesionController extends Controller
                 $pago->institucion='';
                 $pago->convenio='';
                 $pago->isTerminado = 0;
+                $pago->pago_tipo=$request->input('pago_tipo');
                 $pago->save();
             }
 

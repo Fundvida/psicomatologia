@@ -65,7 +65,7 @@
                 </button>
             </div>
 
-            <span class="" id="servicioError"></span>
+            <span class="error-form" id="servicioError"></span>
         </div>
     </div>
 </div>
