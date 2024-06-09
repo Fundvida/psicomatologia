@@ -317,47 +317,47 @@
                         <div class="row mb-3 hidden" id="data_uno">
                             <div class="col">
                                 <label for="nombres_tutor" class="form-label">Nombre tutor <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nombres_tutor" name="nombres_tutor" required>
+                                <input type="text" class="form-control" id="nombres_tutor" name="nombres_tutor">
                             </div>
                             <div class="col">
                                 <label for="apellidos_tutor" class="form-label">Apellido tutor <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="apellidos_tutor" name="apellidos_tutor" required>
+                                <input type="text" class="form-control" id="apellidos_tutor" name="apellidos_tutor">
                             </div>
                         </div>
 
                         <div class="row mb-3 hidden" id="data_dos">
                             <div class="col">
                                 <label for="nombres_tutor" class="form-label">CI tutor <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nombres_tutor" name="nombres_tutor" required>
+                                <input type="text" class="form-control" id="ci_tutor" name="nombres_tutor">
                             </div>
                             <div class="col">
                                 <label for="fechaNacimientoTutor" class="form-label">Fecha de nacimiento tutor <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="fechaNacimientoTutor" name="fechaNacimientoTutor" required>
+                                <input type="date" class="form-control" id="fechaNacimientoTutor" name="fechaNacimientoTutor" >
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
+                                <label for="nombres" id="lblNom" class="form-label">Nombres <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="nombres" name="nombres" required>
                             </div>
                             <div class="col">
-                                <label for="apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                                <label for="apellidos" id="lblApe" class="form-label">Apellidos <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="apellidos" name="apellidos" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
+                                <label for="fechaNacimiento" id="lblFn" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
                             </div>
                             <div class="col">
-                                <label for="ocupacion" class="form-label">Ocupación <span class="text-danger">*</span></label>
+                                <label for="ocupacion" id="lblOcupacion" class="form-label">Ocupación <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="ocupacion" name="ocupacion" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="numeroCI" class="form-label">Número de CI <span class="text-danger">*</span></label>
+                            <label for="numeroCI" id="lblCi" class="form-label">Número de CI <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="numeroCI" name="numeroCI" required>
                         </div>
 
@@ -509,6 +509,17 @@
                 const data_uno = document.getElementById('data_uno');
                 const data_dos = document.getElementById('data_dos');
 
+                const lblNombre = document.getElementById('lblNom');
+                const lblApellido = document.getElementById('lblApe');
+                const lblFechaNa = document.getElementById('lblFn');
+                const lblOcupacion = document.getElementById('lblOcupacion');
+                const lblCi = document.getElementById('lblCi');
+
+                const nombreTutor = document.getElementById('nombres_tutor');
+                const apellidoTuto = document.getElementById('apellidos_tutor');
+                const ciTutor = document.getElementById('ci_tutor');
+                const fechaNaTutor = document.getElementById('fechaNacimientoTutor');
+
                 let minDate, maxDate;
 
                 if (tipo === 'mayor') {
@@ -517,9 +528,17 @@
                     fechaNacimiento.min = maxDate.toDateString().split('T')[0];
                     fechaNacimiento.max = minDate.toISOString().split('T')[0];
                     data_uno.classList.add('hidden');
-                    data_uno.required = false;
                     data_dos.classList.add('hidden');
-                    data_dos.required = false;
+                    nombreTutor.required = false;
+                    apellidoTuto.required = false;
+                    ciTutor.required = false;
+                    fechaNaTutor.required = false;
+
+                    lblNombre.innerHTML = `Nombres <span class="text-danger">*</span>`;
+                    lblApellido.innerHTML = `Apellidos <span class="text-danger">*</span>`;
+                    lblFechaNa.innerHTML = `FN <span class="text-danger">*</span>`;
+                    lblOcupacion.innerHTML = `Ocupación <span class="text-danger">*</span>`;
+                    lblCi.innerHTML = `Número de CI <span class="text-danger">*</span>`;
                 } else if (tipo === 'menor') {
                     minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
                     maxDate = new Date(currentYear - 3, today.getMonth(), today.getDate());
@@ -529,15 +548,23 @@
                     minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
                     maxDate = new Date(currentYear - 80, today.getMonth(), today.getDate());
                     fechaNacimientoTutor.min = maxDate.toDateString().split('T')[0];
-                    fechaNacimientoTutor.max = fechaNacimiento.max = minDate.toISOString().split('T')[0];
+                    fechaNacimientoTutor.max = minDate.toISOString().split('T')[0];
                     data_uno.classList.remove('hidden');
-                    data_uno.required = true;
                     data_dos.classList.remove('hidden');
-                    data_dos.required = true;
+                    nombreTutor.required = true;
+                    apellidoTuto.required = true;
+                    ciTutor.required = true;
+                    fechaNaTutor.required = true;
+
+                    lblNombre.innerHTML = `Nombre paciente <span class="text-danger">*</span>`;
+                    lblApellido.innerHTML = `Apellido paciente <span class="text-danger">*</span>`;
+                    lblFechaNa.innerHTML = `FN paciente <span class="text-danger">*</span>`;
+                    lblOcupacion.innerHTML = `Ocupación tutor <span class="text-danger">*</span>`;
+                    lblCi.innerHTML = `CI Paciente <span class="text-danger">*</span>`;
                 }
 
                 fechaNacimiento.value = '';
-                formattedFechaNacimiento.value = '';
+                
             }
             // Inicializa los valores cuando la página carga
             updateFechaNacimiento();
@@ -730,7 +757,6 @@
             document.getElementById("contrasena").removeAttribute("required");
             //document.getElementById("confirmarContrasena").removeAttribute("required");
 
-            console.log(paciente_id, "   hgkgkhjg");
             $('#formularioRegistroModal').modal('show');
             $.ajax({
                 url: '/paciente/' + paciente_id + '/edit',
