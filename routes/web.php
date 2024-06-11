@@ -219,3 +219,9 @@ Route::get('/psicologo/{id}/bloquear', [PacienteController::class, 'bloquear'])
 // DAR DE ALTA
 Route::get('/psicologo/{id}/alta', [PacienteController::class, 'darAlta'])
     ->name('psicologo.darDeAlta.paciente');
+
+Route::post('/upload', [FileController::class, 'upload'])->name('file.upload');
+
+Route::get('/sesion/{id}/documents', [FileController::class, 'getDocumentPaciente'])->name('sesion.documents');
+
+Route::post('/sesion/documents/delete', [FileController::class, 'deleteDocument'])->name('sesion.documents.delete');

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('institucion')->nullable();
             $table->string('convenio')->nullable();
             $table->foreignId('sesion_id');
+            $table->string('pago_tipo')->nullable();
             $table->timestamps();
             $table->boolean('isTerminado')->default(false);
         });

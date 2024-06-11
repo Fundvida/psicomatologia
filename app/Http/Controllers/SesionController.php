@@ -19,6 +19,7 @@ use App\Models\Pago;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notificacion;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 
 class SesionController extends Controller
 {
@@ -122,8 +123,17 @@ class SesionController extends Controller
                     $sesion->psicologo_id= $request->input('psicologo_id');
                     $sesion->descripcion_sesion=$request->input('adicional_info');
                     $sesion->solicitante= $paciente->id;
-                    $sesion->fecha_hora_inicio = $request->input('fecha_hora_inicio');
-                    $sesion->fecha_hora_fin =$request->input('fecha_hora_fin');
+                    $fecha_hora_inicio = Carbon::parse($request->input('fecha_hora_inicio'));
+                    $fecha_hora_fin = Carbon::parse($request->input('fecha_hora_fin'));
+
+                    // Sumar 7 horas a ambas fechas
+                    $fecha_hora_inicio->addHours(7);
+                    $fecha_hora_fin->addHours(7);
+
+                    $sesion->fecha_hora_inicio = $fecha_hora_inicio;
+                    $sesion->fecha_hora_fin = $fecha_hora_fin;
+                    // $sesion->fecha_hora_inicio = $request->input('fecha_hora_inicio');
+                    // $sesion->fecha_hora_fin =$request->input('fecha_hora_fin');
 
                     $sesion->save();
                 }

@@ -23,6 +23,7 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -425,7 +426,7 @@
                                         <div class="input-group-append">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFinT" name="horaFinT" step="3600">
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFinT" name="horaFinT" step="3600" readonly>
                                     </div>
                                     <div id="time-error-tarde" class="text-danger" style="display:none;">La hora de inicio debe ser menor que la hora de fin.</div>
                                     <div id="error-message-T" class="text-danger" style="display: none;">La diferencia entre las horas debe ser de exactamente una hora.</div>
@@ -508,6 +509,7 @@
                                         <th>Cancelar Sesión</th>
                                         <th>Ver Comprobante</th>
                                         <th>Detalle de la sesión</th>
+                                        <th>Subir</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
@@ -577,6 +579,32 @@
         </div>
     </div>
 
+    <!-- Modal Subir documentos -->
+    <div class="modal fade" id="subirDoc" tabindex="-1" aria-labelledby="subirDocLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title font-alt" id="subirDocLabel">Subir Documentos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div id="uploaded-documents">
+                        <h5>Documentos subidos:</h5>
+                        <div class="notification-body" id="document-list">
+                            
+                        </div>
+                    </div>
+
+                    <form action="{{ route('file.upload') }}" method="post" class="dropzone" id="my-awesome-dropzone">
+                        @csrf
+                        <input type="hidden" name="sesion_ids" id="sesion_ids">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para editar sesión -->
     <div class="modal fade" id="editarSesionModal" tabindex="-1" aria-labelledby="editarSesionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -626,11 +654,6 @@
                         <div class="mb-3">
                             <label for="editarDiagnostico" class="form-label">Diagnóstico<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editarDiagnostico" name="editarDiagnostico" placeholder="Diagnóstico del paciente" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editarArchivosAdjuntos" class="form-label">Archivos Adjuntos</label>
-                            <input type="file" class="form-control" id="editarArchivosAdjuntos" multiple>
-                            <small class="form-text text-muted">Archivos actuales: <span id="archivosActuales"></span></small>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
@@ -805,6 +828,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('vendors/jquery-ui/jquery-ui.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
 
     <script>
         $('#filtroNombre').autocomplete({
@@ -838,6 +862,14 @@
             }
         });
 
+        Dropzone.options.myAwesomeDropzone = {
+            headers:{
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            dictDefaultMessage: "Arrastre un documento al recuadro para subirlo",
+            maxFilesize: 5
+        };
+
     </script>
 
     <script>
@@ -862,7 +894,7 @@
                     
                         // Recorrer los datos y agregar filas a la tabla
                         $.each(data, function(index,sesiones) {
-                            console.log(sesiones);
+                            //console.log(sesiones);
                             var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
                             var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
                             var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
@@ -870,7 +902,7 @@
                             var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
                             var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
-                            var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , '${horaFin}', ${paciente_ci}, '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
+                            var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , '${horaFin}', '${paciente_ci}', '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
                             :'<i class="fas fa-check-circle"></i>';
                             
                             if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
@@ -904,6 +936,9 @@
                                     <td class="action-icons">
                                         <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
                                     </td>
+                                    <td class="action-icons">
+                                        <i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>
+                                    </td>
                                 </tr>
                             `);
                         });
@@ -925,17 +960,20 @@
             console.log('registrar sesion');
         }
 
-        function editarSesion(sesion_id,fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
+        function editarSesion(sesion_id, fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
+            console.log(ci);
+            ciForm = ci == 'No especificado'? '': ci;
+
             document.getElementById('sesion_id_').value = sesion_id;
             document.getElementById('editarFechaSesion').value = fecha;
             document.getElementById('editarHoraInicio').value = horaInicio;
             document.getElementById('editarHoraFin').value = horaFin;
-            document.getElementById('editarCIPaciente').value = ci;
+            document.getElementById('editarCIPaciente').value = ciForm;
             document.getElementById('editarNombrePaciente').value = nombre;
             document.getElementById('editarApellidosPaciente').value = apellidos;
             document.getElementById('editarDescripcionSesion').value = descripcion;
             document.getElementById('editarDiagnostico').value = diagnostico;
-            document.getElementById('archivosActuales').textContent = archivos;
+            //document.getElementById('archivosActuales').textContent = archivos;
             document.getElementById('editarEstadoSesion').value = estadoSesion;
             //document.getElementById('editarEstadoPago').value = estadoPago;
 
@@ -1020,6 +1058,7 @@
             loadNotifications();
 
             setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+
         });
 
         function aceptarComprobante(){
@@ -1071,6 +1110,59 @@
             // document.getElementById("btnAddOrEdit").textContent = "Registrar Psicologo";
             // document.getElementById("psicologo_id").value = "";
             $('#formularioRegistroModal').modal('show');
+        }
+
+        function subir (sesion_id){
+            console.log("subir imagen");
+            var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
+            document.getElementById('sesion_ids').value = sesion_id;
+
+            loadDocuments(sesion_id);
+            
+            modal.show();
+        }
+
+        function loadDocuments(sesion_id) {
+            fetch(`/sesion/${sesion_id}/documents`)
+                .then(response => response.json())
+                .then(data => {
+
+                    const documentList = document.getElementById('document-list');
+                    if (!documentList) {
+                        console.error('Elemento document-list no encontrado');
+                        return;
+                    }
+
+                    let htmlContent = '';
+                    data.forEach(document => {
+                        const extension = document.url.split('.').pop().toLowerCase();
+                        //console.log(document);
+
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                            htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                            <a href="${document.url}" target="_blank"><img src="${document.url}" alt="${document.url}" width="100" height="75"></a>
+                                            <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                                <button type"submit" class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                            </div>`;
+                        } else {
+                            htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                            <a href="${document.url}" target="_blank" width="100">documento</a>
+                                            <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                                <button type"submit" class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                            </div>`;
+                        }
+                    });
+
+                    // Insertar el HTML en el elemento document-list
+                    documentList.innerHTML = htmlContent;
+                })
+                .catch(error => console.error('Error al cargar los documentos:', error));
         }
 
         document.getElementById('btn-sesion-edit').addEventListener('click', function(event){
@@ -1260,6 +1352,27 @@
         });
 
         // Función para actualizar la hora de editarHoraFin
+        function actualizarHoraFin3() {
+            var horaInicio = document.getElementById("horaInicioT").value;
+            
+            var horaInicioSplit = horaInicio.split(":");
+            var hora = parseInt(horaInicioSplit[0]);
+            var minuto = parseInt(horaInicioSplit[1]);
+            
+            hora = hora + 1;
+            
+            if (hora > 23) {
+                hora = hora - 24;
+            }
+            
+            hora = (hora < 10 ? "0" : "") + hora;
+            minuto = (minuto < 10 ? "0" : "") + minuto;
+            
+            var nuevaHora = hora + ":" + minuto;
+            
+            document.getElementById("horaFinT").value = nuevaHora;
+        }
+
         function actualizarHoraFin2() {
             var horaInicio = document.getElementById("editarHoraInicio").value;
             
@@ -1302,9 +1415,11 @@
             document.getElementById("horaFin").value = nuevaHora;
         }
 
+        document.getElementById("horaInicio").addEventListener("change", actualizarHoraFin);
+
         document.getElementById("editarHoraInicio").addEventListener("change", actualizarHoraFin2);
 
-        document.getElementById("horaInicio").addEventListener("change", actualizarHoraFin);
+        document.getElementById("horaInicioT").addEventListener("change", actualizarHoraFin3);
 
     </script>
 </body>

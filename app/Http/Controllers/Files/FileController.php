@@ -31,6 +31,10 @@ class FileController extends Controller
         //
     }
 
+    public function destroy($document){
+
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -50,7 +54,7 @@ class FileController extends Controller
             'url' => $url,
             'paciente_id' => $request->id_paciente,
             'sesion_id' => $request->id_sesion,
-            'tipo_doc' => $request->tipo_doc
+            'tipo_doc' => 'Comprobante'
         ]);
         // Almacenar la URL anterior en la sesión
         session()->flash('previous_url', url()->previous());
@@ -67,40 +71,10 @@ class FileController extends Controller
         return redirect()->route('homePacienteSesiones');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
     public function getComprobanteXPaciente($sesion_id){
-         $file = File::where('sesion_id', $sesion_id)->first();
+         $file = File::where('sesion_id', $sesion_id)
+                        ->where('tipo_doc', 'Comprobante')
+                        ->first();
          $pago = Pago::where('sesion_id', $sesion_id)->first();
 
          if ($file) {
@@ -137,7 +111,9 @@ class FileController extends Controller
         $sesion->pago_confirmado = 0;
         $sesion->save();
 
-        $file = File::where('sesion_id', $sesion_id)->delete();
+        $file = File::where('sesion_id', $sesion_id)
+                    ->where('paciente_id', '!=', null)
+                    ->delete();
 
         $paciente = Paciente::where('id', $sesion->paciente_id)->first();
         
@@ -146,5 +122,40 @@ class FileController extends Controller
             'user_id' => $paciente->user_id,
             'sesion_id' => $sesion_id,
         ]);
+    }
+
+    public function upload(Request $request){
+
+        $request->validate([
+            'file' => 'required|mimes:pdf,doc,docx,xlsx,xls,ppt,pptx,png,jpg,txt|max:5048'
+        ]);
+
+        $imagen = $request->file('file')->store('public/documentos');
+        $url = Storage::url($imagen);
+        File::create([
+            'url' => $url,
+            'tipo_doc' => 'documento',
+            'sesion_id' => $request->sesion_ids
+        ]);
+        // Almacenar la URL anterior en la sesión
+        session()->flash('previous_url', url()->previous());
+    }
+
+    public function getDocumentPaciente($sesion_id){
+        $documents = File::where('sesion_id', $sesion_id)
+                    ->where('tipo_doc', 'documento')
+                    ->get();
+        return response()->json($documents);
+    }
+
+    public function deleteDocument(Request $request){
+        $file = File::where('id', $request->file_id)->first();
+        $url = str_replace('storage', 'public', $file->url);
+
+        Storage::delete($url);
+
+        $file->delete();
+
+        return redirect()->route('psicologo.sesiones');
     }
 }

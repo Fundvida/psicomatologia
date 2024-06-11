@@ -159,23 +159,24 @@ class HorarioController extends Controller
             // $horaFinTarde = Carbon::createFromFormat('H:i:s', $horario->hora_fin_tarde);
 
             // Ensure both times are valid
-            if ($horaInicioManiana && $horaFinManiana && $isDisponibleManiana) {
-                while ($horaInicioManiana->lt($horaFinManiana)) {
-                    // $periods[$dia][] = [
-                    $periods[$i] = [
-                        'dia' => $dia,
-                        'hora_inicio_maniana' => $horaInicioManiana->Format('H:i:s'),
-                        'hora_fin_maniana' => $horaInicioManiana->addMinutes($intervalo)->Format('H:i:s'),
-                        'isDisponibleManiana' => 1,
-
-                    ];
-                    $i++;
+            if($isDisponibleManiana){
+                if ($horaInicioManiana && $horaFinManiana && $isDisponibleManiana) {
+                    while ($horaInicioManiana->lt($horaFinManiana)) {
+                        // $periods[$dia][] = [
+                        $periods[$i] = [
+                            'dia' => $dia,
+                            'hora_inicio_maniana' => $horaInicioManiana->Format('H:i:s'),
+                            'hora_fin_maniana' => $horaInicioManiana->addMinutes($intervalo)->Format('H:i:s'),
+                            'isDisponibleManiana' => 1,
+                        ];
+                        $i++;
+                    }
+                    // if ($i == 2)
+                    // return response()->json([
+                    //     'periods' => $periods,
+                    //     'horarios' => $horarios,
+                    // ]);
                 }
-                // if ($i == 2)
-                // return response()->json([
-                //     'periods' => $periods,
-                //     'horarios' => $horarios,
-                // ]);
             }
         }
 

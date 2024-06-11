@@ -495,6 +495,8 @@
             const day = today.getDate();
             const maxDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
             dateInput.max = maxDate;
+
+            document.getElementById('fechaFuncion').setAttribute('max', new Date().toISOString().split('T')[0]);
         });
     </script>
 
