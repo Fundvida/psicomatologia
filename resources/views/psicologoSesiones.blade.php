@@ -504,6 +504,7 @@
                                         <th>Descripción de la Sesión</th>
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
+                                        <th>Modalidad</th>
                                         <th>Editar Sesión</th>
                                         <th>Cancelar Sesión</th>
                                         <th>Ver Comprobante</th>
@@ -778,8 +779,8 @@
             document.getElementById('ci').innerText = ci;
             document.getElementById('paciente').innerText = paciente;
             document.getElementById('descripcion').innerText = descripcion;
-            document.getElementById('diagnostico').innerText = diagnostico;
-            document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
+            //document.getElementById('diagnostico').innerText = diagnostico;
+            //document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
 
             // Muestra el modal
             $('#infoPacienteModal').modal('show');
@@ -872,12 +873,11 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        console.log("sesion programadas")
-                        console.log(data);
                         $('#sesiones-body').empty();
                     
                         // Recorrer los datos y agregar filas a la tabla
                         $.each(data, function(index,sesiones) {
+                            console.log(sesiones);
                             // TODO estado de las sesiones: Terminado, Cancelado , activo
                             var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
                             var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
@@ -907,9 +907,9 @@
                                     <td>${sesiones.name}</td>
                                     <td>${sesiones.apellidos}</td>
                                     <td>${sesiones.descripcion_sesion}</td>
-                                    
                                     <td>${estado_sesion}</td>
                                     <td>${estado_pago}</td>
+                                    <td>${sesiones.modalidad}</td>
                                     <td class="action-icons">
                                         ${icon_edit_sesion}   
                                     </td>

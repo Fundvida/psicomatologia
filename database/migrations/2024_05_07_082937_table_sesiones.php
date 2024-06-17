@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('solicitante');
             $table->string('justificacion')->nullable();
             $table->string('cancelador')->nullable();
+            $table->string('modalidad')->nullable();
         });
         
     }

@@ -300,8 +300,8 @@
                                         <th>Nombre(s)</th>
                                         <th>Apellidos</th>
                                         <th>Descripción de la Sesión</th>
-                                        <th>Diagnòstico</th>
-                                        <!-- <th>Archivos Adjuntos</th> -->
+                                        <th>Diagnóstico</th>
+                                        <th>Modalidad</th>
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
                                         <th>Pagar Sesión</th>
@@ -568,7 +568,7 @@
                         row.append($('<td>').text(data.user.apellidos));        //Apellidos
                         row.append($('<td>').text(sesion.descripcion_sesion)); // Descripción de la Sesión
                         row.append($('<td>').text(sesion.calificacion_descripcion)); //Diagnòstico
-                        // row.append($('<td>').text("test"));                     // archivos
+                        row.append($('<td>').text(sesion.modalidad));                     // archivos
                         if(sesion.estado == "Cancelado"){
                             row.append($('<td>').text("No concluida")); 
                         } else if(sesion.estado == "Terminada"){

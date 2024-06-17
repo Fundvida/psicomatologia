@@ -330,7 +330,7 @@ class SesionController extends Controller
 
         $query = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
         'sesions.calificacion', 'sesions.fecha_hora_inicio', 'sesions.fecha_hora_fin', 'sesions.id as sesion_id',
-        'users.ci', 'users.name', 'users.apellidos', 
+        'sesions.modalidad','users.ci', 'users.name', 'users.apellidos', 
         'pagos.isTerminado', 'pacientes.id as id_paciente')
         ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
         ->join('users', 'pacientes.user_id', '=', 'users.id')
@@ -674,6 +674,7 @@ class SesionController extends Controller
                 $sesion->psicologo_id= $paciente->psicologo_id;
                 $sesion->descripcion_sesion=$request->desc_sesion;
                 $sesion->solicitante= $paciente->id;
+                $sesion->modalidad = $request->modalidad;
 
                 $fechaHoraInicio = $fechaAgenda . ' ' . $horaInicio . ':00';
                 $fechaHoraFin = $fechaAgenda . ' ' . $horaFin . ':00';
@@ -723,6 +724,7 @@ class SesionController extends Controller
             $sesion->psicologo_id= $psicologo->id;
             $sesion->descripcion_sesion=$request->desc_sesion;
             $sesion->solicitante= $psicologo->id;
+            $sesion->modalidad = $request->modalidad;
 
             $fechaHoraInicio = $fechaAgenda . ' ' . $horaInicio . ':00';
             $fechaHoraFin = $fechaAgenda . ' ' . $horaFin . ':00';

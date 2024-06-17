@@ -394,7 +394,7 @@ class PsicologoController extends Controller
             ->join('users as ps', 'psi.user_id', '=', 'ps.id')
             ->select('pu.name as nombre_paciente', 'pu.apellidos as apellido_paciente',
             'ps.name as nombre_psicologo', 'ps.apellidos as apellido_psicologo',
-            'sesions.estado', 'sesions.pago_confirmado')
+            'sesions.estado', 'sesions.pago_confirmado', 'sesions.modalidad')
             ->get();
             
         return response()->json($resultados);
