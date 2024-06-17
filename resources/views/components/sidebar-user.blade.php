@@ -35,13 +35,17 @@
                 <li><a href="{{ route('homePsicologoHorario') }}" style="color: #fff;">Mis Horarios</a></li>
             </ul>
             @endcan
-        </li>
-        <!-- TODO agregar ruta con spatie permition  para psicologo -->
-        <!-- <li class="custom-menu-item custom-font-alt">CALENDARIO
+            @can('paciente.sesion')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-            <li><a href="#" style="color: #fff;">Calendario</a></li>
+                <li><a href="{{ route('paciente.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
             </ul>
-        </li> -->
+            @endcan
+            @can('psicologo.sesion')
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('psicologo.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
+            </ul>
+            @endcan
+        </li>
         <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="#" style="color: #fff;">Datos Personales</a></li>

@@ -294,6 +294,7 @@
     <!-- Menú lateral -->
     @include('components.sidebar-user')
 
+    <!-- Registro de paciente modal -->
     <div class="modal fade" id="formularioRegistroModal" tabindex="-1" aria-labelledby="formularioRegistroModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -328,7 +329,7 @@
                         <div class="row mb-3 hidden" id="data_dos">
                             <div class="col">
                                 <label for="nombres_tutor" class="form-label">CI tutor <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="ci_tutor" name="nombres_tutor">
+                                <input type="text" class="form-control" id="ci_tutor" name="ci_tutor">
                             </div>
                             <div class="col">
                                 <label for="fechaNacimientoTutor" class="form-label">Fecha de nacimiento tutor <span class="text-danger">*</span></label>
@@ -395,6 +396,44 @@
                             <button type="submit" id="btnAddOrEdit" class="btn btn-primary">Registrar Paciente</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registro de paciente modal -->
+    <div class="modal fade" id="formularioDesignarPsicologo" tabindex="-1" aria-labelledby="formularioDesignarPsicologolLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-alt" id="title_modal">Designar Psicologo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="contenedorPsicologos">
+                        <!-- <div class="psicologo card mb-3">
+                            <div class="card-body">
+                                <label class="card-title">Nombre: Juan Pérez</label>
+                                <p class="card-text">
+                                    <span class="especialidad badge text-bg-success">Terapia Familiar</span>
+                                    <span class="especialidad badge text-bg-success">Terapia Infantil</span>
+                                    <span class="especialidad badge text-bg-success">Terapia de Pareja</span>
+                                </p>
+                                <button class="btn btn-primary">Seleccionar</button>
+                            </div>
+                        </div>
+                        <div class="psicologo card mb-3">
+                            <div class="card-body">
+                                <label class="card-title">Nombre: Ana García</label>
+                                <p class="card-text">
+                                    <span class="especialidad badge text-bg-success">Terapia Cognitivo-Conductual</span>
+                                    <span class="especialidad badge text-bg-success">Terapia de Grupo</span>
+                                    <span class="especialidad badge text-bg-success">Psicología Clínica</span>
+                                </p>
+                                <button class="btn btn-primary">Seleccionar</button>
+                            </div>
+                        </div> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -662,11 +701,13 @@
 
                         $('#pacientes-body').empty();
                         $.each(pacientes, function(index, paciente) {
+                            //console.log(paciente);
                             var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
                             var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
                             var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 
+                            var tiene_paciente = paciente.psicologo_id == null? `<i class="fa-solid fa-user-nurse" onclick="designarPsicologo(${paciente.id})"></i>`:``;
                             var actions_icons = rol == "Administrador"? `<i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>
-                                        <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Sesión"></i>`
+                                        <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${paciente.id})" title="Eliminar Paciente"></i>`+tiene_paciente
                                         :   `<i class="fa-solid fa-user-lock text-danger" style="font-size: 22px;" onclick="confirmarBloqueoPaciente(${paciente.id})" title="Bloquear Paciente"></i>
                                             <i class="fa-solid fa-hospital-user" style="font-size: 22px; color: #1D5776" onclick="confirmarDarAlta(${paciente.id})" title="Dar de Alta"></i>`;
 
@@ -776,7 +817,7 @@
                     $('#respuestaSeguridad').val(response.user.respuesta_seguridad_a);
                     // Data de la tabla paciente
                     $('#ocupacion').val(response.paciente.ocupacion);
-                    $('#tipoUsuario').val(response.tipo_paciente).change();
+                    $('#tipoUsuario').val(response.paciente.tipo_paciente).change();
                 },
                 error: function(xhr, status, error) {
                     console.log(error);
@@ -910,6 +951,61 @@
                             console.log(error);
                         }
                     });
+                }
+            });
+        }
+
+        function designarPsicologo (paciente_id){
+            $.ajax({
+                url: '/getPsicologos/especialidad',
+                method: 'GET',
+                success: function(data) {
+                    $('#contenedorPsicologos').empty();
+                    
+                    data.forEach(function(psicologo) {
+                        let especialidades = psicologo.especialidades.map(especialidad => `
+                            <span class="especialidad badge text-bg-success">${especialidad}</span>
+                        `).join('');
+
+                        let card = `
+                        <div class="psicologo card mb-3">
+                            <div class="card-body">
+                                <label class="card-title">Nombre: ${psicologo.nombre} ${psicologo.apellido}</label>
+                                <p class="card-text">
+                                    ${especialidades}
+                                </p>
+                                <button class="btn btn-primary" onclick="designar(${paciente_id},${psicologo.id})">Seleccionar</button>
+                            </div>
+                        </div>`;
+                        $('#contenedorPsicologos').append(card);
+                    });
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+
+            $('#formularioDesignarPsicologo').modal('show');
+
+        }
+
+        function designar(paciente_id,psicologo_id){
+            console.log(paciente_id, psicologo_id);
+            $.ajax({
+                url: '/psicologo/designar/' + paciente_id + '/' + psicologo_id,
+                type: 'GET',
+                success: function(response) {
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Exito</h2>',
+                        'Psicologo designado exitosamente.',
+                        'success'
+                    );
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
                 }
             });
         }

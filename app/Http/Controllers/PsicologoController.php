@@ -33,6 +33,27 @@ class PsicologoController extends Controller
     public function homePsicologoHorario (){
         return view('homePsicologoHorario');
     }
+
+    public function programarSesion (){
+        $user = Auth::user();
+        $psicologo_id = Psicologo::where('user_id', $user->id)->value('id');
+
+        // estado= ACTIVO, isAlta = 0
+        $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
+                            ->join('users', 'pacientes.user_id', '=', 'users.id')
+                            ->where('pacientes.psicologo_id', $psicologo_id)
+                            ->where('pacientes.estado', '=', 'ACTIVO')
+                            ->where('pacientes.isAlta', '=', '0')
+                            ->get();
+        return view('programarSesionPsicologo', compact('pacientes'));
+    }
+
+    public function getPsicologoId (){
+        $user = Auth::user();
+        $psicologo = Psicologo::select('id')->where('user_id',$user->id)->first();
+        return $psicologo;
+    }
+
     public function store(Request $request)
     {
         if ($request->psicologo_id == "") {
@@ -339,14 +360,6 @@ class PsicologoController extends Controller
         return view('listaPsicologo', compact('psicologos'));
     }
 
-    // public function getPsicologosL (){
-    //     $psicologos = User::join('psicologos', 'users.id', '=', 'psicologos.user_id')
-    //                 ->where('psicologos.estado', 'ACTIVO')
-    //                 ->select('users.*', 'psicologos.*')
-    //                 ->get();
-
-    //     return response()->json($psicologos);
-    // }
     public function getPsicologosL(Request $request) {
         $query = User::join('psicologos', 'users.id', '=', 'psicologos.user_id')
                         ->where('psicologos.estado', 'ACTIVO');
@@ -421,7 +434,36 @@ class PsicologoController extends Controller
         return $data;
     }
 
-    
+    public function getPsicologosEspecialidades(){
+        $resultados = DB::table('psicologos')
+            ->join('users as u', 'psicologos.user_id', '=', 'u.id')
+            ->join('especialidades as es', 'psicologos.id', '=', 'es.psico_id')
+            ->select('u.name as nombre', 'u.apellidos as apellido', 'psicologos.id', 'es.especialidad')
+            ->get();
 
+        $psicologos = [];
 
+        foreach ($resultados as $resultado) {
+            $psicologoId = $resultado->id;
+            if (!isset($psicologos[$psicologoId])) {
+                $psicologos[$psicologoId] = [
+                    'nombre' => $resultado->nombre,
+                    'apellido' => $resultado->apellido,
+                    'id' => $psicologoId,
+                    'especialidades' => []
+                ];
+            }
+            $psicologos[$psicologoId]['especialidades'][] = $resultado->especialidad;
+        }
+
+        return response()->json(array_values($psicologos));
+    }
+
+    public function designarPsicologo($paciente_id, $psicologo_id){
+        $paciente = Paciente::where('id', $paciente_id)->first();
+        if($paciente){
+            $paciente->psicologo_id = $psicologo_id;
+            $paciente->save();
+        }
+    }
 }

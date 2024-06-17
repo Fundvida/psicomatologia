@@ -29,7 +29,7 @@
 
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="{{asset('css/styles.css')}}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -317,11 +317,12 @@
     <!-- Menú lateral -->
     @include('components.sidebar-user')
 
+    <!-- Modal para programar nueva sesion -->
     <div class="modal fade" id="formularioRegistroModal" tabindex="-1" aria-labelledby="formularioRegistroModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title font-alt" id="crearHorarioModalLabel">Agregar Horario de Atención</h5>
+                    <h5 class="modal-title font-alt" id="crearHorarioModalLabel">Programar sesión</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -501,8 +502,6 @@
                                         <th>Nombre(s)</th>
                                         <th>Apellidos</th>
                                         <th>Descripción de la Sesión</th>
-                                        <th>Diagnóstico</th>
-                                        <th>Archivos Adjuntos</th>
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
                                         <th>Editar Sesión</th>
@@ -571,8 +570,8 @@
                     <p><strong>CI:</strong> <span id="ci"></span></p>
                     <p><strong>Paciente:</strong> <span id="paciente"></span></p>
                     <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
-                    <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
-                    <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p>
+                    <!-- <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
+                    <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p> -->
                 </div>
 
             </div>
@@ -596,7 +595,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('file.upload') }}" method="post" class="dropzone" id="my-awesome-dropzone">
+                    <form action="{{ route('file.upload') }}" method="post" class="dropzone" id="my-awesome-dropzone" style="display: none;">
                         @csrf
                         <input type="hidden" name="sesion_ids" id="sesion_ids">
                     </form>
@@ -652,26 +651,13 @@
                             <textarea class="form-control" id="editarDescripcionSesion" name="editarDescripcionSesion" rows="3" placeholder="Detalles de la sesión" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="editarDiagnostico" class="form-label">Diagnóstico<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editarDiagnostico" name="editarDiagnostico" placeholder="Diagnóstico del paciente" required>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="editarEstadoSesion" class="form-label">Estado de la Sesión<span class="text-danger">*</span></label>
-                                <select class="form-select" id="editarEstadoSesion" required>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Terminada">Terminada</option>
-                                    <option value="Cancelada">Cancelada</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="editarEstadoPago" class="form-label">Estado de Pago</label>
-                                <input type="text" class="form-control" id="editarDiagnostico" readonly>
-                            </div>
+                            <label for="editarDiagnostico" class="form-label">Diagnóstico</label>
+                            <input type="text" class="form-control" id="editarDiagnostico" name="editarDiagnostico" placeholder="Diagnóstico del paciente">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary" id="btn-sesion-edit">Editar Sesión</button>
+                            <button type="button" class="btn btn-primary" onclick="finalizarSesion()" id="btn-sesion-fin" value="">Marcar como finalizada</button>
                         </div>
                     </form>
                 </div>
@@ -737,9 +723,6 @@
                 }
             });
         }
-    </script>
-
-    <script>
 
         function verComprobante(sesion_id) {
 
@@ -889,12 +872,13 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+                        console.log("sesion programadas")
                         console.log(data);
                         $('#sesiones-body').empty();
                     
                         // Recorrer los datos y agregar filas a la tabla
                         $.each(data, function(index,sesiones) {
-                            //console.log(sesiones);
+                            // TODO estado de las sesiones: Terminado, Cancelado , activo
                             var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
                             var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
                             var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
@@ -903,7 +887,10 @@
                             var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
                             var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , '${horaFin}', '${paciente_ci}', '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
-                            :'<i class="fas fa-check-circle"></i>';
+                            :'<i class="fas fa-edit" style="color: ##7B7D7D;"  aria-hidden="true"></i>';
+                            var icon_upload = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ? 
+                                `<i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>`: 
+                                `<i class="fa fa-upload" style="color: ##7B7D7D;" aria-hidden="true"></i>`;
                             
                             if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
                                 icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
@@ -920,8 +907,7 @@
                                     <td>${sesiones.name}</td>
                                     <td>${sesiones.apellidos}</td>
                                     <td>${sesiones.descripcion_sesion}</td>
-                                    <td>None</td>
-                                    <td>None</td>
+                                    
                                     <td>${estado_sesion}</td>
                                     <td>${estado_pago}</td>
                                     <td class="action-icons">
@@ -937,7 +923,7 @@
                                         <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
                                     </td>
                                     <td class="action-icons">
-                                        <i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>
+                                        ${icon_upload}
                                     </td>
                                 </tr>
                             `);
@@ -956,15 +942,12 @@
             }
         });
 
-        function registrarSesion(){
-            console.log('registrar sesion');
-        }
-
         function editarSesion(sesion_id, fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
             console.log(ci);
             ciForm = ci == 'No especificado'? '': ci;
 
             document.getElementById('sesion_id_').value = sesion_id;
+            document.getElementById('btn-sesion-fin').value = sesion_id;
             document.getElementById('editarFechaSesion').value = fecha;
             document.getElementById('editarHoraInicio').value = horaInicio;
             document.getElementById('editarHoraFin').value = horaFin;
@@ -973,10 +956,7 @@
             document.getElementById('editarApellidosPaciente').value = apellidos;
             document.getElementById('editarDescripcionSesion').value = descripcion;
             document.getElementById('editarDiagnostico').value = diagnostico;
-            //document.getElementById('archivosActuales').textContent = archivos;
-            document.getElementById('editarEstadoSesion').value = estadoSesion;
-            //document.getElementById('editarEstadoPago').value = estadoPago;
-
+            
             // Abrir el modal
             var modal = new bootstrap.Modal(document.getElementById('editarSesionModal'));
             modal.show();
@@ -1113,20 +1093,38 @@
         }
 
         function subir (sesion_id){
-            console.log("subir imagen");
+            //console.log("subir imagen");
             var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
             document.getElementById('sesion_ids').value = sesion_id;
 
             loadDocuments(sesion_id);
-            
+            estadoSesion(sesion_id);
+
             modal.show();
+        }
+
+        function estadoSesion (sesion_id){
+            $.ajax({
+                url: '/sesion/estado/'+sesion_id,
+                type: 'GET',
+                success: function(data) {
+                    var form = document.getElementById('my-awesome-dropzone');
+                    if(data.estado == 'Terminada'){
+                        form.style.display = 'none'; 
+                    }else {
+                        form.style.display = 'block'; 
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            }); 
         }
 
         function loadDocuments(sesion_id) {
             fetch(`/sesion/${sesion_id}/documents`)
                 .then(response => response.json())
                 .then(data => {
-
                     const documentList = document.getElementById('document-list');
                     if (!documentList) {
                         console.error('Elemento document-list no encontrado');
@@ -1136,7 +1134,6 @@
                     let htmlContent = '';
                     data.forEach(document => {
                         const extension = document.url.split('.').pop().toLowerCase();
-                        //console.log(document);
 
                         if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
                             htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
@@ -1413,6 +1410,43 @@
             var nuevaHora = hora + ":" + minuto;
             
             document.getElementById("horaFin").value = nuevaHora;
+        }
+
+        function finalizarSesion (){
+            var sesion_id = document.getElementById('btn-sesion-fin').value;
+            console.log(sesion_id);
+
+            Swal.fire({
+                title: "Estas seguro?",
+                text: "No podra revertir este cambio.",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, estoy seguro"
+            }).then((result) => {
+            if (result.isConfirmed) {
+                // Terminada = sesion.estado
+                $.ajax({
+                    url: '/sesion/terminada/'+sesion_id,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data);
+                        Swal.fire(
+                            '<h2 class="text-center mb-4 font-alt">Exito!</h2>',
+                            `Sesión marcada como finalizada.`,
+                            'success'
+                        )
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 3000);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                }); 
+            }
+            });
         }
 
         document.getElementById("horaInicio").addEventListener("change", actualizarHoraFin);

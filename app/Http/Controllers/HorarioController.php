@@ -178,6 +178,25 @@ class HorarioController extends Controller
                     // ]);
                 }
             }
+            if($isDisponibleTarde){
+                if ($horaInicioTarde && $horaFinTarde && $isDisponibleTarde) {
+                    while ($horaInicioTarde->lt($horaFinTarde)) {
+                        // $periods[$dia][] = [
+                        $periods[$i] = [
+                            'dia' => $dia,
+                            'hora_inicio_maniana' => $horaInicioTarde->Format('H:i:s'),
+                            'hora_fin_maniana' => $horaInicioTarde->addMinutes($intervalo)->Format('H:i:s'),
+                            'isDisponibleManiana' => 1,
+                        ];
+                        $i++;
+                    }
+                    // if ($i == 2)
+                    // return response()->json([
+                    //     'periods' => $periods,
+                    //     'horarios' => $horarios,
+                    // ]);
+                }
+            }
         }
 
 

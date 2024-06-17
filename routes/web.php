@@ -225,3 +225,39 @@ Route::post('/upload', [FileController::class, 'upload'])->name('file.upload');
 Route::get('/sesion/{id}/documents', [FileController::class, 'getDocumentPaciente'])->name('sesion.documents');
 
 Route::post('/sesion/documents/delete', [FileController::class, 'deleteDocument'])->name('sesion.documents.delete');
+
+// Programar sesion paciente
+Route::get('/paciente/sesion', [PacienteController::class, 'programarSesion'])
+    ->middleware('can:paciente.sesion')
+    ->name('paciente.sesion');
+
+Route::get('/psicologo/programar/sesion', [PsicologoController::class, 'programarSesion'])
+    //->middleware('can:paciente.sesion')
+    ->name('psicologo.sesion');
+
+Route::post('/paciente/programar/sesion', [SesionController::class, 'nuevaSesionPaciente'])
+    //->middleware('can:paciente.sesion')
+    ->name('paciente.programar.sesion');
+
+Route::post('/programar/sesion', [SesionController::class, 'nuevaSesionPsicologo'])
+    //->middleware('can:paciente.sesion')
+    ->name('psicologo.programar.sesion');
+
+Route::get('/paciente/getPsicologoId', [PacienteController::class, 'getPsicologoId'])
+    ->middleware('can:paciente.psicologo.id')
+    ->name('paciente.psicologo.id');
+
+// TODO agregar persmiso spatie
+Route::get('/psicologo/getPsicologoId', [PsicologoController::class, 'getPsicologoId'])
+    //->middleware('can:paciente.psicologo.id') 
+    ->name('psicologo.id');
+
+// Marcar sesion como terminada
+Route::get('/sesion/terminada/{sesion_id}', [SesionController::class, 'terminarSesion']);
+
+Route::get('/sesion/estado/{sesion_id}', [SesionController::class, 'estadoSesion']);
+
+Route::get('/getPsicologos/especialidad', [PsicologoController::class, 'getPsicologosEspecialidades']);
+
+// routes/web.php
+Route::get('/psicologo/designar/{paciente_id}/{psicologo_id}', [PsicologoController::class, 'designarPsicologo']);

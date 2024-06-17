@@ -301,7 +301,7 @@
                                         <th>Apellidos</th>
                                         <th>Descripción de la Sesión</th>
                                         <th>Diagnòstico</th>
-                                        <th>Archivos Adjuntos</th>
+                                        <!-- <th>Archivos Adjuntos</th> -->
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
                                         <th>Pagar Sesión</th>
@@ -568,21 +568,18 @@
                         row.append($('<td>').text(data.user.apellidos));        //Apellidos
                         row.append($('<td>').text(sesion.descripcion_sesion)); // Descripción de la Sesión
                         row.append($('<td>').text(sesion.calificacion_descripcion)); //Diagnòstico
-                        row.append($('<td>').text("test"));                     // archivos
+                        // row.append($('<td>').text("test"));                     // archivos
                         if(sesion.estado == "Cancelado"){
                             row.append($('<td>').text("No concluida")); 
-                        }else{
-                            if(sesion.calificacion){ // TODO para que una sesion se concluya sesion.calificacion != null
-                                row.append($('<td>').text("Realizado"));
-                            } else {
-                                row.append($('<td>').text("No realizado"));
-                            }
-                            //row.append($('<td>').text(sesion.estado));      // estado de la sesion
+                        } else if(sesion.estado == "Terminada"){
+                            row.append($('<td>').text("Terminada").css('color', 'green'));
+                        } else{
+                            row.append($('<td>').text("Pendiente").css('color', '#8B4513')); 
                         }
 
-                        if(sesion.estado != "activo" && sesion.estado != "Activa" ){
+                        if(sesion.estado == "Cancelada"){
                             row.append('<td><span class="text-danger">Cancelada</span></td>');
-                        } else if (sesion.pago_confirmado == 0) {
+                        } else if (sesion.pago_confirmado == 0 && sesion.estado != 'Terminada') {
                             var actionIconsPago = $('<td>Pendiente</td><td class="action-icons">' +
                                 '<i class="fas fa-money-bill text-success" onclick="mostrarModalPago(' + sesion.id + ')" title="Pagar"></i></td>' +
                                 '<td class="action-icons">' +
@@ -592,7 +589,6 @@
                             pagosPendientes++;
                         } else {
                             row.append('<td class="text-success">Realizado</td>');
-                            //closeNotification();
                         }
 
                         // if(pagosPendientes > 0){

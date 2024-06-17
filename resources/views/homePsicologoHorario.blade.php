@@ -397,11 +397,11 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="07:00" max="12:05" step="3600" oninput="validateTimeFrom(this,1)">
+                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="07:00" max="11:01" step="3600" oninput="validateTimeFrom(this,1)">
                                         <div class="input-group-append">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="07:00" max="12:05" step="3600" oninput="validateTimeTo(this,1)">
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="06:00" max="12:01" step="3600" oninput="validateTimeTo(this,1)">
                                     </div>
                                 </div>
 
@@ -458,11 +458,11 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicioT" name="horaInicioT" min="14:00" max="09:00" step="3600" oninput="validateTimeFrom(this,2)">
+                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicioT" name="horaInicioT" min="12:00" max="10:00" step="3600" oninput="validateTimeFrom(this,2)">
                                         <div class="input-group-append">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFinT" name="horaFinT" min="14:00" max="09:00" step="3600" oninput="validateTimeTo(this,2)">
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFinT" name="horaFinT" min="13:00" max="10:00" step="3600" oninput="validateTimeTo(this,2)">
                                     </div>
                                 </div>
                                 <!-- Días de atención para horario de la tarde -->
@@ -572,7 +572,7 @@
                 minTime = "07:00";
                 maxTime = "12:00";
             } else if (turno == 2) {
-                minTime = "14:00";
+                minTime = "12:00";
                 maxTime = "21:00";
             }
             if (input.value < minTime || input.value > maxTime) {

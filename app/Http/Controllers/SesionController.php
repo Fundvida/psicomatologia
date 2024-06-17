@@ -580,7 +580,7 @@ class SesionController extends Controller
 
         if($horaInicio != $horaSesion){
             $notificacion = new Notificacion();
-            $notificacion->descripcion = 'Tu psicologo reprogramo hora de atención de tu sesion programada.';
+            $notificacion->descripcion = 'Tu psicologo reprogramó hora de atención de tu sesión programada.';
             $notificacion->user_id = $paciente->user_id;
             $notificacion->sesion_id = $sesion->id;
             $notificacion->save();
@@ -602,8 +602,6 @@ class SesionController extends Controller
 
         $sesion->save();
 
-
-        //return response()->json('exito!!');
     }
 
     public function getSesionPacienteNombre (Request $request){
@@ -652,5 +650,120 @@ class SesionController extends Controller
         }
 
         return $data;
+    }
+
+    public function nuevaSesionPaciente(Request $request){
+        $fechaAgenda = $request->fechaAgenda;
+        $horaInicio = $request->horaInicio;
+        $horaFin = $request->horaFin;
+
+        $paciente = Paciente::where('user_id', $request->user_id)->first();
+        $sesion_anterior = Sesion::where('paciente_id', $paciente->id)
+                            ->where('estado', 'activo')->first();
+
+        
+        if(!$sesion_anterior){
+            //return response()->json(["message"=> "sesion programada"]);
+            if ($paciente->id != null) {
+                $psicologo_user_id = Psicologo::select('user_id')->where('id', $paciente->psicologo_id)->first();
+                
+                $sesion = new Sesion();
+                $sesion->estado = 'activo';
+                $sesion->pago_confirmado = 0;
+                $sesion->paciente_id = $paciente->id;
+                $sesion->psicologo_id= $paciente->psicologo_id;
+                $sesion->descripcion_sesion=$request->desc_sesion;
+                $sesion->solicitante= $paciente->id;
+
+                $fechaHoraInicio = $fechaAgenda . ' ' . $horaInicio . ':00';
+                $fechaHoraFin = $fechaAgenda . ' ' . $horaFin . ':00';
+                
+                $sesion->fecha_hora_inicio = $fechaHoraInicio;
+                $sesion->fecha_hora_fin = $fechaHoraFin;
+
+                $sesion->save();
+
+                $pago = new Pago();
+                $pago->servicio = "";
+                $pago->sesion_id = $sesion->id;
+                $pago->institucion='';
+                $pago->convenio='';
+                $pago->isTerminado = 0;
+                $pago->pago_tipo='';
+                $pago->save();
+
+                Notificacion::create([
+                    'descripcion' => 'Usted tiene una nueva sesión programada.',
+                    'user_id' => $psicologo_user_id->user_id,
+                    'sesion_id' => $sesion->id,
+                ]);
+
+                return response()->json(["message"=> "sesion programada"]);
+            }
+        }
+
+        return response()->json(["message"=> "sesion pendiente"]);
+    }
+
+    public function nuevaSesionPsicologo (Request $request){
+        $fechaAgenda = $request->fechaAgenda;
+        $horaInicio = $request->horaInicio;
+        $horaFin = $request->horaFin;
+
+        $psicologo = Psicologo::where('user_id', $request->user_id)->first();
+        $sesion_anterior = Sesion::where('paciente_id', $request->paciente_id)
+                            ->where('estado', 'activo')->first();
+        if(!$sesion_anterior){
+            $paciente_user_id = Paciente::select('user_id')->where('id', $request->paciente_id)->first();
+                
+            $sesion = new Sesion();
+            $sesion->estado = 'activo';
+            $sesion->pago_confirmado = 0;
+            $sesion->paciente_id = $request->paciente_id;
+            $sesion->psicologo_id= $psicologo->id;
+            $sesion->descripcion_sesion=$request->desc_sesion;
+            $sesion->solicitante= $psicologo->id;
+
+            $fechaHoraInicio = $fechaAgenda . ' ' . $horaInicio . ':00';
+            $fechaHoraFin = $fechaAgenda . ' ' . $horaFin . ':00';
+            
+            $sesion->fecha_hora_inicio = $fechaHoraInicio;
+            $sesion->fecha_hora_fin = $fechaHoraFin;
+
+            $sesion->save();
+
+            $pago = new Pago();
+            $pago->servicio = "";
+            $pago->sesion_id = $sesion->id;
+            $pago->institucion='';
+            $pago->convenio='';
+            $pago->isTerminado = 0;
+            $pago->pago_tipo='';
+            $pago->save();
+
+            Notificacion::create([
+                'descripcion' => 'Su psicologo acaba de programar una nueva sesión.',
+                'user_id' => $paciente_user_id->user_id,
+                'sesion_id' => $sesion->id,
+            ]);
+            return "exito";
+        }
+        
+        return "err";
+    }
+
+    public function terminarSesion ($sesion_id){
+        $sesion = Sesion::where('id', $sesion_id)->first();
+        if($sesion){
+            $sesion->estado = 'Terminada';
+            $sesion->save();
+        }
+
+        return response()->json($sesion);
+    }
+
+    public function estadoSesion ($sesion_id){
+        $sesion = Sesion::select('estado')->where('id', $sesion_id)->first();
+        return $sesion;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Pago;
 
 class Paciente extends Model
 {
@@ -18,5 +17,11 @@ class Paciente extends Model
     public function sesiones()
     {
         return $this->hasMany(Sesion::class, 'paciente_id');
+    }
+
+    public function tutores()
+    {
+        return $this->belongsToMany(Tutor::class, 'paciente_tutor', 'paciente_id', 'tutor_id')
+                    ->withTimestamps();
     }
 }

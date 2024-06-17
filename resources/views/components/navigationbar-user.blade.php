@@ -6,7 +6,7 @@
             <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
                 <li class="nav-item nav-profile dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="profileDropdownToggle">
-                        <img src="images/faces/face28.jpg" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                        <img src="{{ asset('images/faces/face28.jpg') }}" alt="profile" class="img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profileDropdown" style="display: none; right: 0; left: auto;">
 

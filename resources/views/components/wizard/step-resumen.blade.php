@@ -23,18 +23,18 @@
                             <div class="flex-column text-start resumen-campos">
                                 <div class="">
                                     <div>
-                                        <span style="font-weight: bold;">Nombre:</span><span id='nombreR'></span>
+                                        <span style="font-weight: bold;">Nombre: </span><span id='nombreR'></span>
                                     </div>
                                     <div>
-                                    <span style="font-weight: bold;">Apellidos:</span><span id='apellidoR'></span>
+                                    <span style="font-weight: bold;">Apellidos: </span><span id='apellidoR'></span>
                                     </div>
                                 </div>
                                 <div class="">
                                     <div>
-                                    <span style="font-weight: bold;">Email:</span><span id='emailR'></span>
+                                    <span style="font-weight: bold;">Email: </span><span id='emailR'></span>
                                     </div>
                                     <div>
-                                    <span style="font-weight: bold;">Número Celular:</span><span id='celularR'></span>
+                                    <span style="font-weight: bold;">Número Celular: </span><span id='celularR'></span>
                                     </div>
                                 </div>
                                 
@@ -62,20 +62,20 @@
                                 </div>
                                 <div class="">
                                     <div>
-                                    <span style="font-weight: bold;">Psicologo:</span><span id='psicologoR'></span>
+                                    <span style="font-weight: bold;">Psicologo: </span><span id='psicologoR'></span>
                                     </div>
                                 </div>
                                 <div class="">
                                     <div>
-                                    <span style="font-weight: bold;">horario:</span><span id='horarioR'></span>
+                                    <span style="font-weight: bold;">horario: </span><span id='horarioR'></span>
                                     </div>
                                     <div>
-                                    <span style="font-weight: bold;">Método Pago:</span><span id='pagoR'></span>
+                                    <span style="font-weight: bold;">Forma de Pago: </span><span id='pagoR'></span>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
                                     <div>
-                                    <span style="font-weight: bold;">Descripcion adicional:</span><span id='descripcionR'></span>
+                                    <span style="font-weight: bold;">Descripcion adicional: </span><span id='descripcionR'></span>
                                     </div>
                                     
                                 </div>
