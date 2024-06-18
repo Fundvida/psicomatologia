@@ -803,7 +803,10 @@
                 url: '/paciente/' + paciente_id + '/edit',
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
+                    //console.log(response);
+                    $('#tipoUsuario').val(response.paciente.tipo_paciente).change();
+                    updateFechaNacimiento();
+                    let tipo = '';
                     $('#paciente_id').val(response.paciente.id);
                     // Data de la tabla user
                     $('#nombres').val(response.user.name);
@@ -817,12 +820,93 @@
                     $('#respuestaSeguridad').val(response.user.respuesta_seguridad_a);
                     // Data de la tabla paciente
                     $('#ocupacion').val(response.paciente.ocupacion);
-                    $('#tipoUsuario').val(response.paciente.tipo_paciente).change();
+                    tipo = response.paciente.tipo_paciente;
+                    if(tipo == "menor"){
+                        $('#nombres_tutor').val(response.tutor.nombre_tutor);
+                        $('#apellidos_tutor').val(response.tutor.apellido_tutor);
+                        $('#ci_tutor').val(response.tutor.ci);
+                        $('#fechaNacimientoTutor').val(response.tutor.fecha_nacimiento);
+                        $('#ocupacion').val(response.tutor.ocupacion);
+                        $('#correoElectronico').val(response.tutor.email);
+                        $('#telefono').val(response.tutor.telefono);
+                        $('#preguntaSeguridad').val(response.tutor.preg_tutor);
+                        $('#respuestaSeguridad').val(response.tutor.resp_tutor);
+                    }else {
+                        $('#nombres_tutor').val('');
+                        $('#apellidos_tutor').val('');
+                        $('#ci_tutor').val('');
+                        $('#fechaNacimientoTutor').val('');
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.log(error);
                 }
             });
+        }
+
+        function updateFechaNacimiento() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const tipo = tipoUsuario.value;
+            const data_uno = document.getElementById('data_uno');
+            const data_dos = document.getElementById('data_dos');
+
+            const lblNombre = document.getElementById('lblNom');
+            const lblApellido = document.getElementById('lblApe');
+            const lblFechaNa = document.getElementById('lblFn');
+            const lblOcupacion = document.getElementById('lblOcupacion');
+            const lblCi = document.getElementById('lblCi');
+
+            const nombreTutor = document.getElementById('nombres_tutor');
+            const apellidoTuto = document.getElementById('apellidos_tutor');
+            const ciTutor = document.getElementById('ci_tutor');
+            const fechaNaTutor = document.getElementById('fechaNacimientoTutor');
+
+            let minDate, maxDate;
+
+            if (tipo === 'mayor') {
+                minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
+                maxDate = new Date(currentYear - 80, today.getMonth(), today.getDate());
+                fechaNacimiento.min = maxDate.toDateString().split('T')[0];
+                fechaNacimiento.max = minDate.toISOString().split('T')[0];
+                data_uno.classList.add('hidden');
+                data_dos.classList.add('hidden');
+                nombreTutor.required = false;
+                apellidoTuto.required = false;
+                ciTutor.required = false;
+                fechaNaTutor.required = false;
+
+                lblNombre.innerHTML = `Nombres <span class="text-danger">*</span>`;
+                lblApellido.innerHTML = `Apellidos <span class="text-danger">*</span>`;
+                lblFechaNa.innerHTML = `FN <span class="text-danger">*</span>`;
+                lblOcupacion.innerHTML = `Ocupación <span class="text-danger">*</span>`;
+                lblCi.innerHTML = `Número de CI <span class="text-danger">*</span>`;
+            } else if (tipo === 'menor') {
+                minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
+                maxDate = new Date(currentYear - 3, today.getMonth(), today.getDate());
+                fechaNacimiento.min = minDate.toISOString().split('T')[0];
+                fechaNacimiento.max = maxDate.toISOString().split('T')[0];
+
+                minDate = new Date(currentYear - 18, today.getMonth(), today.getDate());
+                maxDate = new Date(currentYear - 80, today.getMonth(), today.getDate());
+                fechaNacimientoTutor.min = maxDate.toDateString().split('T')[0];
+                fechaNacimientoTutor.max = minDate.toISOString().split('T')[0];
+                data_uno.classList.remove('hidden');
+                data_dos.classList.remove('hidden');
+                nombreTutor.required = true;
+                apellidoTuto.required = true;
+                ciTutor.required = true;
+                fechaNaTutor.required = true;
+
+                lblNombre.innerHTML = `Nombre paciente <span class="text-danger">*</span>`;
+                lblApellido.innerHTML = `Apellido paciente <span class="text-danger">*</span>`;
+                lblFechaNa.innerHTML = `FN paciente <span class="text-danger">*</span>`;
+                lblOcupacion.innerHTML = `Ocupación tutor <span class="text-danger">*</span>`;
+                lblCi.innerHTML = `CI Paciente <span class="text-danger">*</span>`;
+            }
+
+            fechaNacimiento.value = '';
+            
         }
 
         function eliminar(id) {

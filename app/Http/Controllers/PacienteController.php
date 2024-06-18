@@ -154,10 +154,23 @@ class PacienteController extends Controller
     {
         $paciente = Paciente::findOrFail($id);
         $user = User::findOrFail($paciente->user_id);
+        $tutor = null;
+
+        if($paciente->tipo_paciente == 'menor'){
+            //join('pacientes', 'users.id', '=', 'pacientes.user_id')
+            $tutor = Paciente_tutor::where('paciente_id', $paciente->id)
+            ->join('tutors as t', 'paciente_tutor.tutor_id','=','t.id')
+            ->join('users as u', 't.user_id', '=', 'u.id')
+            ->select('t.id as tutor_id', 'u.name as nombre_tutor', 'u.apellidos as apellido_tutor',
+            'u.telefono', 'u.respuesta_seguridad_a as resp_tutor', 'u.pregunta_seguridad_a as preg_tutor',
+            'u.ci', 'u.fecha_nacimiento', 'u.ocupacion', 'u.email')
+            ->first();
+        }
 
         return [
             'paciente' => $paciente,
             'user' => $user,
+            'tutor' => $tutor
         ];
     }
 
