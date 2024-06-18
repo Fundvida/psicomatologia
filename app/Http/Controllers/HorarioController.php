@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Sesion;
 
 /**
  * 
@@ -69,7 +70,6 @@ class HorarioController extends Controller
      */
     public function getHorariosPsicologo(Request $request)
     {
-
         $user = Auth::user();
         // $psicologo = Psicologo::where('user_id', $user->id)->first();
         $horarios = Horario::where('psicologo_id', $request->input('psicologo_id'))
@@ -379,5 +379,81 @@ class HorarioController extends Controller
         $horarioTemp->update($attributes);
 
         return response()->json($request);
+    }
+
+    public function verificarDisponibilidad(Request $request){
+        // color: "orange"
+        // description: "Horario disponible"
+        // dia: "lunes"
+        // end: "2024-06-24T09:00:00"
+        // hora_fin: "09:00:00"
+        // hora_inicio: "08:00:00"
+        // start: "2024-06-24T08:00:00"
+        // title: "Disponible"
+        // turno: "1"
+        $events = $request->input('events');
+        $psicologo_id = $request->input('psicologo_id_');
+        $horarios = $events;
+
+        $finalEvents = [];
+
+        $mensaje = '';
+        foreach ($horarios as $horario) {
+            $fechaInicio = $horario['start']; 
+            $fechaFin = $horario['end']; 
+
+            $fechaHoraInicio = date('Y-m-d H:i:s', strtotime($fechaInicio));
+            $fechaHoraFin = date('Y-m-d H:i:s', strtotime($fechaFin));
+
+            $sesionActiva = Sesion::where('psicologo_id', $psicologo_id)
+                            ->where('estado', 'activo')
+                            ->where('fecha_hora_inicio', $fechaHoraInicio)
+                            ->where('fecha_hora_fin', $fechaHoraFin)
+                            ->exists();
+            if(!$sesionActiva){
+                $hora = (int) substr($horario['hora_inicio'], 0, 2);
+
+                if ($hora < 12) {
+                    $eventoDisponible = [
+                        'color' => 'orange',
+                        'description' => 'Horario disponible',
+                        'dia' => $horario['dia'],
+                        'end' => $fechaFin, 
+                        'hora_fin' => $horario['hora_fin'],
+                        'hora_inicio' => $horario['hora_inicio'],
+                        'start' => $fechaInicio, 
+                        'title' => 'Disponible',
+                        'turno' => $horario['turno']
+                    ];
+                } else {
+                    $eventoDisponible = [
+                        'color' => 'purple',
+                        'description' => 'Horario disponible',
+                        'dia' => $horario['dia'],
+                        'end' => $fechaFin, 
+                        'hora_fin' => $horario['hora_fin'],
+                        'hora_inicio' => $horario['hora_inicio'],
+                        'start' => $fechaInicio, 
+                        'title' => 'Disponible',
+                        'turno' => $horario['turno']
+                    ];
+                }
+                // $eventoDisponible = [
+                //     'color' => 'orange',
+                //     'description' => 'Horario disponible',
+                //     'dia' => $horario['dia'],
+                //     'end' => $fechaFin, 
+                //     'hora_fin' => $horario['hora_fin'],
+                //     'hora_inicio' => $horario['hora_inicio'],
+                //     'start' => $fechaInicio, 
+                //     'title' => 'Disponible',
+                //     'turno' => $horario['turno']
+                // ];
+    
+                $finalEvents[] = $eventoDisponible;
+            } 
+        }
+
+        return response()->json($finalEvents);
     }
 }

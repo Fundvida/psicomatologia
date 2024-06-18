@@ -526,7 +526,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('vendors/jquery-ui/jquery-ui.min.js') }}"></script>
     <script>
-        new MultiSelectTag('especialidad')  // id
+        document.addEventListener('DOMContentLoaded', function() {
+            new MultiSelectTag('especialidad');
+        });
+
+        //new MultiSelectTag('especialidad')  // id
 
         $('#filtroNombre').autocomplete({
             source: function(request, response){
@@ -630,7 +634,6 @@
         }
 
         function editar(psicologoId) {
-            console.log(psicologoId);
             document.getElementById("btnAddOrEdit").textContent = "Editar Psicologo";
             document.getElementById("divContrasena").style.display = "none";
             //document.getElementById("divConfirmarContrasena").style.display = "none";
@@ -643,6 +646,7 @@
                 type: 'GET',
                 success: function(response) {
                     console.log(response);
+
                     $('#psicologo_id').val(response.psicologo.id);
                     // Data de la tabla user
                     $('#nombres').val(response.user.name);

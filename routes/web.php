@@ -261,3 +261,5 @@ Route::get('/getPsicologos/especialidad', [PsicologoController::class, 'getPsico
 
 // routes/web.php
 Route::get('/psicologo/designar/{paciente_id}/{psicologo_id}', [PsicologoController::class, 'designarPsicologo']);
+
+Route::post('/psicologo/disponibilidad', [HorarioController::class, 'verificarDisponibilidad']);

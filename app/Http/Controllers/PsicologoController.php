@@ -19,10 +19,6 @@ use App\Models\Paciente;
 
 class PsicologoController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
 
     public function index_registrar()
     {
@@ -152,10 +148,13 @@ class PsicologoController extends Controller
     {
         $psicologo = Psicologo::findOrFail($id);
         $user = User::findOrFail($psicologo->user_id);
+        $especialidades = Especialidad::select('especialidad')
+                        ->where('psico_id', $psicologo->id)->get();
 
         return [
             'psicologo' => $psicologo,
             'user' => $user,
+            'especialidad' => $especialidades
         ];
     }
 

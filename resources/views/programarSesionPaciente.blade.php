@@ -544,7 +544,7 @@
                         .then(response => response.json())
                         .then(data => {
                             let events = [];
-                            console.log(data)
+                            //console.log(data)
 
                             for (let i = 0; i < 2; i++) {
                                 // if (data?.intervalos)
@@ -581,9 +581,31 @@
                                         })
                                 })
                             }
-                            console.log("prueba: ");
-                            console.log(events);
-                            successCallback(events);
+
+                            $.ajax({
+                                url: '/psicologo/disponibilidad',
+                                type: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                data: { events: events,
+                                    psicologo_id_: psicologo_id
+                                    },
+                                success: function(secondResponse) {
+                                    events = secondResponse;
+                                    console.log(2);
+                                    console.log(events);
+                                    successCallback(events);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Error en la segunda consulta:', error);
+                                }
+                            });
+
+
+                            //console.log("prueba: ");
+                            //console.log(events);
+                            //successCallback(events);
                         })
                         .catch(error => {
                             console.error('Error fetching events:', error);
