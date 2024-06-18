@@ -356,11 +356,10 @@
                                 <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="archivos" class="form-label">Archivos <span class="text-danger">*</span></label>
-                            <input type="file" id="archivos" class="form-control" name="archivos[]" multiple required>
-                            <!--<button type="submit">Subir Archivo(s)</button>-->
-                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="file" class="form-label">Archivos <span class="text-danger">*</span></label>
+                            <input type="file" id="file" class="form-control" name="file" required>
+                        </div> -->
                         <div class="mb-3">
                             <label for="descripcionCV">Descripción de CV: <span class="text-danger">*</span></label><br>
                             <textarea id="descripcionCV" name="descripcionCV" class="form-control" required></textarea>
@@ -446,6 +445,7 @@
                                         <th>CI</th>
                                         <th>Nombre Completo Psicólogo</th>
                                         <th>Estado</th>
+                                        <!-- <th>CV</th> -->
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -589,6 +589,7 @@
                                     <td>${psicologo.ci}</td>
                                     <td>${psicologo.name} ${psicologo.apellidos}</td>
                                     <td>${psicologo.estado}</td>
+                                    
                                     <td class="action-icons"> 
                                         <i class="fas fa-edit me-2" style="color: #6C757D; font-size: 22px;" onclick="editar(${psicologo.id})" title="Editar Psicologo"></i>
                                         <i class="fa-solid fa-trash-can text-danger" style="font-size: 22px;" onclick="eliminar(${psicologo.id})" title="Eliminar Sesión"></i>
@@ -623,7 +624,7 @@
             document.getElementById("ci").value = "";
             document.getElementById("contrasena").value = "";
             //document.getElementById("confirmarContrasena").value = "";
-            document.getElementById("archivos").value = "";
+            //document.getElementById("file").value = "";
             document.getElementById("descripcionCV").value = "";
             document.getElementById("correoElectronico").value = "";
             document.getElementById("telefono").value = "";

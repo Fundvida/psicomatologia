@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id')->nullable();
+            $table->foreignId('psicologo_id')->nullable();
             $table->foreignId('sesion_id')->nullable();
             $table->string('tipo_doc');
             $table->string('url')->nullable();

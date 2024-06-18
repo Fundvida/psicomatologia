@@ -13,8 +13,10 @@ use App\Models\Sesion;
 use App\Models\Especialidad;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Paciente;
+use Illuminate\Support\Facades\Storage;
+use App\Models\file;
+
 
 
 class PsicologoController extends Controller
@@ -52,6 +54,7 @@ class PsicologoController extends Controller
 
     public function store(Request $request)
     {
+        //return response()->json($request);
         if ($request->psicologo_id == "") {
             $user = new User();
             $user->name                 = $request->nombres;
@@ -141,6 +144,8 @@ class PsicologoController extends Controller
             //return redirect()->route('mntPsicologo.index')->with('resultado', "actualizado");
             return redirect()->route('listaPsicologo')->with('resultado', "actualizado");
         }
+        
+
         return response()->json($request);
     }
 

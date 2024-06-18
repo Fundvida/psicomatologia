@@ -158,4 +158,21 @@ class FileController extends Controller
 
         return redirect()->route('psicologo.sesiones');
     }
+
+    // TODO esperar
+    public function uploadCv(Request $request){
+        $request->validate([
+            'file' => 'required|mimes:pdf,doc,docx,xlsx,xls,ppt,pptx,png,jpg,txt|max:5048'
+        ]);
+
+        $imagen = $request->file('file')->store('public/cvs');
+        $url = Storage::url($imagen);
+        File::create([
+            'url' => $url,
+            'tipo_doc' => 'documento',
+            'sesion_id' => $request->sesion_ids
+        ]);
+        // Almacenar la URL anterior en la sesión
+        session()->flash('previous_url', url()->previous());
+    }
 }
