@@ -316,6 +316,71 @@
         </section>
     </main>
 
+    <!-- Modal de Pago -->
+    <div class="modal fade" id="pagoModal" tabindex="-1" aria-labelledby="pagoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <form action="{{ route('admin.files') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title font-alt" id="pagoModalLabel">Pagar Sesión</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <!-- Pestañas -->
+                        <ul class="nav nav-tabs custom-tabs" id="pagoTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pagoQR-tab" data-bs-toggle="tab" data-bs-target="#pagoQR" type="button" role="tab" aria-controls="pagoQR" aria-selected="true">Pago por QR</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="cuentaBancaria-tab" data-bs-toggle="tab" data-bs-target="#cuentaBancaria" type="button" role="tab" aria-controls="cuentaBancaria" aria-selected="false">Pago por Cuenta Bancaria</button>
+                            </li>
+                        </ul>
+
+                        <!-- Contenido de las pestañas -->
+                        <div class="tab-content mt-4" id="pagoTabsContent">
+                            <!-- Pestaña Pago por QR -->
+                        <div class="tab-pane fade show active" id="pagoQR" role="tabpanel" aria-labelledby="pagoQR-tab">
+
+                            <div class="text-center">
+                                <h4 class="mb-4 font-alt">Pago por Código QR</h4>
+                                <p class="mt-4">Por favor, escanea el código de pago a continuación y sube el comprobante correspondiente para confirmar tu transacción.</p>
+                                <img src="{{ asset('images/qr_real.jpeg') }}" alt="QR de Pago" class="img-fluid mb-4" style="max-height: 300px;">
+                            </div>
+                        </div>
+                        <!-- Pestaña Cuenta Bancaria -->
+                        <div class="tab-pane fade" id="cuentaBancaria" role="tabpanel" aria-labelledby="cuentaBancaria-tab">
+
+                            <div class="text-center">
+                                <!-- Pestaña Cuenta Bancaria -->
+                                <h4 class="mb-4 font-alt">Pago por Cuenta Bancaria</h4>
+                                <p class="mt-4">Por favor, realiza el pago a esta cuenta bancaria y sube el comprobante de pago para confirmar tu transacción.</p>
+                                <p><strong>Número de Cuenta:</strong> 4001-3356-418</p>
+                                <p><strong>Banco:</strong> Banco FIE</p>
+                                <p><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
+                                <p><strong>A nombre de:</strong> Fundación Educar Para La Vida</p>
+                                <p><strong>NIT:</strong> 16-943-002-8</p>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                            <input type="hidden" name="paciente_user_id" value="">
+                            <input type="hidden" name="tipo_doc" value="">
+                            <input type="hidden" name="id_sesion" value="">
+                            <div class="mb-3">
+                                <h5 for="comprobantePago" class="font-alt mb-2">Subir Comprobante de Pago <i class="fas fa-chevron-down ms-2 mb-3" style="font-size: 20px;"></i></h5>
+                                <input type="file" class="form-control" name="file">
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="confirmarPago()">CONFIRMAR PAGO</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const notificationIcon = document.getElementById('notificationIcon');
@@ -372,15 +437,16 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     $('#sesiones-body').empty();
                 
                 // Recorrer los datos y agregar filas a la tabla
                 $.each(data, function(index, sesion) {
+                    console.log(data);
                     var pago = sesion.pago_confirmado == 1? '<span style="color: green">Cancelado</span>': '<span style="color: red">Pendiente</span>';
                     var actionIcon = sesion.pago_confirmado == 0 && sesion.estado!='Cancelado' ? `
                     <td class="action-icons">
-                        <i class="fa-solid fa-dollar-sign" style="color: green" onclick="registrarPago()" title="Registrar Pago"></i>
+                        <i class="fa-solid fa-dollar-sign" style="color: green" onclick="mostrarModalPago(${sesion.sesion_id}, ${sesion.paciente_user_id})" title="Registrar Pago"></i>
                     </td>` : `<td></td>`;
 
                     $('#sesiones-body').append(`
@@ -399,6 +465,35 @@
                 }
             });
         });
+
+        function mostrarModalPago(id_sesion, paciente_user_id){
+            var tipo_doc = 'image';
+            $('input[name="paciente_user_id"]').val(paciente_user_id);
+            $('input[name="tipo_doc"]').val(tipo_doc);
+            $('input[name="id_sesion"]').val(id_sesion);
+            $('#pagoModal').modal('show');
+            //console.log(id_sesion);
+        }
+
+        function confirmarPago() {
+            Swal.fire({
+                icon: 'success',
+                title: '<h2 class="text-center mb-4 font-alt">Éxito</h2>',
+                text: 'El pago se realizó exitosamente',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+                customClass: {
+                    title: 'swal-title', // Clase CSS para el título personalizado
+                },
+                // Permite que el HTML se muestre en la notificación
+                allowHtml: true
+            }).then((result) => {
+                console.log('Redirigiendo');
+                setTimeout(() => {
+                window.location.href = '{{ route('listadoAllSesiones') }}';
+                }, 3000);
+            });
+        }
     </script>
 
 </body>

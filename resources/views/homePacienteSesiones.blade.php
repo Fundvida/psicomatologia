@@ -489,35 +489,35 @@
             preConfirm: () => {
                 return document.getElementById('justificacion').value;
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const justificacion = result.value;
-                var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    $.ajax({
-                        url: '/paciente/cancelarSesion',
-                        type: 'POST',
-                        data: {
-                            'sesion_id': sesion_id,
-                            '_token': token,
-                            'justificacion': justificacion
-                        },
-                        success: function(data) {
-                            console.log("exito!!!!  ");
-                            Swal.fire(
-                                '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
-                                `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
-                                'success'
-                            )
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 3000);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error);
-                        }
-                    }); 
-            }
-        });
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const justificacion = result.value;
+                    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        $.ajax({
+                            url: '/paciente/cancelarSesion',
+                            type: 'POST',
+                            data: {
+                                'sesion_id': sesion_id,
+                                '_token': token,
+                                'justificacion': justificacion
+                            },
+                            success: function(data) {
+                                console.log("exito!!!!  ");
+                                Swal.fire(
+                                    '<h2 class="text-center mb-4 font-alt">Eliminado</h2>',
+                                    `La sesión ha sido cancelada.<br>Motivo: ${justificacion}`,
+                                    'success'
+                                )
+                                setTimeout(function() {
+                                    window.location.reload();
+                                }, 3000);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        }); 
+                }
+            });
         }
     </script>
 

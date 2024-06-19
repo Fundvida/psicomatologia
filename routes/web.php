@@ -166,6 +166,9 @@ Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')
     ->middleware('can:paciente.files')
     ->names('paciente.files');
 
+Route::post('/admin/files', [FileController::class, 'uploadComprobanteAdmin'])
+    ->name('admin.files');
+
 Route::post('/login', [LoginController::class, 'iniciar_sesion'])->name('iniciar_sesion');
 Route::post('/logout', [LoginController::class, 'cerrar_sesion'])->name('cerrar_sesion');
 

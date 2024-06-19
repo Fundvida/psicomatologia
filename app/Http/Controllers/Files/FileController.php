@@ -175,4 +175,38 @@ class FileController extends Controller
         // Almacenar la URL anterior en la sesión
         session()->flash('previous_url', url()->previous());
     }
+
+    public function uploadComprobanteAdmin(Request $request)
+    {
+        $sesion = Sesion::where('id', $request->id_sesion)->first();
+        $sesion->pago_confirmado = 1;
+        $sesion->save();
+
+        $paciente = Paciente::select('id')->where('user_id', $request->paciente_user_id)->first();
+
+        $request->validate([
+            'file' => 'required|image|max:2048'
+        ]);
+
+        $imagen = $request->file('file')->store('public/comprobantes');
+        $url = Storage::url($imagen);
+        File::create([
+            'url' => $url,
+            'paciente_id' => $paciente->id,
+            'sesion_id' => $request->id_sesion,
+            'tipo_doc' => 'Comprobante'
+        ]);
+        // Almacenar la URL anterior en la sesión
+        session()->flash('previous_url', url()->previous());
+
+        $psicologo_id = Sesion::where('id', $request->id_sesion)->pluck('psicologo_id')->first();
+        $user_id = Psicologo::where('id', $psicologo_id)->pluck('user_id')->first();
+
+        Notificacion::create([
+            'descripcion' => 'Un usuario a realizado el pago de una sesión programada',
+            'user_id' => $user_id,
+            'sesion_id' => $request->id_sesion,
+        ]);
+        return redirect()->route('listadoAllSesiones');
+    }
 }

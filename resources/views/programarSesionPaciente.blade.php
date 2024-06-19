@@ -322,7 +322,6 @@
                                     <div class="mb-3">
                                         <label for="modalidad" class="form-label">Modalidad <span class="text-danger">*</span></label>
                                         <select id="modalidad" name="modalidad" class="form-select" required>
-                                            <option value="">Selecciona la modalidad</option>
                                             <option value="Virtual">Virtual</option>
                                             <option value="Presencial">Presencial</option>
                                         </select>
