@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Notificacion;
 use App\Models\Tutor;
 use App\Models\Paciente_tutor;
+use Illuminate\Database\QueryException;
 
 class PacienteController extends Controller
 {
@@ -41,111 +42,117 @@ class PacienteController extends Controller
         $psicologo = Psicologo::where('user_id', $userL->id)->first();
         $psicologo_id = $psicologo ? $psicologo->id : null;
         //return response()->json($request);
-        if($request->tipoUsuario == "menor"){
-            // PACIENTE MENOR DE EDAD
-            if($request->paciente_id == ""){
-                $user_tutor = new User();
-                $user_tutor->name                 = $request->nombres_tutor;
-                $user_tutor->apellidos            = $request->apellidos_tutor;
-                $user_tutor->email                = $request->correoElectronico;
-                $user_tutor->password             = $request->contrasena;
-                $user_tutor->contador_bloqueos    = 0;
-                $user_tutor->fecha_nacimiento     = $request->fechaNacimientoTutor;
-                $user_tutor->ci                   = $request->ci_tutor;
-                //$user_tutor->codigo_pais_telefono = $request->codigo_pais;
-                $user_tutor->telefono             = $request->telefono;
-                $user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
-                $user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
-                
-                $user_tutor->assignRole('Tutor');
-    
-                $user_tutor->save();
+        try{
+            if($request->tipoUsuario == "menor"){
+                // PACIENTE MENOR DE EDAD
+                if($request->paciente_id == ""){
+                    $user_tutor = new User();
+                    $user_tutor->name                 = $request->nombres_tutor;
+                    $user_tutor->apellidos            = $request->apellidos_tutor;
+                    $user_tutor->email                = $request->correoElectronico;
+                    $user_tutor->password             = $request->contrasena;
+                    $user_tutor->contador_bloqueos    = 0;
+                    $user_tutor->fecha_nacimiento     = $request->fechaNacimientoTutor;
+                    $user_tutor->ci                   = $request->ci_tutor;
+                    //$user_tutor->codigo_pais_telefono = $request->codigo_pais;
+                    $user_tutor->telefono             = $request->telefono;
+                    $user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    $user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    
+                    $user_tutor->assignRole('Tutor');
+        
+                    $user_tutor->save();
 
-                $user_paciente = new User();
-                $user_paciente->name = $request->nombres;
-                $user_paciente->apellidos = $request->apellidos;
-                $user_paciente->fecha_nacimiento = $request->fechaNacimiento;
-                $user_paciente->ci = $request->numeroCI;
-                $user_paciente->email = "No provided";
-                $user_paciente->password = "No provided";
-                $user_paciente->save();
-                //$user_paciente->assignRole('Paciente');
+                    $user_paciente = new User();
+                    $user_paciente->name = $request->nombres;
+                    $user_paciente->apellidos = $request->apellidos;
+                    $user_paciente->fecha_nacimiento = $request->fechaNacimiento;
+                    $user_paciente->ci = $request->numeroCI;
+                    $user_paciente->email = "No provided";
+                    $user_paciente->password = "No provided";
+                    $user_paciente->save();
+                    //$user_paciente->assignRole('Paciente');
 
-                $tutor = new Tutor();
-                $tutor->user_id = $user_tutor->id;
-                $tutor->save();
+                    $tutor = new Tutor();
+                    $tutor->user_id = $user_tutor->id;
+                    $tutor->save();
 
-                $paciente = new Paciente();
-                $paciente->user_id = $user_paciente->id;
-                $paciente->tipo_paciente = $request->tipoUsuario;
-                //$paciente->ocupacion = $request->ocupacion;
-                $paciente->isAlta = false;
-                $paciente->estado = "ACTIVO";
-                //$paciente->psicologo_id = $psicologo_id;
-                $paciente->save();
+                    $paciente = new Paciente();
+                    $paciente->user_id = $user_paciente->id;
+                    $paciente->tipo_paciente = $request->tipoUsuario;
+                    //$paciente->ocupacion = $request->ocupacion;
+                    $paciente->isAlta = false;
+                    $paciente->estado = "ACTIVO";
+                    //$paciente->psicologo_id = $psicologo_id;
+                    $paciente->save();
 
-                $paciente_tutor = new Paciente_tutor();
-                $paciente_tutor->tutor_id = $tutor->id;
-                $paciente_tutor->paciente_id = $paciente->id;
-                $paciente_tutor->save();
-                //return "paciente menor de edad creado";
-            }else{
+                    $paciente_tutor = new Paciente_tutor();
+                    $paciente_tutor->tutor_id = $tutor->id;
+                    $paciente_tutor->paciente_id = $paciente->id;
+                    $paciente_tutor->save();
+                    //return "paciente menor de edad creado";
+                }else{
 
+                }
+
+            }else {
+                // PACIENTE MAYOR DE EDAD
+                if ($request->paciente_id == "") {
+                    $user = new User();
+                    $user->name                 = $request->nombres;
+                    $user->apellidos            = $request->apellidos;
+                    $user->email                = $request->correoElectronico;
+                    $user->password             = $request->contrasena;
+                    $user->contador_bloqueos    = 0;
+                    $user->fecha_nacimiento     = $request->fechaNacimiento;
+                    $user->ci                   = $request->numeroCI;
+                    $user->codigo_pais_telefono = $request->codigo_pais;
+                    $user->telefono             = $request->telefono;
+                    $user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    
+                    $user->assignRole('Paciente');
+        
+                    $user->save();
+        
+                    $paciente = new Paciente();
+                    $paciente->user_id = $user->id;
+                    $paciente->tipo_paciente = $request->tipoUsuario;
+                    $paciente->ocupacion = $request->ocupacion;
+                    $paciente->isAlta = false;
+                    $paciente->estado = "ACTIVO";
+                    $paciente->psicologo_id = $psicologo_id;
+        
+                    $paciente->save();
+                    return redirect()->route('listaPaciente')->with('resultado', "registrado");
+                } else {
+                    $paciente = Paciente::findOrFail($request->paciente_id);
+                    //$paciente->tipo_paciente = $request->tipoUsuario;
+                    $paciente->ocupacion = $request->ocupacion;
+                    $paciente->isAlta = false;
+                    $paciente->psicologo_id = $psicologo_id;
+                    $paciente->save();
+        
+                    $user = User::findOrFail($paciente->user_id);
+                    $user->name                 = $request->nombres;
+                    $user->apellidos            = $request->apellidos;
+                    $user->email                = $request->correoElectronico;
+                    //$user->password             = $request->contrasena;
+                    $user->contador_bloqueos    = 0;
+                    $user->fecha_nacimiento     = $request->fechaNacimiento;
+                    $user->ci                   = $request->numeroCI;
+                    $user->codigo_pais_telefono = $request->codigo_pais;
+                    $user->telefono             = $request->telefono;
+                    $user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    $user->save();
+        
+                    return redirect()->route('listaPaciente')->with('resultado', "actualizado");
+                }
             }
-
-        }else {
-            // PACIENTE MAYOR DE EDAD
-            if ($request->paciente_id == "") {
-                $user = new User();
-                $user->name                 = $request->nombres;
-                $user->apellidos            = $request->apellidos;
-                $user->email                = $request->correoElectronico;
-                $user->password             = $request->contrasena;
-                $user->contador_bloqueos    = 0;
-                $user->fecha_nacimiento     = $request->fechaNacimiento;
-                $user->ci                   = $request->numeroCI;
-                $user->codigo_pais_telefono = $request->codigo_pais;
-                $user->telefono             = $request->telefono;
-                $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-                $user->respuesta_seguridad_a = $request->respuestaSeguridad;
-                
-                $user->assignRole('Paciente');
-    
-                $user->save();
-    
-                $paciente = new Paciente();
-                $paciente->user_id = $user->id;
-                $paciente->tipo_paciente = $request->tipoUsuario;
-                $paciente->ocupacion = $request->ocupacion;
-                $paciente->isAlta = false;
-                $paciente->estado = "ACTIVO";
-                $paciente->psicologo_id = $psicologo_id;
-    
-                $paciente->save();
-                return redirect()->route('listaPaciente')->with('resultado', "registrado");
-            } else {
-                $paciente = Paciente::findOrFail($request->paciente_id);
-                //$paciente->tipo_paciente = $request->tipoUsuario;
-                $paciente->ocupacion = $request->ocupacion;
-                $paciente->isAlta = false;
-                $paciente->psicologo_id = $psicologo_id;
-                $paciente->save();
-    
-                $user = User::findOrFail($paciente->user_id);
-                $user->name                 = $request->nombres;
-                $user->apellidos            = $request->apellidos;
-                $user->email                = $request->correoElectronico;
-                //$user->password             = $request->contrasena;
-                $user->contador_bloqueos    = 0;
-                $user->fecha_nacimiento     = $request->fechaNacimiento;
-                $user->ci                   = $request->numeroCI;
-                $user->codigo_pais_telefono = $request->codigo_pais;
-                $user->telefono             = $request->telefono;
-                $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-                $user->respuesta_seguridad_a = $request->respuestaSeguridad;
-                $user->save();
-    
-                return redirect()->route('listaPaciente')->with('resultado', "actualizado");
+            }catch(QueryException $e){
+            if ($e->getCode() == 23000) {
+                return redirect()->route('listaPaciente')->with('resultado', 'error');
             }
         }
     }

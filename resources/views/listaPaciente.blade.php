@@ -1117,6 +1117,17 @@
         });
     </script>
     @endif
+    @if(session('resultado') === 'error')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: "Oops...",
+                text: "Ya existe un usuario con ese correo electrónico.",
+                icon: "error"
+            });
+        });
+    </script>
+    @endif
 
 </body>
 

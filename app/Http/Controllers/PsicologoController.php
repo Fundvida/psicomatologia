@@ -14,8 +14,7 @@ use App\Models\Especialidad;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Paciente;
-use Illuminate\Support\Facades\Storage;
-use App\Models\file;
+use Illuminate\Database\QueryException;
 
 
 
@@ -55,98 +54,102 @@ class PsicologoController extends Controller
     public function store(Request $request)
     {
         //return response()->json($request);
-        if ($request->psicologo_id == "") {
-            $user = new User();
-            $user->name                 = $request->nombres;
-            $user->apellidos            = $request->apellidos;
-            $user->email                = $request->correoElectronico;
-            $user->password             = $request->contrasena;
-            //$user->role                 = "psicologo";
-            $user->contador_bloqueos     = 0;
-            $user->fecha_nacimiento      = $request->fechaNacimiento;
-            $user->ci                    = $request->ci;
-            $user->codigo_pais_telefono  = $request->codigo_pais;
-            $user->telefono              = $request->telefono;
-            $user->pregunta_seguridad_a  = $request->preguntaSeguridad;
-            $user->respuesta_seguridad_a = $request->respuestaSeguridad;
-            $user->assignRole('psicologo');
+        try{
+            if ($request->psicologo_id == "") {
+                    $user = new User();
+                    $user->name                 = $request->nombres;
+                    $user->apellidos            = $request->apellidos;
+                    $user->email                = $request->correoElectronico;
+                    $user->password             = $request->contrasena;
+                    //$user->role                 = "psicologo";
+                    $user->contador_bloqueos     = 0;
+                    $user->fecha_nacimiento      = $request->fechaNacimiento;
+                    $user->ci                    = $request->ci;
+                    $user->codigo_pais_telefono  = $request->codigo_pais;
+                    $user->telefono              = $request->telefono;
+                    $user->pregunta_seguridad_a  = $request->preguntaSeguridad;
+                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    $user->assignRole('psicologo');
 
-            $user->save();
-            // TODO FALTAN "archivos":["Screenshot_1.png"], "metodoConfirmacion":"sms" 
-            $psicologo = new Psicologo();
-            $psicologo->user_id                 = $user->id; // Recuperamos el ultimo id creado
-            $psicologo->estado                  = "ACTIVO";
-            $psicologo->fecha_funcion_titulo    = $request->fechaFuncion;
-            $psicologo->universidad             = $request->universidad;
-            $psicologo->ciudad_residencia       = $request->ciudadResidencia;
-            $psicologo->pais_residencia         = $request->paisResidencia;
-            $psicologo->descripcion_cv          = $request->descripcionCV;
+                    $user->save();
+                    // TODO FALTAN "archivos":["Screenshot_1.png"], "metodoConfirmacion":"sms" 
+                    $psicologo = new Psicologo();
+                    $psicologo->user_id                 = $user->id; // Recuperamos el ultimo id creado
+                    $psicologo->estado                  = "ACTIVO";
+                    $psicologo->fecha_funcion_titulo    = $request->fechaFuncion;
+                    $psicologo->universidad             = $request->universidad;
+                    $psicologo->ciudad_residencia       = $request->ciudadResidencia;
+                    $psicologo->pais_residencia         = $request->paisResidencia;
+                    $psicologo->descripcion_cv          = $request->descripcionCV;
 
-            $psicologo->save();
+                    $psicologo->save();
 
-            foreach ($request->especialidad as $especialidadNombre) {
-                $especialidad = new Especialidad();
-                $especialidad->psico_id = $psicologo->id;
-                $especialidad->especialidad = $especialidadNombre;
+                    foreach ($request->especialidad as $especialidadNombre) {
+                        $especialidad = new Especialidad();
+                        $especialidad->psico_id = $psicologo->id;
+                        $especialidad->especialidad = $especialidadNombre;
+                        
+                        $especialidad->save();
+                    }
+
+                    $diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes"];
+                    foreach ($diasSemana as $dia) {
+                        $horario = new Horario();
+                        $horario->psicologo_id = $psicologo->id;
+                        $horario->isDisponibleManiana = false;
+                        $horario->isDisponibleTarde = false;
+                        $horario->dia = $dia;
+                        $horario->save();
+                    }
+
+                    //return redirect()->route('mntPsicologo.index')->with('resultado', "registrado");
+                    return redirect()->route('listaPsicologo')->with('resultado', "registrado");
                 
-                $especialidad->save();
+            } else {
+                $psicologo = Psicologo::findOrFail($request->psicologo_id);
+
+                $psicologo->fecha_funcion_titulo    = $request->fechaFuncion;
+                $psicologo->universidad             = $request->universidad;
+                $psicologo->ciudad_residencia       = $request->ciudadResidencia;
+                $psicologo->pais_residencia         = $request->paisResidencia;
+                $psicologo->descripcion_cv          = $request->descripcionCV;
+
+                $psicologo->save();
+
+                $user = User::findOrFail($psicologo->user_id);
+
+                $user->name                 = $request->nombres;
+                $user->apellidos            = $request->apellidos;
+                $user->email                = $request->correoElectronico;
+                //$user->password             = $request->contrasena;
+                $user->contador_bloqueos    = 0;
+                $user->fecha_nacimiento     = $request->fechaNacimiento;
+                $user->ci                   = $request->ci;
+                $user->codigo_pais_telefono = $request->codigo_pais;
+                $user->telefono             = $request->telefono;
+                $user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                $user->save();
+
+                // Eliminar las especialidades existentes
+                Especialidad::where('psico_id', $psicologo->id)->delete();
+
+                // Iterar sobre las especialidades recibidas y crear un nuevo registro para cada una
+                foreach ($request->especialidad as $especialidadNombre) {
+                    $especialidad = new Especialidad();
+                    $especialidad->psico_id = $psicologo->id;
+                    $especialidad->especialidad = $especialidadNombre;
+                    $especialidad->save();
+                    return redirect()->route('listaPsicologo')->with('resultado', "actualizado");
             }
-
-            $diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes"];
-            foreach ($diasSemana as $dia) {
-                $horario = new Horario();
-                $horario->psicologo_id = $psicologo->id;
-                $horario->isDisponibleManiana = false;
-                $horario->isDisponibleTarde = false;
-                $horario->dia = $dia;
-                $horario->save();
             }
-
-            //return redirect()->route('mntPsicologo.index')->with('resultado', "registrado");
-            return redirect()->route('listaPsicologo')->with('resultado', "registrado");
-        } else {
-            $psicologo = Psicologo::findOrFail($request->psicologo_id);
-
-            $psicologo->fecha_funcion_titulo    = $request->fechaFuncion;
-            $psicologo->universidad             = $request->universidad;
-            $psicologo->ciudad_residencia       = $request->ciudadResidencia;
-            $psicologo->pais_residencia         = $request->paisResidencia;
-            $psicologo->descripcion_cv          = $request->descripcionCV;
-
-            $psicologo->save();
-
-            $user = User::findOrFail($psicologo->user_id);
-
-            $user->name                 = $request->nombres;
-            $user->apellidos            = $request->apellidos;
-            $user->email                = $request->correoElectronico;
-            //$user->password             = $request->contrasena;
-            $user->contador_bloqueos    = 0;
-            $user->fecha_nacimiento     = $request->fechaNacimiento;
-            $user->ci                   = $request->ci;
-            $user->codigo_pais_telefono = $request->codigo_pais;
-            $user->telefono             = $request->telefono;
-            $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-            $user->respuesta_seguridad_a = $request->respuestaSeguridad;
-            $user->save();
-
-        // Eliminar las especialidades existentes
-        Especialidad::where('psico_id', $psicologo->id)->delete();
-
-        // Iterar sobre las especialidades recibidas y crear un nuevo registro para cada una
-        foreach ($request->especialidad as $especialidadNombre) {
-            $especialidad = new Especialidad();
-            $especialidad->psico_id = $psicologo->id;
-            $especialidad->especialidad = $especialidadNombre;
-            $especialidad->save();
+        }catch(QueryException $e){
+            if ($e->getCode() == 23000) {
+                return redirect()->route('listaPsicologo')->with('resultado', 'error');
+            }
         }
 
-            //return redirect()->route('mntPsicologo.index')->with('resultado', "actualizado");
-            return redirect()->route('listaPsicologo')->with('resultado', "actualizado");
-        }
-        
-
-        return response()->json($request);
+        //return response()->json($request);
     }
 
     public function edit($id)
