@@ -590,7 +590,7 @@
                 <div class="modal-body">
 
                     <div id="uploaded-documents">
-                        <h5>Documentos subidos:</h5>
+                        <!-- <h5 id="title-modal-docs">Documentos subidos:</h5>  -->
                         <div class="notification-body" id="document-list">
                             
                         </div>
@@ -878,6 +878,7 @@
                         // Recorrer los datos y agregar filas a la tabla
                         $.each(data, function(index,sesiones) {
                             console.log(sesiones);
+                            console.log('.....');
                             // TODO estado de las sesiones: Terminado, Cancelado , activo
                             var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
                             var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
@@ -886,7 +887,9 @@
                             var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
                             var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
-                            var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , '${horaFin}', '${paciente_ci}', '${sesiones.name}', '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion})" title='Editar Sesión'></i>`
+                            var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , 
+                                                                                                                                            '${horaFin}', '${paciente_ci}', '${sesiones.name}', 
+                                                                                                                                            '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion}, ${sesiones.isTerminado})" title='Editar Sesión'></i>`
                             :'<i class="fas fa-edit" style="color: ##7B7D7D;"  aria-hidden="true"></i>';
                             var icon_upload = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ? 
                                 `<i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>`: 
@@ -942,8 +945,16 @@
             }
         });
 
-        function editarSesion(sesion_id, fecha, horaInicio, horaFin, ci, nombre, apellidos, descripcion, diagnostico, archivos, estadoSesion, estadoPago){
-            console.log(ci);
+        function editarSesion(sesion_id, fecha, horaInicio, 
+                            horaFin, ci, nombre, apellidos, 
+                            descripcion, diagnostico, isTerminado){
+
+            console.log(isTerminado)
+            if (isTerminado) {
+                document.getElementById('btn-sesion-fin').disabled = false;
+            }else {
+                document.getElementById('btn-sesion-fin').disabled = true;
+            }
             ciForm = ci == 'No especificado'? '': ci;
 
             document.getElementById('sesion_id_').value = sesion_id;
@@ -1092,36 +1103,84 @@
             $('#formularioRegistroModal').modal('show');
         }
 
-        function subir (sesion_id){
-            //console.log("subir imagen");
+        // function subir (sesion_id){
+        //     //console.log("subir imagen");
+        //     var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
+        //     document.getElementById('sesion_ids').value = sesion_id;
+
+        //     var isTerminada = estadoSesion(sesion_id);
+        //     loadDocuments(sesion_id, isTerminada);
+
+        //     modal.show();
+        // }
+        async function subir(sesion_id) {
             var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
             document.getElementById('sesion_ids').value = sesion_id;
 
-            loadDocuments(sesion_id);
-            estadoSesion(sesion_id);
+            try {
+                var isTerminada = await estadoSesion(sesion_id);
+                loadDocuments(sesion_id, isTerminada);
+            } catch (error) {
+                console.error('Error al verificar el estado de la sesión:', error);
+            }
 
             modal.show();
         }
 
-        function estadoSesion (sesion_id){
-            $.ajax({
-                url: '/sesion/estado/'+sesion_id,
-                type: 'GET',
-                success: function(data) {
-                    var form = document.getElementById('my-awesome-dropzone');
-                    if(data.estado == 'Terminada'){
-                        form.style.display = 'none'; 
-                    }else {
-                        form.style.display = 'block'; 
+        // function estadoSesion (sesion_id){
+        //     var isTerminada = true;
+        //     $.ajax({
+        //         url: '/sesion/estado/'+sesion_id,
+        //         type: 'GET',
+        //         success: function(data) {
+        //             var form = document.getElementById('my-awesome-dropzone');
+        //             if(data.estado == 'Terminada'){
+        //                 isTerminada = true;
+        //                 console.log('esta terminada true');
+        //                 form.style.display = 'none'; 
+        //                 document.getElementById('subirDocLabel').textContent = 'Documentos subidos';
+        //             }else {
+        //                 isTerminada = false;
+        //                 console.log('no esta terminada false');
+        //                 form.style.display = 'block'; 
+        //                 document.getElementById('subirDocLabel').textContent = 'Subir Documentos';
+        //             }
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error(error);
+        //         }
+        //     }); 
+
+        //     return isTerminada;
+        // }
+        function estadoSesion(sesion_id) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/sesion/estado/' + sesion_id,
+                    type: 'GET',
+                    success: function(data) {
+                        var form = document.getElementById('my-awesome-dropzone');
+                        if (data.estado == 'Terminada') {
+                            form.style.display = 'none'; 
+                            document.getElementById('subirDocLabel').textContent = 'Documentos subidos';
+                            resolve(true);
+                        } else {
+                            form.style.display = 'block'; 
+                            document.getElementById('subirDocLabel').textContent = 'Subir Documentos';
+                            resolve(false);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                        reject(error);
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            }); 
+                });
+            });
         }
 
-        function loadDocuments(sesion_id) {
+
+        function loadDocuments(sesion_id, isTerminada) {
+            console.log(isTerminada);
             fetch(`/sesion/${sesion_id}/documents`)
                 .then(response => response.json())
                 .then(data => {
@@ -1135,24 +1194,44 @@
                     data.forEach(document => {
                         const extension = document.url.split('.').pop().toLowerCase();
 
-                        if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
-                            htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
-                                            <a href="${document.url}" target="_blank"><img src="${document.url}" alt="${document.url}" width="100" height="75"></a>
-                                            <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
-                                                <button type"submit" class="btn btn-danger">Eliminar</button>
-                                            </form>
-                                            </div>`;
-                        } else {
-                            htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
-                                            <a href="${document.url}" target="_blank" width="100">documento</a>
-                                            <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
-                                                <button type"submit" class="btn btn-danger">Eliminar</button>
-                                            </form>
-                                            </div>`;
+                        if(isTerminada){
+                            if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                                htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                                <a href="${document.url}" target="_blank"><img src="${document.url}" alt="${document.url}" width="100" height="75"></a>
+                                                <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                                </form>
+                                                </div>`;
+                            } else {
+                                htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                                <a href="${document.url}" target="_blank" width="100">documento</a>
+                                                <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                                </form>
+                                                </div>`;
+                            }
+                        }else{
+                            if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                                htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                                <a href="${document.url}" target="_blank"><img src="${document.url}" alt="${document.url}" width="100" height="75"></a>
+                                                <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                                    <button type"submit" class="btn btn-danger">Eliminar</button>
+                                                </form>
+                                                </div>`;
+                            } else {
+                                htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                                <a href="${document.url}" target="_blank" width="100">documento</a>
+                                                <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                                    <button type"submit" class="btn btn-danger">Eliminar</button>
+                                                </form>
+                                                </div>`;
+                            }
                         }
                     });
 
@@ -1414,7 +1493,7 @@
 
         function finalizarSesion (){
             var sesion_id = document.getElementById('btn-sesion-fin').value;
-            console.log(sesion_id);
+            //console.log(sesion_id);
 
             Swal.fire({
                 title: "Estas seguro?",
