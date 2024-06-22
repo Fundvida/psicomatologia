@@ -121,7 +121,7 @@ class PacienteController extends Controller
                     $paciente->ocupacion = $request->ocupacion;
                     $paciente->isAlta = false;
                     $paciente->estado = "ACTIVO";
-                    $paciente->psicologo_id = $psicologo_id;
+                    //$paciente->psicologo_id = $psicologo_id;
         
                     $paciente->save();
                     return redirect()->route('listaPaciente')->with('resultado', "registrado");
@@ -130,7 +130,7 @@ class PacienteController extends Controller
                     //$paciente->tipo_paciente = $request->tipoUsuario;
                     $paciente->ocupacion = $request->ocupacion;
                     $paciente->isAlta = false;
-                    $paciente->psicologo_id = $psicologo_id;
+                    //$paciente->psicologo_id = $psicologo_id;
                     $paciente->save();
         
                     $user = User::findOrFail($paciente->user_id);
