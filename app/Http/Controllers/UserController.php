@@ -80,4 +80,9 @@ class UserController extends Controller
     {
         return view('cambiarContraseña');
     }
+
+    public function notificaciones()
+    {
+        return view('notificaciones');
+    }
 }

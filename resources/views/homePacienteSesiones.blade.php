@@ -466,9 +466,7 @@
                 }, 3000);
             });
         }
-    </script>
-
-    <script>
+    
         function confirmarCancelar(sesion_id) {
             console.log(sesion_id);
             Swal.fire({

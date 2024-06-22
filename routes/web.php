@@ -181,8 +181,6 @@ Route::get('/test', function () {
 });
 
 
-
-
 Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']); // TODO agregar restricciones todos los users incluidos
 Route::post('/notificaciones/mark-all-read', [NotificacionController::class, 'markAllAsRead']); // TODO agregar restricciones todos los users incluidos
 
@@ -266,3 +264,7 @@ Route::get('/getPsicologos/especialidad', [PsicologoController::class, 'getPsico
 Route::get('/psicologo/designar/{paciente_id}/{psicologo_id}', [PsicologoController::class, 'designarPsicologo']);
 
 Route::post('/psicologo/disponibilidad', [HorarioController::class, 'verificarDisponibilidad']);
+
+Route::get('/user/notificaciones', [NotificacionController::class, 'getAllNotifications'])
+    //->middleware('can:cambiarContraseña')
+    ->name('user.view.notificaciones');

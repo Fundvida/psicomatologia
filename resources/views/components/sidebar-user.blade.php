@@ -56,5 +56,10 @@
                 <li><a href="{{ route('cambiarContraseña') }}" style="color: #fff;">Cambiar Contraseña</a></li>
             </ul>
         </li>
+        <li class="custom-menu-item custom-font-alt">NOTIFICACIONES
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('user.view.notificaciones') }}" style="color: #fff;">Aviso de pagos</a></li>
+            </ul>
+        </li>
     </ul>
 </div>
