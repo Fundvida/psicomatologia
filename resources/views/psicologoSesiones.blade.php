@@ -509,7 +509,7 @@
                                         <th>Cancelar Sesión</th>
                                         <th>Ver Comprobante</th>
                                         <th>Detalle de la sesión</th>
-                                        <th>Subir</th>
+                                        <th>Documentos</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">

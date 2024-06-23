@@ -410,6 +410,7 @@ class HorarioController extends Controller
                             ->where('fecha_hora_inicio', $fechaHoraInicio)
                             ->where('fecha_hora_fin', $fechaHoraFin)
                             ->exists();
+
             if(!$sesionActiva){
                 $hora = (int) substr($horario['hora_inicio'], 0, 2);
 
@@ -452,6 +453,37 @@ class HorarioController extends Controller
     
                 $finalEvents[] = $eventoDisponible;
             } 
+            else{
+                $hora = (int) substr($horario['hora_inicio'], 0, 2);
+
+                if ($hora < 12) {
+                    $eventoDisponible = [
+                        'color' => 'red',
+                        'description' => 'Horario disponible',
+                        'dia' => $horario['dia'],
+                        'end' => $fechaFin, 
+                        'hora_fin' => $horario['hora_fin'],
+                        'hora_inicio' => $horario['hora_inicio'],
+                        'start' => $fechaInicio, 
+                        'title' => 'No disponible',
+                        'turno' => $horario['turno']
+                    ];
+                } else {
+                    $eventoDisponible = [
+                        'color' => 'red',
+                        'description' => 'Horario disponible',
+                        'dia' => $horario['dia'],
+                        'end' => $fechaFin, 
+                        'hora_fin' => $horario['hora_fin'],
+                        'hora_inicio' => $horario['hora_inicio'],
+                        'start' => $fechaInicio, 
+                        'title' => 'No disponible',
+                        'turno' => $horario['turno']
+                    ];
+                }
+    
+                $finalEvents[] = $eventoDisponible;
+            }
         }
 
         return response()->json($finalEvents);

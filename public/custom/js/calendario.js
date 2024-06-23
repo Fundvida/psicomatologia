@@ -135,15 +135,17 @@ const displayCalendar = (psicologo_id) => {
                 }
             }
 
+            var titulo = info.event.title;
+            if(titulo != "No disponible"){
+                info.event.setProp('backgroundColor', 'green');
+                info.event.setProp('title', 'Seleccionado');
+                // Store the clicked event
+                previouslyClickedEvent = info.event;
+                console.log(convetToDBFormat(info.event.start));
+                console.log(convetToDBFormat(info.event.end));
 
-            info.event.setProp('backgroundColor', 'red');
-            info.event.setProp('title', 'Seleccionado');
-            // Store the clicked event
-            previouslyClickedEvent = info.event;
-            console.log(convetToDBFormat(info.event.start));
-            console.log(convetToDBFormat(info.event.end));
-
-            guardarHorario(info.event.extendedProps.turno, info.event.extendedProps.dia, convetToDBFormat(info.event.start), convetToDBFormat(info.event.end))
+                guardarHorario(info.event.extendedProps.turno, info.event.extendedProps.dia, convetToDBFormat(info.event.start), convetToDBFormat(info.event.end), titulo)
+            }
         },
     });
     calendar.render();

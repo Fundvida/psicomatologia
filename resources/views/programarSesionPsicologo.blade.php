@@ -656,23 +656,26 @@
                     if (previouslyClickedEvent !== null) {
                         previouslyClickedEvent.setProp('title', 'Disponible');
                         if (previouslyClickedEvent.extendedProps.turno == '1') {
-                            console.log('orange');
+                            //console.log('orange');
                             previouslyClickedEvent.setProp('backgroundColor', 'orange'); // Change to original color
                         } else if (previouslyClickedEvent.extendedProps.turno == '2') {
-                            console.log('purple');
+                            //console.log('purple');
                             previouslyClickedEvent.setProp('backgroundColor', 'purple'); // Change to original color
                         }
                     }
 
 
-                    info.event.setProp('backgroundColor', 'red');
-                    info.event.setProp('title', 'Seleccionado');
-                    // Store the clicked event
-                    previouslyClickedEvent = info.event;
-                    console.log(convetToDBFormat(info.event.start));
-                    console.log(convetToDBFormat(info.event.end));
+                    var titulo = info.event.title;
+                    if(titulo != "No disponible"){
+                        info.event.setProp('backgroundColor', 'green');
+                        info.event.setProp('title', 'Seleccionado');
+                        // Store the clicked event
+                        previouslyClickedEvent = info.event;
+                        //console.log(convetToDBFormat(info.event.start));
+                        //console.log(convetToDBFormat(info.event.end));
 
-                    guardarHorario(info.event.extendedProps.turno, info.event.extendedProps.dia, convetToDBFormat(info.event.start), convetToDBFormat(info.event.end))
+                        guardarHorario(info.event.extendedProps.turno, info.event.extendedProps.dia, convetToDBFormat(info.event.start), convetToDBFormat(info.event.end), titulo)
+                    }
                 },
             });
             calendar.render();
@@ -800,29 +803,32 @@
             document.getElementById('paciente_nombre').value = pacienteNombre ? pacienteNombre : 'Paciente no seleccionado';
         });
 
-        function guardarHorario (turno, dia, hora_inicio, hora_fin) {
-            selectedHorarios = {
-                turno: turno,
-                dia: dia,
-                fecha_hora_inicio: hora_inicio,
-                fecha_hora_fin: hora_fin,
-            };
-            console.log(selectedHorarios);
-            let fechaInicio = new Date(selectedHorarios.fecha_hora_inicio);
-            let fechaFin = new Date(selectedHorarios.fecha_hora_fin);
+        function guardarHorario (turno, dia, hora_inicio, hora_fin, titulo) {
+            //console.log(titulo ,' <----');
+            if(titulo != "No disponible"){                
+                selectedHorarios = {
+                    turno: turno,
+                    dia: dia,
+                    fecha_hora_inicio: hora_inicio,
+                    fecha_hora_fin: hora_fin,
+                };
+                //console.log(selectedHorarios);
+                let fechaInicio = new Date(selectedHorarios.fecha_hora_inicio);
+                let fechaFin = new Date(selectedHorarios.fecha_hora_fin);
 
-            fechaInicio.setHours(fechaInicio.getHours() + 7);
-            fechaFin.setHours(fechaFin.getHours() + 7);
+                fechaInicio.setHours(fechaInicio.getHours() + 7);
+                fechaFin.setHours(fechaFin.getHours() + 7);
 
-            const fechaInicioStr = fechaInicio.toISOString().split('T')[0]; 
-            const horaInicioStr = fechaInicio.toTimeString().split(' ')[0].substring(0, 5);
+                const fechaInicioStr = fechaInicio.toISOString().split('T')[0]; 
+                const horaInicioStr = fechaInicio.toTimeString().split(' ')[0].substring(0, 5);
 
-            const horaFinStr = fechaFin.toTimeString().split(' ')[0].substring(0, 5); 
+                const horaFinStr = fechaFin.toTimeString().split(' ')[0].substring(0, 5); 
 
-            document.getElementById('fechaAgenda').value = fechaInicioStr;
-            document.getElementById('horaInicio').value = horaInicioStr;
-            document.getElementById('horaFin').value = horaFinStr;
-            $('#formularioRegistroModal').modal('show');
+                document.getElementById('fechaAgenda').value = fechaInicioStr;
+                document.getElementById('horaInicio').value = horaInicioStr;
+                document.getElementById('horaFin').value = horaFinStr;
+                $('#formularioRegistroModal').modal('show');
+            }
         }
 
 

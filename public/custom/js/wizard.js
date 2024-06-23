@@ -24,14 +24,16 @@ let dataToSend = {
 }
 tabShow(currentTab);
 
-const guardarHorario = (turno, dia, hora_inicio, hora_fin) => {
-    selectedHorarios = {
-        turno: turno,
-        dia: dia,
-        fecha_hora_inicio: hora_inicio,
-        fecha_hora_fin: hora_fin,
-    };
-    console.log(selectedHorarios);
+const guardarHorario = (turno, dia, hora_inicio, hora_fin, titulo) => {
+    if(titulo != "No disponible"){    
+        selectedHorarios = {
+            turno: turno,
+            dia: dia,
+            fecha_hora_inicio: hora_inicio,
+            fecha_hora_fin: hora_fin,
+        };
+        console.log(selectedHorarios);
+    }
 }
 function tabShow(n) {
     var x = document.getElementsByClassName("step");
