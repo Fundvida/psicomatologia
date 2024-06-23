@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
+            $table->foreignId('usermenor_id')->nullable();
             $table->foreignId('psicologo_id')->nullable();
             $table->string('tipo_paciente')->nullable();
             $table->string('ocupacion')->nullable();

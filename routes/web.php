@@ -150,7 +150,8 @@ Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'
     ->middleware('can:paciente.listar')
     ->name('paciente.listar');
 
-Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXRol']);
+//Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXRol']);
+Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXRol2']);
 //->name('psicologo.pacientes');
 
 Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])
@@ -268,3 +269,12 @@ Route::post('/psicologo/disponibilidad', [HorarioController::class, 'verificarDi
 Route::get('/user/notificaciones', [NotificacionController::class, 'getAllNotifications'])
     //->middleware('can:cambiarContraseña')
     ->name('user.view.notificaciones');
+
+
+
+
+
+
+Route::get('/paciente/getPrueba', [PacienteController::class, 'listaPacienteXRol2'])
+    //->middleware('can:paciente.edit')
+    ->name('paciente.test'); // get paciente x id

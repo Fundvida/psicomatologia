@@ -13,6 +13,8 @@ use App\Models\Notificacion;
 use App\Models\Tutor;
 use App\Models\Paciente_tutor;
 use Illuminate\Database\QueryException;
+use App\Models\PacienteMenor;
+use Illuminate\Support\Facades\DB;
 
 class PacienteController extends Controller
 {
@@ -63,22 +65,26 @@ class PacienteController extends Controller
         
                     $user_tutor->save();
 
-                    $user_paciente = new User();
+                    // $user_paciente = new User();
+                    // $user_paciente->email = "No provided";
+                    // $user_paciente->password = "No provided";
+                    // $user_paciente->save();
+                    //$user_paciente->assignRole('Paciente');
+                    
+                    $user_paciente = new PacienteMenor();
                     $user_paciente->name = $request->nombres;
                     $user_paciente->apellidos = $request->apellidos;
                     $user_paciente->fecha_nacimiento = $request->fechaNacimiento;
+                    $user_paciente->estado = "ACTIVO"; 
                     $user_paciente->ci = $request->numeroCI;
-                    $user_paciente->email = "No provided";
-                    $user_paciente->password = "No provided";
                     $user_paciente->save();
-                    //$user_paciente->assignRole('Paciente');
 
                     $tutor = new Tutor();
                     $tutor->user_id = $user_tutor->id;
                     $tutor->save();
 
                     $paciente = new Paciente();
-                    $paciente->user_id = $user_paciente->id;
+                    $paciente->usermenor_id = $user_paciente->id;
                     $paciente->tipo_paciente = $request->tipoUsuario;
                     //$paciente->ocupacion = $request->ocupacion;
                     $paciente->isAlta = false;
@@ -90,7 +96,7 @@ class PacienteController extends Controller
                     $paciente_tutor->tutor_id = $tutor->id;
                     $paciente_tutor->paciente_id = $paciente->id;
                     $paciente_tutor->save();
-                    //return "paciente menor de edad creado";
+                    return redirect()->route('listaPaciente')->with('resultado', "registrado");
                 }else{
 
                 }
@@ -150,7 +156,7 @@ class PacienteController extends Controller
                     return redirect()->route('listaPaciente')->with('resultado', "actualizado");
                 }
             }
-            }catch(QueryException $e){
+        }catch(QueryException $e){
             if ($e->getCode() == 23000) {
                 return redirect()->route('listaPaciente')->with('resultado', 'error');
             }
@@ -263,58 +269,132 @@ class PacienteController extends Controller
         return view('listaPacienteXPsicologo');
     }
 
-    public function listaPacienteXRol (Request $request){
+    // public function listaPacienteXRol (Request $request){
+    //     $user = Auth::user();
+    //     $psicologo = Psicologo::where('user_id', $user->id)->first();
+
+    //     $roles = $user->getRoleNames(); // Obtiene los roles del usuario autenticado
+    //     $nombreRol = $roles->isNotEmpty() ? $roles->first() : 'Sin rol';
+
+    //     $query = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+    //              ->where('pacientes.estado', 'ACTIVO');
+
+    //     if ($psicologo) {
+    //         $query->where('pacientes.psicologo_id', $psicologo->id);
+    //     }
+
+    //     // Aplicar filtros si están presentes en la solicitud
+    //     if ($request->filled('nombre')) {
+    //         $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+    //     }
+
+    //     if ($request->filled('ci')) {
+    //         $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+    //     }
+
+    //     // if ($request->tipo !== 'todos') {
+    //     //     if ($request->tipo == 'mayor') {
+    //     //         $query->where('pacientes.tipo_paciente', 'mayor');
+    //     //     } elseif ($request->tipo == 'menor') {
+    //     //         $query->where('pacientes.tipo_paciente', 'menor');
+    //     //     }
+    //     // }
+
+    //     $datos = $query->select('users.*', 'pacientes.*')->get();
+
+    //     // if($psicologo){
+    //     //     $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+    //     //           ->where('pacientes.psicologo_id', $psicologo->id) 
+    //     //           ->where('pacientes.estado', 'ACTIVO')
+    //     //           ->select('users.*', 'pacientes.*') 
+    //     //           ->get();
+    //     // } else {
+    //     //     $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
+    //     //           ->where('pacientes.estado', 'ACTIVO')
+    //     //           ->select('users.*', 'pacientes.*') 
+    //     //           ->get();
+    //     // }
+
+    //     // return response()->json($datos);
+    //     $respuesta = [
+    //         'datos' => $datos,
+    //         'rol' => $nombreRol
+    //     ];
+    //     return response()->json($respuesta);
+    // }
+
+    public function listaPacienteXRol2 (Request $request){
         $user = Auth::user();
         $psicologo = Psicologo::where('user_id', $user->id)->first();
 
         $roles = $user->getRoleNames(); // Obtiene los roles del usuario autenticado
         $nombreRol = $roles->isNotEmpty() ? $roles->first() : 'Sin rol';
 
-        $query = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
-                 ->where('pacientes.estado', 'ACTIVO');
+        // Obtener pacientes mayores (que tienen cuenta de usuario)
+        $pacientesMayores = DB::table('users')
+        ->join('pacientes as p', 'users.id', '=', 'p.user_id')
+        ->where('p.estado', 'ACTIVO')
+        ->select(
+            'users.id as user_id', 
+            'users.name', 
+            'users.apellidos', 
+            'users.fecha_nacimiento', 
+            'users.ci', 
+            'users.telefono', 
+            'p.tipo_paciente'
+        );
 
+        // Aplicar filtros a pacientes mayores
         if ($psicologo) {
-            $query->where('pacientes.psicologo_id', $psicologo->id);
+            $pacientesMayores->where('p.psicologo_id', $psicologo->id);
         }
 
-        // Aplicar filtros si están presentes en la solicitud
         if ($request->filled('nombre')) {
-            $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+            $pacientesMayores->where('users.name', 'LIKE', '%' . $request->nombre . '%');
         }
 
         if ($request->filled('ci')) {
-            $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+            $pacientesMayores->where('users.ci', 'LIKE', '%' . $request->ci . '%');
         }
 
-        // if ($request->tipo !== 'todos') {
-        //     if ($request->tipo == 'mayor') {
-        //         $query->where('pacientes.tipo_paciente', 'mayor');
-        //     } elseif ($request->tipo == 'menor') {
-        //         $query->where('pacientes.tipo_paciente', 'menor');
-        //     }
-        // }
+        // Obtener pacientes menores (que no tienen cuenta de usuario)
+        $pacientesMenores = DB::table('pacienteMenor')
+            ->join('pacientes as p', 'pacienteMenor.id', '=', 'p.usermenor_id')
+            ->join('paciente_tutor as tp', 'p.id', '=', 'tp.paciente_id')
+            ->join('tutors as t', 'tp.tutor_id', '=', 't.id')
+            ->join('users as tu', 'tu.id', '=', 't.user_id')
+            ->where('p.estado', 'ACTIVO')
+            ->select(
+                'pacienteMenor.id as user_id', 
+                'pacienteMenor.name as name', 
+                'pacienteMenor.apellidos', 
+                'pacienteMenor.fecha_nacimiento', 
+                'pacienteMenor.ci', 
+                'tu.telefono', 
+                'p.tipo_paciente'
+            );
 
-        $datos = $query->select('users.*', 'pacientes.*')->get();
+        if ($psicologo) {
+            $pacientesMenores->where('p.psicologo_id', $psicologo->id);
+        }
+    
+        if ($request->filled('nombre')) {
+            $pacientesMenores->where('pacienteMenor.name', 'LIKE', '%' . $request->nombre . '%');
+        }
+    
+        if ($request->filled('ci')) {
+            $pacientesMenores->where('pacienteMenor.ci', 'LIKE', '%' . $request->ci . '%');
+        }
 
-        // if($psicologo){
-        //     $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
-        //           ->where('pacientes.psicologo_id', $psicologo->id) 
-        //           ->where('pacientes.estado', 'ACTIVO')
-        //           ->select('users.*', 'pacientes.*') 
-        //           ->get();
-        // } else {
-        //     $datos = User::join('pacientes', 'users.id', '=', 'pacientes.user_id')
-        //           ->where('pacientes.estado', 'ACTIVO')
-        //           ->select('users.*', 'pacientes.*') 
-        //           ->get();
-        // }
+        $datos = $pacientesMayores->union($pacientesMenores)->get();
 
-        // return response()->json($datos);
         $respuesta = [
             'datos' => $datos,
             'rol' => $nombreRol
         ];
         return response()->json($respuesta);
+
+        //return response()->json($query);
     }
 
     public function getPacienteNombre (Request $request){

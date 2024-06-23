@@ -13,7 +13,7 @@ class Tutor extends Model
 
     public function pacientes()
     {
-        return $this->belongsToMany(Paciente::class, 'paciente_tutor', 'tutor_id', 'paciente_id')
+        return $this->belongsToMany(PacienteMenor::class, 'paciente_tutor', 'tutor_id', 'paciente_id')
                     ->withTimestamps();
     }
 }

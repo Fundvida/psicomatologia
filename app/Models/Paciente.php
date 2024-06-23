@@ -14,6 +14,11 @@ class Paciente extends Model
         return $this->belongsTo(User::class, "user_id");
     }
 
+    public function usermenor()
+    {
+        return $this->belongsTo(PacienteMenor::class, "usermenor_id");
+    }
+
     public function sesiones()
     {
         return $this->hasMany(Sesion::class, 'paciente_id');

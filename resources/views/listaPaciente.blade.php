@@ -687,7 +687,8 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        //console.log(data);
+                        console.log("ahora")
+                        console.log(data);
                         var pacientes = data.datos;
                         var rol = data.rol;
                         var titleElement = document.getElementById('title-user');
@@ -837,6 +838,21 @@
                         $('#ci_tutor').val('');
                         $('#fechaNacimientoTutor').val('');
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+            //prueba();
+        }
+
+        function prueba (){
+            $.ajax({
+                url: '/paciente/getPrueba',
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
                 },
                 error: function(xhr, status, error) {
                     console.log(error);
