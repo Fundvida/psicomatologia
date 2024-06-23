@@ -461,7 +461,7 @@
                     <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones Programadas</h2>
                     <p class="lead fw-normal text-muted mb-5 ttNorms" style="line-height: 1.5em;">Consulta las sesiones que tienes programadas para estar al tanto de tus compromisos y seguir el progreso de tus pacientes. </p>
                     <div class="text-end mb-3">
-                        <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="limpiar()">
+                        <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="window.location.href='{{ route('psicologo.sesion') }}'">>
                             <i class="bi bi-person-plus-fill me-2"></i> Programar nueva Sesión
                         </button>
                     </div>

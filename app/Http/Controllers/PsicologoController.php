@@ -410,17 +410,55 @@ class PsicologoController extends Controller
 
     public function getAllSesiones(){
 
-        $resultados = DB::table('sesions')
-            ->join('pacientes as pas', 'sesions.paciente_id', '=' , 'pas.id')
-            ->join('psicologos as psi', 'sesions.psicologo_id', '=' , 'psi.id')
-            ->join('users as pu', 'pas.user_id', '=', 'pu.id')
-            ->join('users as ps', 'psi.user_id', '=', 'ps.id')
-            ->select('pu.name as nombre_paciente', 'pu.apellidos as apellido_paciente',
-            'ps.name as nombre_psicologo', 'ps.apellidos as apellido_psicologo',
-            'sesions.estado', 'sesions.pago_confirmado', 'sesions.modalidad', 'sesions.id as sesion_id',
-            'pu.id as paciente_user_id')
-            ->get();
+        // $resultados = DB::table('sesions')
+        //     ->join('pacientes as pas', 'sesions.paciente_id', '=' , 'pas.id')
+        //     ->join('psicologos as psi', 'sesions.psicologo_id', '=' , 'psi.id')
+        //     ->join('users as pu', 'pas.user_id', '=', 'pu.id')
+        //     ->join('users as ps', 'psi.user_id', '=', 'ps.id')
+        //     ->select('pu.name as nombre_paciente', 'pu.apellidos as apellido_paciente',
+        //     'ps.name as nombre_psicologo', 'ps.apellidos as apellido_psicologo',
+        //     'sesions.estado', 'sesions.pago_confirmado', 'sesions.modalidad', 'sesions.id as sesion_id',
+        //     'pu.id as paciente_user_id')
+        //     ->get();
             
+        // return response()->json($resultados);
+        $sesiones_mayores = DB::table('sesions')
+        ->join('pacientes as pas', 'sesions.paciente_id', '=', 'pas.id')
+        ->join('psicologos as psi', 'sesions.psicologo_id', '=', 'psi.id')
+        ->join('users as pu', 'pas.user_id', '=', 'pu.id')
+        ->join('users as ps', 'psi.user_id', '=', 'ps.id')
+        ->select(
+            'pu.name as nombre_paciente', 
+            'pu.apellidos as apellido_paciente',
+            'ps.name as nombre_psicologo', 
+            'ps.apellidos as apellido_psicologo',
+            'sesions.estado', 
+            'sesions.pago_confirmado', 
+            'sesions.modalidad', 
+            'sesions.id as sesion_id',
+            'pu.id as paciente_user_id'
+        );
+
+        // Consulta para sesiones de pacientes menores de edad
+        $sesiones_menores = DB::table('sesions')
+            ->join('pacientes as pas', 'sesions.paciente_id', '=', 'pas.id')
+            ->join('psicologos as psi', 'sesions.psicologo_id', '=', 'psi.id')
+            ->join('pacienteMenor as pm', 'pas.usermenor_id', '=', 'pm.id')
+            ->join('users as ps', 'psi.user_id', '=', 'ps.id')
+            ->select(
+                'pm.name as nombre_paciente', 
+                'pm.apellidos as apellido_paciente',
+                'ps.name as nombre_psicologo', 
+                'ps.apellidos as apellido_psicologo',
+                'sesions.estado', 
+                'sesions.pago_confirmado', 
+                'sesions.modalidad', 
+                'sesions.id as sesion_id',
+                'pm.id as paciente_user_id'
+            );
+
+        $resultados = $sesiones_mayores->union($sesiones_menores)->get();
+
         return response()->json($resultados);
     }
 

@@ -126,6 +126,7 @@ class SesionController extends Controller
                     $sesion->psicologo_id= $request->input('psicologo_id');
                     $sesion->descripcion_sesion=$request->input('adicional_info');
                     $sesion->solicitante= $paciente->id;
+                    $sesion->modalidad= "Presencial";
                     $fecha_hora_inicio = Carbon::parse($request->input('fecha_hora_inicio'));
                     $fecha_hora_fin = Carbon::parse($request->input('fecha_hora_fin'));
 
@@ -879,6 +880,11 @@ class SesionController extends Controller
 
     public function estadoSesion ($sesion_id){
         $sesion = Sesion::select('estado')->where('id', $sesion_id)->first();
+        return $sesion;
+    }
+
+    public function diagnosticoSesion ($sesion_id){
+        $sesion = Sesion::select('calificacion_descripcion')->where('id', $sesion_id)->first();
         return $sesion;
     }
 }

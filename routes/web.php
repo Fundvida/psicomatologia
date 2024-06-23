@@ -259,6 +259,8 @@ Route::get('/sesion/terminada/{sesion_id}', [SesionController::class, 'terminarS
 
 Route::get('/sesion/estado/{sesion_id}', [SesionController::class, 'estadoSesion']);
 
+Route::get('/sesion/diagnostico/{sesion_id}', [SesionController::class, 'diagnosticoSesion']);
+
 Route::get('/getPsicologos/especialidad', [PsicologoController::class, 'getPsicologosEspecialidades']);
 
 // routes/web.php
