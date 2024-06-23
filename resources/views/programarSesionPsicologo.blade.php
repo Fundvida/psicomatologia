@@ -344,7 +344,7 @@
                                         <label for="desc_sesion">Nota adicional de sesion: <span class="text-secondary">(opcional)</span></label><br>
                                         <textarea id="desc_sesion" name="desc_sesion" class="form-control"></textarea>
                                     </div>
-                                    <label>Duración de la sesión: <span class="text-danger">*</span></label>
+                                    <label>Duración de la sesión: </label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>

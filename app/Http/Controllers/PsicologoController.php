@@ -36,12 +36,28 @@ class PsicologoController extends Controller
         $psicologo_id = Psicologo::where('user_id', $user->id)->value('id');
 
         // estado= ACTIVO, isAlta = 0
-        $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
-                            ->join('users', 'pacientes.user_id', '=', 'users.id')
+        // $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
+        //                     ->join('users', 'pacientes.user_id', '=', 'users.id')
+        //                     ->where('pacientes.psicologo_id', $psicologo_id)
+        //                     ->where('pacientes.estado', '=', 'ACTIVO')
+        //                     ->where('pacientes.isAlta', '=', '0')
+        //                     ->get();
+        $pacientes_mayor = DB::table('pacientes')
+        ->select('users.ci', 'users.name', 'users.apellidos', 'users.id as user_id', 'pacientes.id as paciente_id')
+        ->join('users', 'pacientes.user_id', '=', 'users.id')
+        ->where('pacientes.psicologo_id', $psicologo_id)
+        ->where('pacientes.estado', '=', 'ACTIVO')
+        ->where('pacientes.isAlta', '=', '0');
+
+        $pacientes_menor = DB::table('pacientes')
+                            ->select('pacienteMenor.ci', 'pacienteMenor.name', 'pacienteMenor.apellidos', 'pacienteMenor.id as user_id', 'pacientes.id as paciente_id')
+                            ->join('pacienteMenor', 'pacientes.usermenor_id', '=', 'pacienteMenor.id')
                             ->where('pacientes.psicologo_id', $psicologo_id)
                             ->where('pacientes.estado', '=', 'ACTIVO')
-                            ->where('pacientes.isAlta', '=', '0')
-                            ->get();
+                            ->where('pacientes.isAlta', '=', '0');
+
+        $pacientes = $pacientes_mayor->union($pacientes_menor)->get();
+
         return view('programarSesionPsicologo', compact('pacientes'));
     }
 
@@ -92,7 +108,7 @@ class PsicologoController extends Controller
                         $especialidad->save();
                     }
 
-                    $diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes"];
+                    $diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
                     foreach ($diasSemana as $dia) {
                         $horario = new Horario();
                         $horario->psicologo_id = $psicologo->id;

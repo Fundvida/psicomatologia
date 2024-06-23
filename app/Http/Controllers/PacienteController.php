@@ -64,12 +64,6 @@ class PacienteController extends Controller
                     $user_tutor->assignRole('Tutor');
         
                     $user_tutor->save();
-
-                    // $user_paciente = new User();
-                    // $user_paciente->email = "No provided";
-                    // $user_paciente->password = "No provided";
-                    // $user_paciente->save();
-                    //$user_paciente->assignRole('Paciente');
                     
                     $user_paciente = new PacienteMenor();
                     $user_paciente->name = $request->nombres;
@@ -89,7 +83,7 @@ class PacienteController extends Controller
                     //$paciente->ocupacion = $request->ocupacion;
                     $paciente->isAlta = false;
                     $paciente->estado = "ACTIVO";
-                    //$paciente->psicologo_id = $psicologo_id;
+                    $paciente->psicologo_id = $psicologo_id;
                     $paciente->save();
 
                     $paciente_tutor = new Paciente_tutor();
@@ -98,9 +92,37 @@ class PacienteController extends Controller
                     $paciente_tutor->save();
                     return redirect()->route('listaPaciente')->with('resultado', "registrado");
                 }else{
+                    $paciente_tutor = Paciente_tutor::where('paciente_id', $request->paciente_id)->first();
+                    $tutor = Tutor::where('id', $paciente_tutor->tutor_id)->first();
 
+                    $user_tutor = User::findOrFail($tutor->user_id);
+                    $user_tutor->name                 = $request->nombres_tutor;
+                    $user_tutor->apellidos            = $request->apellidos_tutor;
+                    $user_tutor->email                = $request->correoElectronico;
+                    //$user_tutor->password             = $request->contrasena;
+                    //$user_tutor->contador_bloqueos    = 0;
+                    $user_tutor->fecha_nacimiento     = $request->fechaNacimientoTutor;
+                    $user_tutor->ci                   = $request->ci_tutor;
+                    //$user_tutor->codigo_pais_telefono = $request->codigo_pais;
+                    $user_tutor->telefono             = $request->telefono;
+                    $user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    $user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    $user_tutor->save();
+
+                    $paciente = Paciente::findOrFail($request->paciente_id);
+                    $paciente->isAlta = false;
+                    $paciente->save();
+
+                    $user_paciente = PacienteMenor::where('id', $paciente->usermenor_id)->first();
+                    $user_paciente->name = $request->nombres;
+                    $user_paciente->apellidos = $request->apellidos;
+                    $user_paciente->fecha_nacimiento = $request->fechaNacimiento;
+                    $user_paciente->estado = "ACTIVO"; 
+                    $user_paciente->ci = $request->numeroCI;
+                    $user_paciente->save();
+
+                    return redirect()->route('listaPaciente')->with('resultado', "actualizado");
                 }
-
             }else {
                 // PACIENTE MAYOR DE EDAD
                 if ($request->paciente_id == "") {
@@ -127,7 +149,7 @@ class PacienteController extends Controller
                     $paciente->ocupacion = $request->ocupacion;
                     $paciente->isAlta = false;
                     $paciente->estado = "ACTIVO";
-                    //$paciente->psicologo_id = $psicologo_id;
+                    $paciente->psicologo_id = $psicologo_id;
         
                     $paciente->save();
                     return redirect()->route('listaPaciente')->with('resultado', "registrado");
@@ -144,7 +166,7 @@ class PacienteController extends Controller
                     $user->apellidos            = $request->apellidos;
                     $user->email                = $request->correoElectronico;
                     //$user->password             = $request->contrasena;
-                    $user->contador_bloqueos    = 0;
+                    //$user->contador_bloqueos    = 0;
                     $user->fecha_nacimiento     = $request->fechaNacimiento;
                     $user->ci                   = $request->numeroCI;
                     $user->codigo_pais_telefono = $request->codigo_pais;
@@ -166,18 +188,30 @@ class PacienteController extends Controller
     public function edit($id)
     {
         $paciente = Paciente::findOrFail($id);
-        $user = User::findOrFail($paciente->user_id);
-        $tutor = null;
-
         if($paciente->tipo_paciente == 'menor'){
-            //join('pacientes', 'users.id', '=', 'pacientes.user_id')
             $tutor = Paciente_tutor::where('paciente_id', $paciente->id)
-            ->join('tutors as t', 'paciente_tutor.tutor_id','=','t.id')
-            ->join('users as u', 't.user_id', '=', 'u.id')
-            ->select('t.id as tutor_id', 'u.name as nombre_tutor', 'u.apellidos as apellido_tutor',
-            'u.telefono', 'u.respuesta_seguridad_a as resp_tutor', 'u.pregunta_seguridad_a as preg_tutor',
-            'u.ci', 'u.fecha_nacimiento', 'u.ocupacion', 'u.email')
+            ->join('tutors as t', 't.id', '=', 'paciente_tutor.tutor_id')
+            ->join('users as u', 't.user_id', '=','u.id')
+            ->select('u.name', 'u.apellidos', 'u.email', 'u.ci', 'u.fecha_nacimiento',
+            'u.telefono', 'u.pregunta_seguridad_a as preg_tutor', 'u.respuesta_seguridad_a as resp_tutor')
             ->first();
+
+            $user = DB::table('pacientemenor as pm')
+            ->join('pacientes as p', 'pm.id', '=', 'p.usermenor_id')
+            ->where('p.estado', 'ACTIVO')
+            ->where('p.id', $paciente->id)
+            ->select(
+                'pm.id as id', 
+                'pm.name', 
+                'pm.apellidos', 
+                'pm.fecha_nacimiento', 
+                'pm.ci', 
+                'p.tipo_paciente',
+                'p.id'
+            )->first();
+        }else {
+            $user = User::findOrFail($paciente->user_id);
+            $tutor = null;
         }
 
         return [
@@ -195,6 +229,7 @@ class PacienteController extends Controller
         Sesion::where('paciente_id', $paciente->id)->delete();
 
         $paciente->estado = "INACTIVO";
+        $paciente->psicologo_id = null;
         $paciente->motivo = $request->justificacion;
         
         $paciente->save();
@@ -335,7 +370,7 @@ class PacienteController extends Controller
         ->join('pacientes as p', 'users.id', '=', 'p.user_id')
         ->where('p.estado', 'ACTIVO')
         ->select(
-            'users.id as user_id', 
+            'p.id as id', 
             'users.name', 
             'users.apellidos', 
             'users.fecha_nacimiento', 
@@ -365,7 +400,7 @@ class PacienteController extends Controller
             ->join('users as tu', 'tu.id', '=', 't.user_id')
             ->where('p.estado', 'ACTIVO')
             ->select(
-                'pacienteMenor.id as user_id', 
+                'p.id as id', 
                 'pacienteMenor.name as name', 
                 'pacienteMenor.apellidos', 
                 'pacienteMenor.fecha_nacimiento', 

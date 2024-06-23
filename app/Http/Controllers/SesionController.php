@@ -18,8 +18,11 @@ use Illuminate\Validation\ValidationException;
 use App\Models\Pago;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notificacion;
+use App\Models\Paciente_tutor;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use App\Models\Tutor;
 
 class SesionController extends Controller
 {
@@ -314,13 +317,50 @@ class SesionController extends Controller
         $psicologo_id = Psicologo::where('user_id', $user->id)->value('id');
 
         // estado= ACTIVO, isAlta = 0
-        $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
+        // $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
+        //                     ->join('users', 'pacientes.user_id', '=', 'users.id')
+        //                     ->where('pacientes.psicologo_id', $psicologo_id)
+        //                     ->where('pacientes.estado', '=', 'ACTIVO')
+        //                     ->where('pacientes.isAlta', '=', '0')
+        //                     ->get();
+        
+        // $pacientes_menor = Paciente::select('u.ci','u.name', 'u.apellidos','u.id as user_id', 'pacientes.id as paciente_id')
+        //                     ->join('pacienteMenor u', 'pacientes.usermenor_id', '=', 'u.id')
+        //                     ->where('pacientes.psicologo_id', $psicologo_id)
+        //                     ->where('pacientes.estado', '=', 'ACTIVO')
+        //                     ->where('pacientes.isAlta', '=', '0')
+        //                     ->get();
+
+        DB::listen(function ($query) {
+            Log::info($query->sql, $query->bindings);
+        });
+
+        // return view('psicologoSesiones', compact('pacientes_menor'));
+        // Primera consulta
+        $pacientes_mayor = DB::table('pacientes')
+                            ->select('users.ci', 'users.name', 'users.apellidos', 'users.id as user_id', 'pacientes.id as paciente_id')
                             ->join('users', 'pacientes.user_id', '=', 'users.id')
                             ->where('pacientes.psicologo_id', $psicologo_id)
                             ->where('pacientes.estado', '=', 'ACTIVO')
-                            ->where('pacientes.isAlta', '=', '0')
-                            ->get();
+                            ->where('pacientes.isAlta', '=', '0');
 
+        Log::info('SQL de pacientes:', [$pacientes_mayor->toSql()]);
+
+        // Segunda consulta
+        $pacientes_menor = DB::table('pacientes')
+                            ->select('pacienteMenor.ci', 'pacienteMenor.name', 'pacienteMenor.apellidos', 'pacienteMenor.id as user_id', 'pacientes.id as paciente_id')
+                            ->join('pacienteMenor', 'pacientes.usermenor_id', '=', 'pacienteMenor.id')
+                            ->where('pacientes.psicologo_id', $psicologo_id)
+                            ->where('pacientes.estado', '=', 'ACTIVO')
+                            ->where('pacientes.isAlta', '=', '0');
+
+        Log::info('SQL de pacientes_menor:', [$pacientes_menor->toSql()]);
+
+        // Combinar ambas consultas usando union
+        $pacientes = $pacientes_mayor->union($pacientes_menor)->get();
+
+
+        // Retornar la vista con los datos combinados
         return view('psicologoSesiones', compact('pacientes'));
     }
 
@@ -328,25 +368,86 @@ class SesionController extends Controller
         $user = Auth::user();
         $psicologo = Psicologo::where('user_id', $user->id)->first();
 
-        $query = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
-        'sesions.calificacion', 'sesions.fecha_hora_inicio', 'sesions.fecha_hora_fin', 'sesions.id as sesion_id',
-        'sesions.modalidad','users.ci', 'users.name', 'users.apellidos', 
-        'pagos.isTerminado', 'pacientes.id as id_paciente')
+        // $query = Sesion::select('sesions.estado', 'sesions.descripcion_sesion', 'sesions.calificacion_descripcion', 
+        // 'sesions.calificacion', 'sesions.fecha_hora_inicio', 'sesions.fecha_hora_fin', 'sesions.id as sesion_id',
+        // 'sesions.modalidad','users.ci', 'users.name', 'users.apellidos', 
+        // 'pagos.isTerminado', 'pacientes.id as id_paciente')
+        // ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+        // ->join('users', 'pacientes.user_id', '=', 'users.id')
+        // ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+        // ->where('sesions.psicologo_id', $psicologo->id);
+
+        // Aplicar filtros si están presentes en la solicitud
+        // if ($request->filled('nombre')) {
+        //     $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+        // }
+
+        // if ($request->filled('ci')) {
+        //     $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+        // }
+
+        // $sessions = $query->orderBy('sesion_id', 'desc')->get();
+        $sesiones_mayores = DB::table('sesions')
+        ->select(
+            'sesions.estado', 
+            'sesions.descripcion_sesion', 
+            'sesions.calificacion_descripcion', 
+            'sesions.calificacion', 
+            'sesions.fecha_hora_inicio', 
+            'sesions.fecha_hora_fin', 
+            'sesions.id as sesion_id', 
+            'sesions.modalidad', 
+            'users.ci', 
+            'users.name', 
+            'users.apellidos', 
+            'pagos.isTerminado', 
+            'pacientes.id as id_paciente'
+        )
         ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
         ->join('users', 'pacientes.user_id', '=', 'users.id')
         ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
         ->where('sesions.psicologo_id', $psicologo->id);
 
-        // Aplicar filtros si están presentes en la solicitud
         if ($request->filled('nombre')) {
-            $query->where('users.name', 'LIKE', '%' . $request->nombre . '%');
+            $sesiones_mayores->where('users.name', 'LIKE', '%' . $request->nombre . '%');
         }
-
+    
         if ($request->filled('ci')) {
-            $query->where('users.ci', 'LIKE', '%' . $request->ci . '%');
+            $sesiones_mayores->where('users.ci', 'LIKE', '%' . $request->ci . '%');
         }
 
-        $sessions = $query->orderBy('sesion_id', 'desc')->get();
+        // Consulta para sesiones de pacientes menores de edad
+        $sesiones_menores = DB::table('sesions')
+            ->select(
+                'sesions.estado', 
+                'sesions.descripcion_sesion', 
+                'sesions.calificacion_descripcion', 
+                'sesions.calificacion', 
+                'sesions.fecha_hora_inicio', 
+                'sesions.fecha_hora_fin', 
+                'sesions.id as sesion_id', 
+                'sesions.modalidad', 
+                'pacienteMenor.ci', 
+                'pacienteMenor.name', 
+                'pacienteMenor.apellidos', 
+                'pagos.isTerminado', 
+                'pacientes.id as id_paciente'
+            )
+            ->join('pacientes', 'sesions.paciente_id', '=', 'pacientes.id')
+            ->join('pacienteMenor', 'pacientes.usermenor_id', '=', 'pacienteMenor.id')
+            ->join('pagos', 'sesions.id', '=', 'pagos.sesion_id')
+            ->where('sesions.psicologo_id', $psicologo->id);
+
+        if ($request->filled('nombre')) {
+            $sesiones_menores->where('pacienteMenor.name', 'LIKE', '%' . $request->nombre . '%');
+        }
+    
+        if ($request->filled('ci')) {
+            $sesiones_menores->where('pacienteMenor.ci', 'LIKE', '%' . $request->ci . '%');
+        }
+
+        // Combinar ambas consultas usando union
+        $sessions = $sesiones_mayores->union($sesiones_menores)->orderBy('sesion_id', 'desc')->get();
 
         return response()->json($sessions);
     }
@@ -715,7 +816,7 @@ class SesionController extends Controller
         $sesion_anterior = Sesion::where('paciente_id', $request->paciente_id)
                             ->where('estado', 'activo')->first();
         if(!$sesion_anterior){
-            $paciente_user_id = Paciente::select('user_id')->where('id', $request->paciente_id)->first();
+            $paciente = Paciente::where('id', $request->paciente_id)->first();
                 
             $sesion = new Sesion();
             $sesion->estado = 'activo';
@@ -743,11 +844,23 @@ class SesionController extends Controller
             $pago->pago_tipo='';
             $pago->save();
 
-            Notificacion::create([
-                'descripcion' => 'Su psicologo acaba de programar una nueva sesión.',
-                'user_id' => $paciente_user_id->user_id,
-                'sesion_id' => $sesion->id,
-            ]);
+            if($paciente->tipo_paciente == "menor"){
+                $paciente_tutor = Paciente_tutor::where('paciente_id', $paciente->id)->first();
+                $tutor = Tutor::where('id', $paciente_tutor->tutor_id)->first();
+
+                Notificacion::create([
+                    'descripcion' => 'Su psicologo acaba de programar una nueva sesión con su paciente.',
+                    'user_id' => $tutor->user_id,
+                    'sesion_id' => $sesion->id,
+                ]);
+            }else {
+                Notificacion::create([
+                    'descripcion' => 'Su psicologo acaba de programar una nueva sesión.',
+                    'user_id' => $paciente->user_id,
+                    'sesion_id' => $sesion->id,
+                ]);
+            }
+
             return "exito";
         }
         

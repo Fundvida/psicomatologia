@@ -687,8 +687,8 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        console.log("ahora")
-                        console.log(data);
+                        //console.log("ahora")
+                        //console.log(data);
                         var pacientes = data.datos;
                         var rol = data.rol;
                         var titleElement = document.getElementById('title-user');
@@ -702,7 +702,6 @@
 
                         $('#pacientes-body').empty();
                         $.each(pacientes, function(index, paciente) {
-                            //console.log(paciente);
                             var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
                             var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
                             var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 
@@ -804,27 +803,15 @@
                 url: '/paciente/' + paciente_id + '/edit',
                 type: 'GET',
                 success: function(response) {
-                    //console.log(response);
                     $('#tipoUsuario').val(response.paciente.tipo_paciente).change();
                     updateFechaNacimiento();
+
                     let tipo = '';
-                    $('#paciente_id').val(response.paciente.id);
-                    // Data de la tabla user
-                    $('#nombres').val(response.user.name);
-                    $('#apellidos').val(response.user.apellidos);
-                    $('#fechaNacimiento').val(response.user.fecha_nacimiento);
-                    $('#numeroCI').val(response.user.ci);
-                    $('#correoElectronico').val(response.user.email);
-                    $('#contrasena').val(response.user.password);
-                    $('#telefono').val(response.user.telefono);
-                    $('#preguntaSeguridad').val(response.user.pregunta_seguridad_a);
-                    $('#respuestaSeguridad').val(response.user.respuesta_seguridad_a);
-                    // Data de la tabla paciente
-                    $('#ocupacion').val(response.paciente.ocupacion);
                     tipo = response.paciente.tipo_paciente;
+
                     if(tipo == "menor"){
-                        $('#nombres_tutor').val(response.tutor.nombre_tutor);
-                        $('#apellidos_tutor').val(response.tutor.apellido_tutor);
+                        $('#nombres_tutor').val(response.tutor.name);
+                        $('#apellidos_tutor').val(response.tutor.apellidos);
                         $('#ci_tutor').val(response.tutor.ci);
                         $('#fechaNacimientoTutor').val(response.tutor.fecha_nacimiento);
                         $('#ocupacion').val(response.tutor.ocupacion);
@@ -832,12 +819,33 @@
                         $('#telefono').val(response.tutor.telefono);
                         $('#preguntaSeguridad').val(response.tutor.preg_tutor);
                         $('#respuestaSeguridad').val(response.tutor.resp_tutor);
+
+                        // DATOS PACIENTE
+                        $('#nombres').val(response.user.name);
+                        $('#apellidos').val(response.user.apellidos);
+                        $('#fechaNacimiento').val(response.user.fecha_nacimiento);
+                        $('#numeroCI').val(response.user.ci);
                     }else {
                         $('#nombres_tutor').val('');
                         $('#apellidos_tutor').val('');
                         $('#ci_tutor').val('');
                         $('#fechaNacimientoTutor').val('');
+
+                        // Data de la tabla user
+                        $('#nombres').val(response.user.name);
+                        $('#apellidos').val(response.user.apellidos);
+                        $('#fechaNacimiento').val(response.user.fecha_nacimiento);
+                        $('#numeroCI').val(response.user.ci);
+                        $('#correoElectronico').val(response.user.email);
+                        $('#contrasena').val(response.user.password);
+                        $('#telefono').val(response.user.telefono);
+                        $('#preguntaSeguridad').val(response.user.pregunta_seguridad_a);
+                        $('#respuestaSeguridad').val(response.user.respuesta_seguridad_a);
+                        // Data de la tabla paciente
+                        $('#ocupacion').val(response.paciente.ocupacion);
                     }
+                    $('#paciente_id').val(response.paciente.id);
+                    
                 },
                 error: function(xhr, status, error) {
                     console.log(error);
