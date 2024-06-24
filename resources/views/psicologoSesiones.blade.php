@@ -889,7 +889,7 @@
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
                             var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , 
                                                                                                                                             '${horaFin}', '${paciente_ci}', '${sesiones.name}', 
-                                                                                                                                            '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', ${sesiones.calificacion}, ${sesiones.isTerminado})" title='Editar Sesión'></i>`
+                                                                                                                                            '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', '${sesiones.calificacion_descripcion}', ${sesiones.isTerminado})" title='Editar Sesión'></i>`
                             :'<i class="fas fa-edit" style="color: ##7B7D7D;"  aria-hidden="true"></i>';
                             var icon_upload = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ? 
                                 `<i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>`: 

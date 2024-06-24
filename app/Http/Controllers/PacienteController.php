@@ -376,7 +376,8 @@ class PacienteController extends Controller
             'users.fecha_nacimiento', 
             'users.ci', 
             'users.telefono', 
-            'p.tipo_paciente'
+            'p.tipo_paciente',
+            'p.psicologo_id'
         );
 
         // Aplicar filtros a pacientes mayores
@@ -406,7 +407,8 @@ class PacienteController extends Controller
                 'pacienteMenor.fecha_nacimiento', 
                 'pacienteMenor.ci', 
                 'tu.telefono', 
-                'p.tipo_paciente'
+                'p.tipo_paciente',
+                'p.psicologo_id'
             );
 
         if ($psicologo) {

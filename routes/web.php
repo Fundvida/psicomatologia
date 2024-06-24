@@ -177,9 +177,9 @@ Route::post('/changePassword', [UserController::class, 'changePassword'])
     ->name('user.password');
 
 
-Route::get('/test', function () {
-    return view('test');
-});
+// Route::get('/test', function () {
+//     return view('test');
+// });
 
 
 Route::get('/notificaciones', [NotificacionController::class, 'getNotificationes']); // TODO agregar restricciones todos los users incluidos

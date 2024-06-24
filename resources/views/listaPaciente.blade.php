@@ -702,6 +702,7 @@
 
                         $('#pacientes-body').empty();
                         $.each(pacientes, function(index, paciente) {
+                            console.log(paciente);
                             var f_nacimiento = paciente.fecha_nacimiento == null ? 'No especificado' : paciente.fecha_nacimiento;
                             var paciente_ci = paciente.ci == null ? 'No especificado' : paciente.ci;
                             var paciente_tipo = paciente.tipo_paciente == 'mayor'? 'Paciente Mayor': 'Paciente Menor'; 

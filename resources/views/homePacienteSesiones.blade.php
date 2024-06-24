@@ -754,6 +754,7 @@
                 url: '/sesion/diagnostico/' + sesion_id,
                 type: 'GET',
                 success: function(data) {
+                    console.log(data);
                     if (data && data.calificacion_descripcion) {
                         document.getElementById('diagnostico').innerText = data.calificacion_descripcion;
                     } else {
