@@ -499,6 +499,16 @@
                                             <input class="form-check-input" type="checkbox" id="viernes" name="dias[]" value="viernes">
                                             <label class="form-check-label" for="viernesT">Viernes</label>
                                         </div>
+                                        <!-- ------------------------------- -->
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="sabado" name="dias[]" value="sabado">
+                                            <label class="form-check-label" for="sabado">Sábado</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="domingo" name="dias[]" value="domingo">
+                                            <label class="form-check-label" for="domingo">Domingo</label>
+                                        </div>
+                                        <!-- ------------------------------- -->
                                     </div>
                                 </div>
                                 <!-- Botones de guardar y cancelar para horario de la tarde -->
