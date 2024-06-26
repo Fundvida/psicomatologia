@@ -197,6 +197,54 @@
         .show {
             display: block !important;
         }
+        /* Estilos para el parrafo*/
+
+        .welcome-container {
+            background: linear-gradient(to bottom right, #ffffff, #f0f8ff);
+            max-width: 1000px;
+            border-radius: 2rem;
+            box-shadow: 0 1rem 3rem rgba(0,0,0,0.1);
+        }
+        .welcome-message {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #333;
+        }
+        .welcome-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: justify;
+            padding: 0 1rem;
+            line-height: 1.8;
+        }
+        .font-alt {
+            font-family: 'Newsreader', serif;
+            color: #e17777;
+        }
+        .lead {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #e17777;
+        }
+        .font-weight-bold {
+            font-weight: 700!important;
+            color: #000000;
+        }
+        .text-primary {
+            color: #e17777!important;
+        }
+        .display-4 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (min-width: 768px) {
+            .welcome-container {
+                padding: 3rem!important;
+            }
+            .display-4 {
+                font-size: 3rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -212,10 +260,17 @@
     <!-- Contenido principal -->
     <main class="main-content ">
         <section class="py-0 d-flex justify-content-center align-items-center" id="">
-            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
+            <div class="container px-4 text-center shadow-lg p-5 rounded-lg welcome-container">
                 <!-- Título -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">¡Bienvenido/a Psicólogo/a!</h2>
-                <p class="lead fw-normal text-muted mb-5 ttNorms">¡Gracias por acceder al Sistema de Psicología!</p>
+                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido/a Psicólogo/a!</h2>
+                <div class="welcome-message">
+                    <p class="lead mb-5 text-dark">¡Bienvenidos al Gabinete de Atención Psicológica!</p>
+                    <p class="welcome-text">Estamos encantados de darles la bienvenida a nuestro equipo de profesionales dedicados al cuidado de la salud mental. Sabemos que han elegido una profesión noble y desafiante, y estamos emocionados de tenerlos aquí para contribuir con su experiencia y pasión al servicio de nuestros pacientes.</p>
+                    <p class="welcome-text">En este gabinete, valoramos la diversidad de enfoques y perspectivas que cada uno de ustedes trae consigo. Creemos firmemente en el poder del trabajo en equipo y en el intercambio de conocimientos para ofrecer la mejor atención posible a quienes confían en nosotros para su bienestar emocional.</p>
+                    <p class="welcome-text">Queremos que se sientan apoyados y empoderados en su trabajo aquí. Estamos comprometidos a proporcionarles el ambiente y los recursos que necesitan para crecer tanto personal como profesionalmente, y a fomentar una cultura de cuidado mutuo y desarrollo continuo.</p>
+                    <p class="welcome-text">Siempre estaremos disponibles para escuchar sus ideas, preocupaciones o necesidades, así que no duden en comunicarse con nosotros en cualquier momento.</p>
+                    <p class="welcome-text font-weight-bold">¡Bienvenidos de nuevo y esperamos que su tiempo aquí sea inspirador, gratificante y lleno de oportunidades para hacer una diferencia significativa en la vida de quienes atendemos!</p>
+                </div>
             </div>
         </section>
     </main>

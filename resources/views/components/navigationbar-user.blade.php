@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
         <div class="container px-5">
-            <a class="navbar-brand fw-bold me-auto" href="#page-top" style="margin-left: -80px;">
+            <a class="navbar-brand fw-bold me-auto" href="{{ url('/') }}" style="margin-left: -80px;">
                 <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
             </a>
             <ul class="navbar-nav ml-auto flex-row-reverse flex-md-row">
