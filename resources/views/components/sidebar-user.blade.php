@@ -7,6 +7,13 @@
             </ul>
         </li>
         @endcan
+        @can('pacientesTutor')
+        <li class="custom-menu-item custom-font-alt">PACIENTES
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('tutor.pacientes') }}" style="color: #fff;">Pacientes</a></li>
+            </ul>
+        </li>
+        @endcan
         @can('listaPsicologo')
             <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
@@ -18,6 +25,12 @@
             @can('homePacienteSesiones')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('homePacienteSesiones') }}" style="color: #fff;">Mis Sesiones</a></li>
+            </ul>
+            @endcan
+            @can('tutorSesiones')
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <!-- <li><a href="{{ route('tutorSesiones') }}" style="color: #fff;">Mis Sesiones</a></li> -->
+                <li><a href="#" style="color: #fff;">Mis Sesiones</a></li>
             </ul>
             @endcan
             @can('listadoAllSesiones')

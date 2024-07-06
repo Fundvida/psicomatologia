@@ -509,6 +509,9 @@
                 case 'Psicologo':
                     window.location.href = routes.psicologo;
                     break;
+                case 'Tutor':
+                    //window.location.href = routes.psicologo;
+                    break;
             }
         }
     </script>

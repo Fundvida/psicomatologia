@@ -25,6 +25,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/paciente/home', function () {
         return view('homePaciente');
     })->name('homePaciente');
+
+    Route::get('/tutor/home', function () {
+        return view('homeTutor');
+    })->name('homeTutor');
 });
 
 Route::get('/check-auth', function () {
@@ -53,6 +57,10 @@ Route::get('/homePacienteSesiones', [PacienteController::class, 'homePacienteSes
     ->middleware('can:homePacienteSesiones')
     ->name('homePacienteSesiones');
 
+Route::get('/tutor/sesiones', [PacienteController::class, 'TutorSesiones'])
+    ->middleware('can:tutorSesiones')
+    ->name('tutorSesiones');
+
 Route::get('/listadoAllSesiones', [SesionController::class, 'listadoAllSesiones'])
     ->middleware('can:listadoAllSesiones')
     ->name('listadoAllSesiones');
@@ -79,6 +87,10 @@ Route::get('/cambiarContraseña', [UserController::class, 'cambiarContraseña'])
 Route::get('psicologo/listaPaciente', [PacienteController::class, 'listaPacienteXpsicologo_'])
     ->middleware('can:listaPaciente')
     ->name('psicologo.pacientes');
+
+Route::get('tutor/listaPaciente', [PacienteController::class, 'listaPacienteXtutor'])
+    ->middleware('can:pacientesTutor')
+    ->name('tutor.pacientes');
 
 Route::get('/listaPaciente', [PacienteController::class, 'listaPaciente'])
     ->middleware('can:listaPaciente')
@@ -138,8 +150,11 @@ Route::post('/storePaciente', [PacienteController::class, 'store'])
     ->middleware('can:paciente.store')
     ->name('paciente.store');  // crear paciente
 
+Route::post('/paciente/menor/store', [PacienteController::class, 'storePacientemenor'])
+    ->name('paciente.menor.store');  // crear paciente menor
+
 Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])
-    ->middleware('can:paciente.edit')
+    //->middleware('can:paciente.edit')
     ->name('paciente.edit'); // get paciente x id
 
 Route::post('/paciente/del', [PacienteController::class, 'delete'])
@@ -153,6 +168,8 @@ Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'
 //Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXRol']);
 Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXRol2']);
 //->name('psicologo.pacientes');
+
+Route::get('/tutor/getPacientes', [PacienteController::class, 'listaPacienteTutor']);
 
 Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])
     ->middleware('can:paciente.delSesion')

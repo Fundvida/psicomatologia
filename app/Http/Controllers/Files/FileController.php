@@ -12,6 +12,8 @@ use App\Models\Sesion;
 use Illuminate\Support\Facades\Log;
 use App\Models\Pago;
 use App\Models\Paciente;
+use App\Models\Paciente_tutor;
+use App\Models\Tutor;
 
 class FileController extends Controller
 {
@@ -98,11 +100,21 @@ class FileController extends Controller
         $sesion = Sesion::where('id', $sesion_id)->first();
         $paciente = Paciente::where('id', $sesion->paciente_id)->first();
         
-        Notificacion::create([
-            'descripcion' => 'Comprobante aprobado exitosamente!',
-            'user_id' => $paciente->user_id,
-            'sesion_id' => $sesion_id,
-        ]);
+        if($paciente->tipo_paciente == "menor"){
+            $paciente_tutor = Paciente_tutor::where('paciente_id', $paciente->id)->first();
+            $tutor = Tutor::where('id', $paciente_tutor->tutor_id)->first();
+            Notificacion::create([
+                'descripcion' => 'Comprobante rechazado vuelva a subir su comprobante.',
+                'user_id' => $tutor->user_id,
+                'sesion_id' => $sesion_id,
+            ]);
+        } else {
+            Notificacion::create([
+                'descripcion' => 'Comprobante aprobado exitosamente!',
+                'user_id' => $paciente->user_id,
+                'sesion_id' => $sesion_id,
+            ]);
+        }
     }
 
     public function rechazarComprobante($sesion_id){
@@ -117,11 +129,21 @@ class FileController extends Controller
 
         $paciente = Paciente::where('id', $sesion->paciente_id)->first();
         
-        Notificacion::create([
-            'descripcion' => 'Comprobante rechazado vuelva a subir su comprobante.',
-            'user_id' => $paciente->user_id,
-            'sesion_id' => $sesion_id,
-        ]);
+        if($paciente->tipo_paciente == "menor"){
+            $paciente_tutor = Paciente_tutor::where('paciente_id', $paciente->id)->first();
+            $tutor = Tutor::where('id', $paciente_tutor->tutor_id)->first();
+            Notificacion::create([
+                'descripcion' => 'Comprobante rechazado vuelva a subir su comprobante.',
+                'user_id' => $tutor->user_id,
+                'sesion_id' => $sesion_id,
+            ]);
+        } else {
+            Notificacion::create([
+                'descripcion' => 'Comprobante rechazado vuelva a subir su comprobante.',
+                'user_id' => $paciente->user_id,
+                'sesion_id' => $sesion_id,
+            ]);
+        }
     }
 
     public function upload(Request $request){
@@ -192,7 +214,7 @@ class FileController extends Controller
         $url = Storage::url($imagen);
         File::create([
             'url' => $url,
-            'paciente_id' => $paciente->id,
+            'paciente_id' => $sesion->paciente_id,
             'sesion_id' => $request->id_sesion,
             'tipo_doc' => 'Comprobante'
         ]);
