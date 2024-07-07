@@ -552,11 +552,14 @@ class PacienteController extends Controller
     }
 
     public function listaPacienteTutor (){
+        $user = Auth::user();
+        $tutor = Tutor::where('user_id', $user->id)->first();
         $pacientes = DB::table('pacienteMenor')
             ->join('pacientes as p', 'pacienteMenor.id', '=', 'p.usermenor_id')
             ->join('paciente_tutor as tp', 'p.id', '=', 'tp.paciente_id')
             ->join('tutors as t', 'tp.tutor_id', '=', 't.id')
             ->join('users as tu', 'tu.id', '=', 't.user_id')
+            ->where('tp.tutor_id', '=', $tutor->id)
             ->where('p.estado', 'ACTIVO')
             ->select(
                 'p.id as id', 
