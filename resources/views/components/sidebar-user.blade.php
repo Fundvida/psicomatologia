@@ -8,9 +8,9 @@
         </li>
         @endcan
         @can('pacientesTutor')
-        <li class="custom-menu-item custom-font-alt">PACIENTES
+        <li class="custom-menu-item custom-font-alt">Lista de menores de edad
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                <li><a href="{{ route('tutor.pacientes') }}" style="color: #fff;">Pacientes</a></li>
+                <li><a href="{{ route('tutor.pacientes') }}" style="color: #fff;">Lista de menores de edad</a></li>
             </ul>
         </li>
         @endcan

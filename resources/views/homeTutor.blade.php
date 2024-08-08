@@ -201,9 +201,12 @@
         <section class="py-0 d-flex justify-content-center align-items-center" id="">
             <div class="container px-4 text-center shadow-lg p-5 rounded-lg welcome-container">
                 <!-- Título -->
-                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido/a tutor!</h2>
+                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido/a</h2>
                 <div class="welcome-message">
-                    <p class="lead mb-5 text-dark">¡Bienvenido al Gabinete de Psicología!</p>
+                    <p class="lead mb-5 text-dark">¡Bienvenidos al Gabinete de Atención Psicológica!</p>
+                    <p class="welcome-text">Nos complace darle la bienvenida y agradecer el uso de nuestra plataforma de apoyo psicológico para niños(as) y adolescentes. Esta herramienta está diseñada para ofrecer un apoyo en el bienestar emocional y psicológico de los menores de edad, nuestro compromiso es proporcionar una experiencia positiva y enriquecedora que contribuya al crecimiento saludable de los niños(as) y adolescentes.</p>
+                    <p class="welcome-text font-weight-bold">¡Bienvenidos de nuevo y esperamos que su tiempo aquí sea inspirador, gratificante y lleno de oportunidades para hacer una diferencia significativa en la vida de quienes atendemos!</p>
+
                 </div>
             </div>
         </section>
