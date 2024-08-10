@@ -29,8 +29,7 @@
             @endcan
             @can('tutorSesiones')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                <!-- <li><a href="{{ route('tutorSesiones') }}" style="color: #fff;">Mis Sesiones</a></li> -->
-                <li><a href="#" style="color: #fff;">Mis Sesiones</a></li>
+                <li><a href="{{ route('tutor.seesiones') }}" style="color: #fff;">Mis Sesiones</a></li>
             </ul>
             @endcan
             @can('listadoAllSesiones')

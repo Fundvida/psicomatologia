@@ -541,11 +541,6 @@ class PacienteController extends Controller
                         ->where('user_id', $user->id)->first();
         return response()->json($psicologo_id);
     }
-
-    public function TutorSesiones (){
-        // TODO implementar
-        
-    }
     
     public function listaPacienteXtutor(){
         return view('listaPacienteTutor');
@@ -566,7 +561,8 @@ class PacienteController extends Controller
                 'pacienteMenor.name as name', 
                 'pacienteMenor.apellidos', 
                 'pacienteMenor.fecha_nacimiento', 
-                'pacienteMenor.ci'
+                'pacienteMenor.ci',
+                'p.psicologo_id'
             )->get();
 
         return $pacientes;

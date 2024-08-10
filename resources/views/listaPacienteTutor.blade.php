@@ -339,6 +339,23 @@
         </div>
     </div>
 
+    <!-- Registro de paciente modal -->
+    <div class="modal fade" id="formularioDesignarPsicologo" tabindex="-1" aria-labelledby="formularioDesignarPsicologolLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-alt" id="title_modal">Designar Psicologo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="contenedorPsicologos">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contenido principal -->
     <main class="main-content ">
         <section class="py-1 d-flex justify-content-center align-items-center" id="sesiones">
@@ -521,13 +538,17 @@
                         $('#pacientes-body').empty();
                         $.each(pacientes, function(index, paciente) {
                             var action_icons = `<i class="fas fa-edit" style="color: #6C757D; font-size: 22px;" onclick="editar(${paciente.id})" title="Editar"></i>`;
+                            var hasPsicologo = !paciente.psicologo_id?`<i class="fa-solid fa-user-nurse" onclick="designarPsicologo(${paciente.id})"></i>`:``;
 
                             $('#pacientes-body').append(`
                                 <tr>
                                     <td>${paciente.ci}</td>
                                     <td>${paciente.name} ${paciente.apellidos}</td>
                                     <td>${paciente.fecha_nacimiento}</td>
-                                    <td>${action_icons}</td>
+                                    <td class="action-icons">
+                                        ${action_icons}
+                                        ${hasPsicologo}
+                                    </td>
                                 </tr>
                             `);
                         });
@@ -535,6 +556,59 @@
                 });
             }
         });
+
+        function designarPsicologo(paciente_id){
+            $.ajax({
+                url: '/getPsicologos/especialidad',
+                method: 'GET',
+                success: function(data) {
+                    $('#contenedorPsicologos').empty();
+                    
+                    data.forEach(function(psicologo) {
+                        let especialidades = psicologo.especialidades.map(especialidad => `
+                            <span class="especialidad badge text-bg-success">${especialidad}</span>
+                        `).join('');
+
+                        let card = `
+                        <div class="psicologo card mb-3">
+                            <div class="card-body">
+                                <label class="card-title">Nombre: ${psicologo.nombre} ${psicologo.apellido}</label>
+                                <p class="card-text">
+                                    ${especialidades}
+                                </p>
+                                <button class="btn btn-primary" onclick="designar(${paciente_id},${psicologo.id})">Seleccionar</button>
+                            </div>
+                        </div>`;
+                        $('#contenedorPsicologos').append(card);
+                    });
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+
+            $('#formularioDesignarPsicologo').modal('show');
+        }
+
+        function designar(paciente_id,psicologo_id){
+            $.ajax({
+                url: '/psicologo/designar/' + paciente_id + '/' + psicologo_id,
+                type: 'GET',
+                success: function(response) {
+                    Swal.fire(
+                        '<h2 class="text-center mb-4 font-alt">Exito</h2>',
+                        'Psicologo designado exitosamente.',
+                        'success'
+                    );
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const fechaNacimiento = document.getElementById('fechaNacimiento');

@@ -9,6 +9,7 @@ use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\PsicologoController;
+use App\Http\Controllers\TutorController;
 use Illuminate\Support\Facades\Auth;
 
 // Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -57,9 +58,6 @@ Route::get('/homePacienteSesiones', [PacienteController::class, 'homePacienteSes
     ->middleware('can:homePacienteSesiones')
     ->name('homePacienteSesiones');
 
-Route::get('/tutor/sesiones', [PacienteController::class, 'TutorSesiones'])
-    ->middleware('can:tutorSesiones')
-    ->name('tutorSesiones');
 
 Route::get('/listadoAllSesiones', [SesionController::class, 'listadoAllSesiones'])
     ->middleware('can:listadoAllSesiones')
@@ -288,3 +286,8 @@ Route::post('/psicologo/disponibilidad', [HorarioController::class, 'verificarDi
 Route::get('/user/notificaciones', [NotificacionController::class, 'getAllNotifications'])
     //->middleware('can:cambiarContraseña')
     ->name('user.view.notificaciones');
+
+
+Route::get('/tutor/sesiones', [TutorController::class, 'getViewSesionList'])
+    ->middleware('can:tutorSesiones')
+    ->name('tutor.seesiones');
