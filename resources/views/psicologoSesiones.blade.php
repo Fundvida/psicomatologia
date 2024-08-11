@@ -305,6 +305,10 @@
             display: block !important;
         }
 
+        .icon-legend span {
+            margin-right: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -465,11 +469,18 @@
                             <i class="bi bi-person-plus-fill me-2"></i> Programar nueva Sesión
                         </button>
                     </div>
-                    <div class="row mb-3">
-                    <div class="col-md-12">
-                        <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                    <div class="icon-legend">
+                        <span><i class="fas fa-edit text-primary"></i> Editar Sesión</span>
+                        <span><i class="fas fa-times-circle text-danger"></i> Cancelar Sesión</span>
+                        <span><i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;"></i>Ver comprobante de pago</span>
+                        <span><i class="fas fa-info-circle" style="color: #7c87e4;"></i> Detalle de Sesión</span>
+                        <span><i class="fa fa-upload" style="color: #27FF00;"></i> Subir documentos</span>
                     </div>
-                </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                        </div>
+                    </div>
                 <!-- Filtros y barra de búsqueda -->
                 <div class="row mb-4">
                     <div class="col-md-3 mb-3 mb-md-0">
@@ -497,19 +508,12 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
-                                        <th>Hora Inicio/Hora Fin</th>
                                         <th>CI Paciente</th>
-                                        <th>Nombre(s)</th>
-                                        <th>Apellidos</th>
-                                        <th>Descripción de la Sesión</th>
+                                        <th>Nombre y apellido</th>
                                         <th>Estado de la Sesión</th>
-                                        <th>Estado de Pago</th>
-                                        <th>Modalidad</th>
-                                        <th>Editar Sesión</th>
-                                        <th>Cancelar Sesión</th>
-                                        <th>Ver Comprobante</th>
-                                        <th>Detalle de la sesión</th>
-                                        <th>Documentos</th>
+                                        <th>Información</th>
+                                        <th>Subir documentos</th>
+                                        <th>Operaciones</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
@@ -562,17 +566,17 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Información del Paciente</h5>
+                    <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Detalle de Sesión</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Fecha:</strong> <span id="fecha"></span></p>
-                    <p><strong>Hora:</strong> <span id="hora"></span></p>
-                    <p><strong>CI:</strong> <span id="ci"></span></p>
-                    <p><strong>Paciente:</strong> <span id="paciente"></span></p>
-                    <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
-                    <!-- <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
-                    <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p> -->
+                    <p><strong>Fecha de la Sesión:</strong> <span id="fecha"></span></p>
+                    <p><strong>CI paciente:</strong> <span id="ci"></span></p>
+                    <p><strong>Nombre paciente:</strong> <span id="paciente"></span></p>
+                    <p><strong>Descripción de la sesión:</strong> <span id="descripcion"></span></p>
+                    <p><strong>Duración:</strong> <span id="hora"></span></p>
+                    <p><strong>Modalidad:</strong> <span id="modalidad"></span></p>
+                    <p><strong>Estado de pago:</strong> <span id="pago"></span></p>
                 </div>
 
             </div>
@@ -772,15 +776,14 @@
         }
 
 
-        function mostrarInfo(fecha, hora, ci, paciente, descripcion, diagnostico, archivoAdjunto) {
-            // Inserta los datos del paciente en el modal
+        function mostrarInfo(fecha, ci, paciente, descripcion, hora, modalidad, pago) {
             document.getElementById('fecha').innerText = fecha;
             document.getElementById('hora').innerText = hora;
             document.getElementById('ci').innerText = ci;
             document.getElementById('paciente').innerText = paciente;
             document.getElementById('descripcion').innerText = descripcion;
-            //document.getElementById('diagnostico').innerText = diagnostico;
-            //document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
+            document.getElementById('modalidad').innerText = modalidad;
+            document.getElementById('pago').innerText = pago;
 
             // Muestra el modal
             $('#infoPacienteModal').modal('show');
@@ -877,8 +880,6 @@
                     
                         // Recorrer los datos y agregar filas a la tabla
                         $.each(data, function(index,sesiones) {
-                            console.log(sesiones);
-                            console.log('.....');
                             // TODO estado de las sesiones: Terminado, Cancelado , activo
                             var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
                             var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
@@ -905,28 +906,26 @@
                             $('#sesiones-body').append(`
                                 <tr>
                                     <td>${fechaInicio}</td>
-                                    <td>${horaInicio} - ${horaFin}</td>
                                     <td>${paciente_ci}</td>
-                                    <td>${sesiones.name}</td>
-                                    <td>${sesiones.apellidos}</td>
-                                    <td>${sesiones.descripcion_sesion}</td>
+                                    <td>${sesiones.name} ${sesiones.apellidos}</td>
                                     <td>${estado_sesion}</td>
-                                    <td>${estado_pago}</td>
-                                    <td>${sesiones.modalidad}</td>
                                     <td class="action-icons">
-                                        ${icon_edit_sesion}   
-                                    </td>
-                                    <td class="action-icons">
-                                        ${icon_cancel}
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
+                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo(  
+                                        '${fechaInicio}',
+                                        '${paciente_ci}', 
+                                        '${sesiones.name} ${sesiones.apellidos}', 
+                                        '${sesiones.descripcion_sesion}', 
+                                        '${horaInicio} - ${horaFin}',
+                                        '${sesiones.modalidad}',
+                                        '${estado_pago}')" title="Ver Información"></i>
                                     </td>
                                     <td class="action-icons">
                                         ${icon_upload}
+                                    </td>
+                                    <td class="action-icons">
+                                        ${icon_edit_sesion}   
+                                        ${icon_cancel}
+                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
                                     </td>
                                 </tr>
                             `);
@@ -1103,16 +1102,6 @@
             $('#formularioRegistroModal').modal('show');
         }
 
-        // function subir (sesion_id){
-        //     //console.log("subir imagen");
-        //     var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
-        //     document.getElementById('sesion_ids').value = sesion_id;
-
-        //     var isTerminada = estadoSesion(sesion_id);
-        //     loadDocuments(sesion_id, isTerminada);
-
-        //     modal.show();
-        // }
         async function subir(sesion_id) {
             var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
             document.getElementById('sesion_ids').value = sesion_id;
@@ -1127,32 +1116,6 @@
             modal.show();
         }
 
-        // function estadoSesion (sesion_id){
-        //     var isTerminada = true;
-        //     $.ajax({
-        //         url: '/sesion/estado/'+sesion_id,
-        //         type: 'GET',
-        //         success: function(data) {
-        //             var form = document.getElementById('my-awesome-dropzone');
-        //             if(data.estado == 'Terminada'){
-        //                 isTerminada = true;
-        //                 console.log('esta terminada true');
-        //                 form.style.display = 'none'; 
-        //                 document.getElementById('subirDocLabel').textContent = 'Documentos subidos';
-        //             }else {
-        //                 isTerminada = false;
-        //                 console.log('no esta terminada false');
-        //                 form.style.display = 'block'; 
-        //                 document.getElementById('subirDocLabel').textContent = 'Subir Documentos';
-        //             }
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error(error);
-        //         }
-        //     }); 
-
-        //     return isTerminada;
-        // }
         function estadoSesion(sesion_id) {
             return new Promise((resolve, reject) => {
                 $.ajax({

@@ -66,6 +66,9 @@
                         <i class="login__icon fas fa-lock"></i>
                         <input type="password" class="login__input font-alt" placeholder="Password" name="password">
                     </div>
+                    @error('email')
+                        <span class="text-danger" style="font-size:12px;">{{ $message }}</span>
+                    @enderror
                     <input type="submit" class="button login__submit font-alt" value="Iniciar Sesión"></input>
                 </form>
                 <div class="forgot-password">
