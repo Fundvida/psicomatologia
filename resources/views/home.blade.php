@@ -304,9 +304,11 @@
             const markReadBtn = document.getElementById('markReadBtn');
             const notificationItems = document.querySelectorAll('.notification-item');
             const pagarIcon = document.querySelector('.fas.fa-money-bill');
+            var profileDropdown = document.getElementById('profileDropdown');
 
             notificationIcon.addEventListener('click', function() {
                 notificationContainer.classList.toggle('show');
+                profileDropdown.style.display = 'none';
             });
 
             markReadBtn.addEventListener('click', function() {

@@ -39,13 +39,23 @@
         document.addEventListener("DOMContentLoaded", function() {
             var profileDropdown = document.getElementById('profileDropdown');
             var profileDropdownToggle = document.getElementById('profileDropdownToggle');
+            
+            const notificationContainer = document.getElementById('notificationContainer');
+            const notificationIcon = document.getElementById('notificationIcon');
+
 
             profileDropdownToggle.addEventListener('click', function() {
                 if (profileDropdown.style.display === 'none') {
                     profileDropdown.style.display = 'block';
+                    notificationContainer.classList.remove('show');
                 } else {
                     profileDropdown.style.display = 'none';
                 }
+            });
+
+            notificationIcon.addEventListener('click', function() {
+                //notificationContainer.classList.toggle('show');
+                profileDropdown.style.display = 'none';
             });
         });
     </script>
