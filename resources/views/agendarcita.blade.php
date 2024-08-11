@@ -297,7 +297,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
         <div class="container px-2">
             <!-- Logo a la izquierda -->
-            <a class="navbar-brand fw-bold" href="#page-top">
+            <a class="navbar-brand fw-bold" href="/">
                 <img src="{{ asset('images/logo gav2.png') }}" alt="Logo" style="height: 100px">
             </a>
 
@@ -308,14 +308,14 @@
             </button>
 
             <!-- Contenido del navbar: enlaces y botón de enviar feedback -->
-            <div class="collapse navbar-collapse" id="navbarResponsive">
+            <!-- <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto me-4 my-4 my-lg-1">
                     <li class="nav-item mb-3 me-3">
                         <a class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold" href="#features">ÁREA
                             DE MIEMBROS</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
 
         </div>
     </nav>
