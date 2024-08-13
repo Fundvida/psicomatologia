@@ -71,9 +71,9 @@
                     @enderror
                     <input type="submit" class="button login__submit font-alt" value="Iniciar Sesión"></input>
                 </form>
-                <div class="forgot-password">
+                <!-- <div class="forgot-password">
                     <a href="">¿Has olvidado tu contraseña?</a>
-                </div>
+                </div> -->
                 <div class="social-login">
                     <img src="{{ asset('images/logof.png') }}" alt="Logo" class="logo-fun">
                     <div class="social-icons">

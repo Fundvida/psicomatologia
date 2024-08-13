@@ -87,6 +87,12 @@
         </div>
     </div>
 
+    <!-- HTML: Alerta de éxito -->
+    <div id="myAlert" class="alert alert-success" role="alert" style="display: none;">
+        Registro exitoso!
+    </div>
+
+
     <!-- Descripción -->
     <p class="lead fw-normal text-muted mb-2 ttNorms fs-6">Por favor revise toda la información
         ingresada en los pasos anteriores. Si toda la información es correcta, confirme su

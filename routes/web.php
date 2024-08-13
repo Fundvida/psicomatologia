@@ -287,7 +287,10 @@ Route::get('/user/notificaciones', [NotificacionController::class, 'getAllNotifi
     //->middleware('can:cambiarContraseña')
     ->name('user.view.notificaciones');
 
-
 Route::get('/tutor/sesiones', [TutorController::class, 'getViewSesionList'])
     ->middleware('can:tutorSesiones')
     ->name('tutor.seesiones');
+
+// Route::get('/test', function () {
+//         return view('test');
+//     });

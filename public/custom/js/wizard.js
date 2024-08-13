@@ -219,12 +219,22 @@ const updateListPsicologysts = () => {
     bodyPsicologos = document.getElementById('body_psicologos');
     const generatePsychologistRow = psychologist => `<tr data-name=${psychologist.id}>
             <td>${psychologist.name} ${psychologist.apellidos}</td>
-            <td>${psychologist.available ? 'Sí' : 'No'}</td>
+            <td><button class="btn btn-primary" onClick="infoPsicologyst(event,${psychologist.id})">Ver mas</button><td>
             <td>
             <button class="btn btn-primary btn-paso1 fw-bold btn-select-psicologo" onClick='handleSelectPsychologist(event,${psychologist.id})'>Seleccionar</button>
             </td></tr>`;
     const psychologistHTML = psicologos.map(generatePsychologistRow).join('');
     bodyPsicologos.innerHTML = psychologistHTML;
+}
+
+const infoPsicologyst = (e, message) => {
+    e.preventDefault();
+    console.log(message, ' id de psicologo a mostrar');
+
+    var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
+        keyboard: false
+    });
+    myModal.show();
 }
 
 function showTabAfterAsync() {
@@ -376,8 +386,11 @@ function sendDataSesion() {
             return response.json();
         })
         .then(data => {
-            window.location.href = redirectUrl;
-            console.log(data);
+            //console.log(data);
+            document.getElementById('myAlert').style.display = 'block';
+            setTimeout(function(){
+                window.location.href = redirectUrl;
+            }, 5000);
         })
         .catch(error => {
             console.error('Error saving Session:', error.message);
