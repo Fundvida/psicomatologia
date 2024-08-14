@@ -227,9 +227,34 @@ const updateListPsicologysts = () => {
     bodyPsicologos.innerHTML = psychologistHTML;
 }
 
-const infoPsicologyst = (e, message) => {
+const infoPsicologyst = (e, psicologo_id) => {
     e.preventDefault();
-    console.log(message, ' id de psicologo a mostrar');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log(psicologo_id, ' id de psicologo a mostrar');
+
+    fetch('/psicologo/'+psicologo_id, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+    })
+        .then(response => {
+
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(error
+                        .message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error fetching psychologists:', error.message);
+            showNotification('Error fetching psychologists');
+        });
 
     var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
         keyboard: false

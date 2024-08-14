@@ -291,6 +291,9 @@ Route::get('/tutor/sesiones', [TutorController::class, 'getViewSesionList'])
     ->middleware('can:tutorSesiones')
     ->name('tutor.seesiones');
 
+Route::get('/psicologo/{id}', [PsicologoController::class, 'getPsicologoXId']);
+
+
 // Route::get('/test', function () {
 //         return view('test');
 //     });
