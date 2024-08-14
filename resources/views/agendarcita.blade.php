@@ -286,6 +286,20 @@
                 /* Smaller font for event text */
             }
         }
+
+        .description-box {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            max-width: 250px;
+            z-index: 1000;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            display: none; /* Oculto por defecto */
+            pointer-events: none; /* Para que no interfiera con el hover */
+        }
     </style>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
@@ -460,6 +474,40 @@
                 passwordIcon.classList.add('bi-eye');
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.btn-servicio');
+
+            const descriptions = {
+                btnServicio1: 'Descripción detallada sobre Psicología Infantil.',
+                btnServicio2: 'Descripción detallada sobre Terapia Adolescentes/Jóvenes.',
+                btnServicio3: 'Descripción detallada sobre Terapia Adultos.',
+                btnServicio4: 'Descripción detallada sobre Terapia Adultos Mayores.',
+                btnServicio5: 'Descripción detallada sobre Terapia de Pareja.',
+                btnServicio6: 'Descripción detallada sobre Talleres, Seminarios y/o Foros.',
+                btnServicio7: 'Descripción detallada sobre Taller de Cuerdas Bajas.'
+            };
+
+            buttons.forEach(button => {
+                const descriptionBox = document.createElement('div');
+                descriptionBox.className = 'description-box';
+                descriptionBox.textContent = descriptions[button.id] || 'Descripción no disponible';
+                document.body.appendChild(descriptionBox);
+
+                button.addEventListener('mouseover', function (e) {
+                    const rect = button.getBoundingClientRect();
+                    descriptionBox.style.left = `${rect.left + window.scrollX}px`;
+                    descriptionBox.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
+                    descriptionBox.style.display = 'block';
+                });
+
+                button.addEventListener('mouseout', function () {
+                    descriptionBox.style.display = 'none';
+                });
+            });
+        });
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

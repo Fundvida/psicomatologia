@@ -17,6 +17,7 @@
                     onclick="handleButtonServicioClick(this,'Psicología Infantil')" id='btnServicio1'>
                     >
                     <i class="bi bi-person servicio-icon"></i> Psicología Infantil
+                    
                 </button>
             </div>
             <div class="col-md-6 mb-3">
