@@ -65,6 +65,7 @@ class SesionController extends Controller
 
     public function saveSesion(Request $request)
     {
+        //return response()->json($request);
         return DB::transaction(function () use ($request) {
             try {
                 $validatedData = $request->validate([
@@ -85,7 +86,7 @@ class SesionController extends Controller
                     'adicional_info'=>'string',
                 ]);
             } catch (ValidationException $exception) {
-                return $this->convertValidationExceptionToResponse($exception, $request);
+                //return $this->convertValidationExceptionToResponse($exception, $request);
             }
 
             $user = User::create([
