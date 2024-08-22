@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FichaAtencionController;
 use App\Http\Controllers\Files\FileController;
 use App\Http\Controllers\HorarioController;
 use Illuminate\Support\Facades\Route;
@@ -293,7 +294,9 @@ Route::get('/tutor/sesiones', [TutorController::class, 'getViewSesionList'])
 
 Route::get('/psicologo/{id}', [PsicologoController::class, 'getPsicologoXId']);
 
+Route::post('/psicologo/ficha', [FichaAtencionController::class, 'index'])->name('ficha.index');
+Route::post('/psicologo/ficha/adultos', [FichaAtencionController::class, 'saveFichaAdults'])->name('ficha.adultos.save');
 
-// Route::get('/test', function () {
-//         return view('test');
-//     });
+//  Route::get('/test', function () {
+//          return view('test');
+//      });

@@ -269,6 +269,12 @@
             max-width: 300px;
         }
 
+        .disabled-link {
+            pointer-events: none;
+            color: gray;
+            cursor: default;
+            text-decoration: none;
+        }
         .notification-header {
             display: flex;
             justify-content: space-between;
@@ -510,10 +516,11 @@
                                         <th>Fecha</th>
                                         <th>CI Paciente</th>
                                         <th>Nombre y apellido</th>
-                                        <th>Estado de la Sesión</th>
+                                        <th>Estado</th>
                                         <th>Información</th>
-                                        <th>Subir documentos</th>
+                                        <th>Documentos</th>
                                         <th>Operaciones</th>
+                                        <th>Ficha de atención</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
@@ -876,6 +883,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+                        console.log(data)
                         $('#sesiones-body').empty();
                     
                         // Recorrer los datos y agregar filas a la tabla
@@ -886,7 +894,7 @@
                             var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
                             var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
                             var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
+                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? '<span class="badge text-bg-success">Realizado</span>': '<span class="badge text-bg-danger">No realizado</span>'; // Si se realizo la sesion o no
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
                             var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , 
                                                                                                                                             '${horaFin}', '${paciente_ci}', '${sesiones.name}', 
@@ -895,6 +903,13 @@
                             var icon_upload = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ? 
                                 `<i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>`: 
                                 `<i class="fa fa-upload" style="color: ##7B7D7D;" aria-hidden="true"></i>`;
+                            
+                            var icon_ficha = ``;
+                            if(sesiones.estado=='activo' || sesiones.estado=='Terminado'){
+                                icon_ficha = `<a href="#" onclick="redirectFichaAtencion(${sesiones.sesion_id})"><i class="fa-solid fa-file-signature" style="color: #d86464;"></i></a>`;
+                            } else {
+                                icon_ficha = `<a href="#" class="disabled-link"><i class="fa-solid fa-file-signature"></i></a>`;
+                            }
                             
                             if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
                                 icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
@@ -926,6 +941,9 @@
                                         ${icon_edit_sesion}   
                                         ${icon_cancel}
                                         <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
+                                    </td>
+                                    <td>
+                                        ${icon_ficha}
                                     </td>
                                 </tr>
                             `);
@@ -1456,7 +1474,6 @@
 
         function finalizarSesion (){
             var sesion_id = document.getElementById('btn-sesion-fin').value;
-            //console.log(sesion_id);
 
             Swal.fire({
                 title: "Estas seguro?",
@@ -1497,6 +1514,27 @@
 
         document.getElementById("horaInicioT").addEventListener("change", actualizarHoraFin3);
 
+        function redirectFichaAtencion(sesion_id){
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/psicologo/ficha'; 
+
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            let tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
+
+            let sesionInput = document.createElement('input');
+            sesionInput.type = 'hidden';
+            sesionInput.name = 'sesion_id';
+            sesionInput.value = sesion_id;
+            form.appendChild(sesionInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 </body>
 </html>
