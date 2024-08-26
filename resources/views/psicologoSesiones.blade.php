@@ -669,7 +669,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary" id="btn-sesion-edit">Editar Sesión</button>
-                            <button type="button" class="btn btn-primary" onclick="finalizarSesion()" id="btn-sesion-fin" value="">Marcar como finalizada</button>
+                            <!-- <button type="button" class="btn btn-primary" onclick="finalizarSesion()" id="btn-sesion-fin" value="">Marcar como finalizada</button> -->
                         </div>
                     </form>
                 </div>
@@ -905,10 +905,13 @@
                                 `<i class="fa fa-upload" style="color: ##7B7D7D;" aria-hidden="true"></i>`;
                             
                             var icon_ficha = ``;
-                            if(sesiones.estado=='activo' || sesiones.estado=='Terminado'){
+                            if(sesiones.estado=='activo'){
                                 icon_ficha = `<a href="#" onclick="redirectFichaAtencion(${sesiones.sesion_id})"><i class="fa-solid fa-file-signature" style="color: #d86464;"></i></a>`;
-                            } else {
-                                icon_ficha = `<a href="#" class="disabled-link"><i class="fa-solid fa-file-signature"></i></a>`;
+                            } else  if(sesiones.estado=='Terminada'){
+                                icon_ficha = `<a href="{{ asset('documents/Ficha_atención_terapeútica_adulto.pdf') }}" target="_blank"><i class="fa-solid fa-file-signature" style="color: #1bff00;"></i></a>`;
+                            } 
+                            else {
+                                icon_ficha = ``;
                             }
                             
                             if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
@@ -968,14 +971,14 @@
 
             console.log(isTerminado)
             if (isTerminado) {
-                document.getElementById('btn-sesion-fin').disabled = false;
+                //document.getElementById('btn-sesion-fin').disabled = false;
             }else {
-                document.getElementById('btn-sesion-fin').disabled = true;
+                //document.getElementById('btn-sesion-fin').disabled = true;
             }
             ciForm = ci == 'No especificado'? '': ci;
 
             document.getElementById('sesion_id_').value = sesion_id;
-            document.getElementById('btn-sesion-fin').value = sesion_id;
+            //document.getElementById('btn-sesion-fin').value = sesion_id;
             document.getElementById('editarFechaSesion').value = fecha;
             document.getElementById('editarHoraInicio').value = horaInicio;
             document.getElementById('editarHoraFin').value = horaFin;
@@ -1472,41 +1475,41 @@
             document.getElementById("horaFin").value = nuevaHora;
         }
 
-        function finalizarSesion (){
-            var sesion_id = document.getElementById('btn-sesion-fin').value;
+        // function finalizarSesion (){
+        //     var sesion_id = document.getElementById('btn-sesion-fin').value;
 
-            Swal.fire({
-                title: "Estas seguro?",
-                text: "No podra revertir este cambio.",
-                icon: "info",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Si, estoy seguro"
-            }).then((result) => {
-            if (result.isConfirmed) {
-                // Terminada = sesion.estado
-                $.ajax({
-                    url: '/sesion/terminada/'+sesion_id,
-                    type: 'GET',
-                    success: function(data) {
-                        console.log(data);
-                        Swal.fire(
-                            '<h2 class="text-center mb-4 font-alt">Exito!</h2>',
-                            `Sesión marcada como finalizada.`,
-                            'success'
-                        )
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 3000);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                }); 
-            }
-            });
-        }
+        //     Swal.fire({
+        //         title: "Estas seguro?",
+        //         text: "No podra revertir este cambio.",
+        //         icon: "info",
+        //         showCancelButton: true,
+        //         confirmButtonColor: "#3085d6",
+        //         cancelButtonColor: "#d33",
+        //         confirmButtonText: "Si, estoy seguro"
+        //     }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         // Terminada = sesion.estado
+        //         $.ajax({
+        //             url: '/sesion/terminada/'+sesion_id,
+        //             type: 'GET',
+        //             success: function(data) {
+        //                 console.log(data);
+        //                 Swal.fire(
+        //                     '<h2 class="text-center mb-4 font-alt">Exito!</h2>',
+        //                     `Sesión marcada como finalizada.`,
+        //                     'success'
+        //                 )
+        //                 setTimeout(function() {
+        //                     window.location.reload();
+        //                 }, 3000);
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error(error);
+        //             }
+        //         }); 
+        //     }
+        //     });
+        // }
 
         document.getElementById("horaInicio").addEventListener("change", actualizarHoraFin);
 
@@ -1536,6 +1539,17 @@
             form.submit();
         }
     </script>
+
+@if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Éxito',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </script>
+    @endif
 </body>
 </html>
 

@@ -33,9 +33,11 @@ class FichaAtencionController extends Controller
                     DB::raw('(SELECT COUNT(*)+1 FROM sesions WHERE paciente_id = s.paciente_id AND estado NOT IN ("Cancelado", "activo")) as numero_sesion'),
                     DB::raw('(SELECT name FROM users WHERE id=(SELECT user_id FROM psicologos WHERE id=s.psicologo_id)) as nombre_psicologo'),
                     DB::raw('(SELECT apellidos FROM users WHERE id=(SELECT user_id FROM psicologos WHERE id=s.psicologo_id)) as apellido_psicologo')
-                )->first();   
+                )->first(); 
+        
+        $saved = FichaAtencionTerapeutica::where('sesion_id', $sesion_id)->first();
 
-        return view('formFichaAtencion', compact('results'));
+        return view('formFichaAtencion', compact('results', 'saved'));
     }
 
     public function saveFichaAdults(Request $request){
@@ -65,6 +67,6 @@ class FichaAtencionController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'actulizado']);
+        return redirect()->route('psicologo.sesiones')->with('success', 'Ficha de atención terapéutica guardada exitosamente!');
     }
 }

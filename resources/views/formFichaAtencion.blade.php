@@ -298,7 +298,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="adultos" role="tabpanel" aria-labelledby="adultos-tab">
-                        <form action="{{ route('ficha.adultos.save') }}" method="POST">
+                        <form action="{{ route('ficha.adultos.save') }}" id="formAdultos" method="POST">
                             @csrf
                             <div class="p-4 rounded shadow-lg">
                                 <input type="hidden" id="sesion_id" name="sesion_id" value="{{ $results->sesion_id }}">
@@ -343,94 +343,97 @@
                                 <h4 class="mb-4 font-alt text-start">2. Motivo de la Consulta</h4>
                                 <div class="mb-3 text-start">
                                     <label for="descripcionProblema" class="form-label">Descripción del Problema:</label>
-                                    <textarea class="form-control" id="descripcionProblema" name="descripcionProblema" rows="3" ></textarea>
+                                    <textarea class="form-control" id="descripcionProblema" name="descripcionProblema" rows="3" >{{ $saved->descripcion_problema }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="objetivosTerapeuticos" class="form-label">Objetivos Terapéuticos:</label>
-                                    <textarea class="form-control" id="objetivosTerapeuticos" name="objetivosTerapeuticos" rows="3" ></textarea>
+                                    <textarea class="form-control" id="objetivosTerapeuticos" name="objetivosTerapeuticos" rows="3">{{ $saved->objetivos_terapeuticos }}</textarea>
                                 </div>
 
                                 <!-- 3. Información de Desarrollo y Contexto -->
                                 <h4 class="mb-4 font-alt text-start">3. Evaluación del Estado Actual</h4>
                                 <div class="mb-3 text-start">
                                     <label for="estadoEmocional" class="form-label">Estado Emocional (Escala de 1 a 10):</label>
-                                    <input type="number" class="form-control" id="estadoEmocional" name="estadoEmocional" min="1" max="10" >
+                                    <input type="number" class="form-control" id="estadoEmocional" name="estadoEmocional" min="1" max="10" value="{{ $saved->estado_emocional }}" >
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="sintomasReportados" class="form-label">Síntomas Reportados:</label>
-                                    <textarea class="form-control" id="sintomasReportados" name="sintomasReportados" rows="3" ></textarea>
+                                    <textarea class="form-control" id="sintomasReportados" name="sintomasReportados" rows="3" >{{ $saved->sintomas_reportados }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="nivelEstres" class="form-label">Nivel de Estrés (Escala de 1 a 10):</label>
-                                    <input type="number" class="form-control" id="nivelEstres" name="nivelEstres" rows="3" ></input>
+                                    <input type="number" class="form-control" id="nivelEstres" name="nivelEstres" rows="3" value="{{ $saved->nivel_estres }}" ></input>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="observacionTerapeuta" class="form-label">Observaciones del Terapeuta:</label>
-                                    <textarea class="form-control" id="observacionTerapeuta" name="observacionTerapeuta" rows="3" ></textarea>
+                                    <textarea class="form-control" id="observacionTerapeuta" name="observacionTerapeuta" rows="3" >{{ $saved->observaciones_terapeuta }}</textarea>
                                 </div>
 
                                 <!-- 5. Contenido de la Sesión -->
                                 <h4 class="mb-4 font-alt text-start">4. Contenido de la Sesión</h4>
                                 <div class="mb-3 text-start">
                                     <label for="temasTratados" class="form-label">Temas Tratados:</label>
-                                    <textarea class="form-control" id="temasTratados" name="temasTratados" rows="3" ></textarea>
+                                    <textarea class="form-control" id="temasTratados" name="temasTratados" rows="3" >{{ $saved->temas_tratados }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="tecnicasEstrategias" class="form-label">Técnicas y Estrategias Utilizadas:</label>
-                                    <textarea class="form-control" id="tecnicasEstrategias" name="tecnicasEstrategias" rows="3" ></textarea>
+                                    <textarea class="form-control" id="tecnicasEstrategias" name="tecnicasEstrategias" rows="3" >{{ $saved->tecnicas_utilizadas }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="intervencionEspecifica" class="form-label">Intervenciones Específicas:</label>
-                                    <textarea class="form-control" id="intervencionEspecifica" name="intervencionEspecifica" rows="3" ></textarea>
+                                    <textarea class="form-control" id="intervencionEspecifica" name="intervencionEspecifica" rows="3">{{ $saved->intervenciones_especificas }}</textarea>
                                 </div>
 
                                 <!-- 6. Actividades y Tareas Asignadas -->
                                 <h4 class="mb-4 font-alt text-start">5. Actividades y Tareas Asignadas</h4>
                                 <div class="mb-3 text-start">
                                     <label for="actividadesTareas" class="form-label">Tareas para el Paciente:</label>
-                                    <textarea class="form-control" id="actividadesTareas" name="actividadesTareas" rows="3"></textarea>
+                                    <textarea class="form-control" id="actividadesTareas" name="actividadesTareas" rows="3">{{ $saved->tareas_paciente }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="fechaEntrega" class="form-label">Fecha de Entrega:</label>
-                                    <input type="date" class="form-control" id="fechaEntrega" name="fechaEntrega">
+                                    <input type="date" class="form-control" id="fechaEntrega" name="fechaEntrega" value="{{ $saved->fecha_entrega }}">
                                 </div>
 
                                 <!-- 7. Progreso y Evaluación -->
                                 <h4 class="mb-4 font-alt text-start">6. Progreso y Evaluación</h4>
                                 <div class="mb-3 text-start">
                                     <label for="progresoObjetivos" class="form-label">Progreso en Objetivos Terapéuticos:</label>
-                                    <textarea class="form-control" id="progresoObjetivos" name="progresoObjetivos" rows="3" ></textarea>
+                                    <textarea class="form-control" id="progresoObjetivos" name="progresoObjetivos" rows="3" >{{ $saved->progreso_objetivos }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="cambiosNotables" class="form-label">Cambios Notables desde la Última Sesión:</label>
-                                    <textarea class="form-control" id="cambiosNotables" name="cambiosNotables" rows="3" ></textarea>
+                                    <textarea class="form-control" id="cambiosNotables" name="cambiosNotables" rows="3" >{{ $saved->cambios_notables }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="retroalimentacion" class="form-label">Retroalimentación del Paciente:</label>
-                                    <textarea class="form-control" id="retroalimentacion" name="retroalimentacion" rows="3"></textarea>
+                                    <textarea class="form-control" id="retroalimentacion" name="retroalimentacion" rows="3">{{ $saved->retroalimentacion_paciente }}</textarea>
                                 </div>
 
                                 <!-- 8. Plan para la Próxima Sesión -->
                                 <h4 class="mb-4 font-alt text-start">7. Plan para la Próxima Sesión</h4>
                                 <div class="mb-3 text-start">
                                     <label for="objetivosProximaSesion" class="form-label">Objetivos para la Próxima Sesión:</label>
-                                    <textarea class="form-control" id="objetivosProximaSesion" name="objetivosProximaSesion" rows="3" ></textarea>
+                                    <textarea class="form-control" id="objetivosProximaSesion" name="objetivosProximaSesion" rows="3" >{{ $saved->objetivos_proxima_sesion }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="areasEnfoque" class="form-label">Áreas de Enfoque:</label>
-                                    <textarea class="form-control" id="areasEnfoque" name="areasEnfoque" rows="3" ></textarea>
+                                    <textarea class="form-control" id="areasEnfoque" name="areasEnfoque" rows="3" >{{ $saved->areas_enfoque }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="preparacionNecesaria" class="form-label">Preparación Necesaria para el Paciente:</label>
-                                    <textarea class="form-control" id="preparacionNecesaria" name="preparacionNecesaria" rows="3"></textarea>
+                                    <textarea class="form-control" id="preparacionNecesaria" name="preparacionNecesaria" rows="3">{{ $saved->preparacion_necesaria }}</textarea>
                                 </div>
                                 <!-- 9. Notas Adicionales -->
                                 <h4 class="mb-4 font-alt text-start">8. Notas Adicionales</h4>
                                 <div class="mb-3 text-start">
                                     <label for="notasAdicionales" class="form-label">Notas Adicionales:</label>
-                                    <textarea class="form-control" id="notasAdicionales" name="notasAdicionales" rows="3"></textarea>
+                                    <textarea class="form-control" id="notasAdicionales" name="notasAdicionales" rows="3">{{ $saved->notas_adicionales }}</textarea>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <div class="mt-3 text-end">
+                                    <button type="submit" class="btn btn-info">Guardar</button>
+                                    <button type="button" onclick="finalizarSesion()" id="btn-sesion-fin" value="{{ $results->sesion_id }}" class="btn btn-primary">Terminar sesión</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -659,7 +662,73 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function finalizarSesion (){
+            var sesion_id = document.getElementById('btn-sesion-fin').value;
 
+            const form = document.querySelector('#formAdultos');
+            const inputs = form.querySelectorAll('input[type="text"], input[type="number"], input[type="date"], textarea');
+            let allFieldsFilled = true;
+
+            inputs.forEach((input) => {
+                if(input.value.trim() === ''){
+                    input.setAttribute("required", "required");
+                    allFieldsFilled = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            if (allFieldsFilled) {
+                console.log("Todos los campos estan llenos finalizando sesion");
+                Swal.fire({
+                    title: "Estas seguro?",
+                    text: "No podra revertir este cambio.",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, estoy seguro"
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    // Terminada = sesion.estado
+                    $.ajax({
+                        url: '/sesion/terminada/'+sesion_id,
+                        type: 'GET',
+                        success: function(data) {
+                            //console.log(data);
+                            Swal.fire(
+                                '<h2 class="text-center mb-4 font-alt">Exito!</h2>',
+                                `Sesión marcada como finalizada.`,
+                                'success'
+                            )
+                            setTimeout(function() {
+                            document.getElementById('formAdultos').submit();
+
+                            setTimeout(function() {
+                                window.location.href = "{{ route('psicologo.sesiones') }}";
+                            }, 1000); 
+                        }, 3000);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    }); 
+                }
+                });
+            } else {
+                //console.log("completa todos los campos requeridos");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Campos vacios",
+                });
+            }
+
+        }
+
+    </script>
 </body>
 
 </html>
