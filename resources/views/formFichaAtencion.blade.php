@@ -289,14 +289,19 @@
 
                 <!-- Pestañas -->
                 <ul class="nav nav-tabs justify-content-center mb-4">
+                    @if($paciente_tipo === 'mayor')
+                        <li class="nav-item">
+                            <a class="nav-link active" id="adultos-tab" data-bs-toggle="tab" href="#adultos" role="tab">Adulto</a>
+                        </li>
+                    @else
                     <li class="nav-item">
-                        <a class="nav-link active" id="adultos-tab" data-bs-toggle="tab" href="#adultos" role="tab">Adultos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="ninos-tab" data-bs-toggle="tab" href="#ninos" role="tab">Niños</a>
-                    </li>
+                        <a class="nav-link active" id="ninos-tab" data-bs-toggle="tab" href="#ninos" role="tab">Niño</a>
+                    </li> 
+                    @endif
                 </ul>
                 <div class="tab-content">
+                    @if($paciente_tipo === 'mayor')
+                    
                     <div class="tab-pane fade show active" id="adultos" role="tabpanel" aria-labelledby="adultos-tab">
                         <form action="{{ route('ficha.adultos.save') }}" id="formAdultos" method="POST">
                             @csrf
@@ -414,7 +419,7 @@
                                 <h4 class="mb-4 font-alt text-start">7. Plan para la Próxima Sesión</h4>
                                 <div class="mb-3 text-start">
                                     <label for="objetivosProximaSesion" class="form-label">Objetivos para la Próxima Sesión:</label>
-                                    <textarea class="form-control" id="objetivosProximaSesion" name="objetivosProximaSesion" rows="3" >{{ $saved->objetivos_proxima_sesion }}</textarea>
+                                    <textarea class="form-control" id="objetivosProximaSesion" name="objetivosProximaSesion" rows="3">{{ $saved->objetivos_proxima_sesion }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="areasEnfoque" class="form-label">Áreas de Enfoque:</label>
@@ -432,30 +437,32 @@
                                 </div>
                                 <div class="mt-3 text-end">
                                     <button type="submit" class="btn btn-info">Guardar</button>
-                                    <button type="button" onclick="finalizarSesion()" id="btn-sesion-fin" value="{{ $results->sesion_id }}" class="btn btn-primary">Terminar sesión</button>
+                                    <button type="button" onclick="finalizarSesion(1)" id="btn-sesion-fin" value="{{ $results->sesion_id }}" class="btn btn-primary">Terminar sesión</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="ninos" role="tabpanel" aria-labelledby="ninos-tab">
-                        <form action="/guardar-atencion-ninos" method="POST">
+                    @else
+                    <div class="tab-pane fade show active" id="ninos" role="tabpanel" aria-labelledby="ninos-tab">
+                        <form action="{{ route('ficha.ninos.save') }}" id="formNinos" method="POST">
                             @csrf
                             <div class="p-4 rounded shadow-lg">
+                                <input type="hidden" id="sesion_id" name="sesion_id" value="{{ $results->sesion_id }}">
                                 <h3 class="mb-4 font-alt">Ficha de Atención Psicológica para Niños(as)</h3>
 
                                 <!-- 1. Información General -->
                                 <h4 class="mb-4 font-alt text-start">1. Información General</h4>
                                 <div class="mb-3 text-start">
                                     <label for="nombreNino" class="form-label">Nombre del Niño/a:</label>
-                                    <input type="text" class="form-control" id="nombreNino" name="nombreNino" >
+                                    <input type="text" class="form-control" value="{{ $results->name }} {{ $results->apellidos }}" readonly>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="edad" class="form-label">Edad:</label>
-                                    <input type="number" class="form-control" id="edad" name="edad" >
+                                    <input type="number" class="form-control" value="{{ $results->edad }}" readonly>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
-                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" >
+                                    <input type="date" class="form-control" value="{{ $results->fecha_nacimiento }}" readonly>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="genero" class="form-label">Género:</label>
@@ -467,134 +474,134 @@
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="nombreTutor" class="form-label">Nombre del Tutor/Responsable:</label>
-                                    <input type="text" class="form-control" id="nombreTutor" name="nombreTutor" >
+                                    <input type="text" class="form-control" value="{{ $results->tutor_name }} {{ $results->tutor_apellido }}" readonly>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="telefono" class="form-label">Teléfono de Contacto:</label>
-                                    <input type="tel" class="form-control" id="telefono" name="telefono" >
+                                    <input type="tel" class="form-control" value="{{ $results->tutor_tel }}" readonly>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="fechaSesion" class="form-label">Fecha de la Sesión:</label>
-                                    <input type="date" class="form-control" id="fechaSesion" name="fechaSesion" >
+                                    <input type="date" class="form-control" value="{{ $results->fecha_sesion }}" readonly>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="nombreTerapeuta" class="form-label">Nombre del Terapeuta:</label>
-                                    <input type="text" class="form-control" id="nombreTerapeuta" name="nombreTerapeuta" >
+                                    <input type="text" class="form-control" value="{{ $results->nombre_psicologo }} {{ $results->apellido_psicologo }}" readonly>
                                 </div>
 
                                 <!-- 2. Motivo de la Consulta -->
                                 <h4 class="mb-4 font-alt text-start">2. Motivo de la Consulta</h4>
                                 <div class="mb-3 text-start">
                                     <label for="descripcionProblema" class="form-label">Descripción del Problema:</label>
-                                    <textarea class="form-control" id="descripcionProblema" name="descripcionProblema" rows="3" ></textarea>
+                                    <textarea class="form-control" id="descripcionProblema" name="descripcionProblema" rows="3" >{{ $saved->descripcion_problema }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="observacionesPadres" class="form-label">Observaciones de los Padres/Tutores:</label>
-                                    <textarea class="form-control" id="observacionesPadres" name="observacionesPadres" rows="3" ></textarea>
+                                    <textarea class="form-control" id="observacionesPadres" name="observacionesPadres" rows="3">{{ $saved->observacion_padres_motivo }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="objetivosTerapeuticos" class="form-label">Objetivos Terapéuticos:</label>
-                                    <textarea class="form-control" id="objetivosTerapeuticos" name="objetivosTerapeuticos" rows="3" ></textarea>
+                                    <textarea class="form-control" id="objetivosTerapeuticos" name="objetivosTerapeuticos" rows="3">{{ $saved->objetivos_terapeuticos }}</textarea>
                                 </div>
 
                                 <!-- 3. Información de Desarrollo y Contexto -->
                                 <h4 class="mb-4 font-alt text-start">3. Información de Desarrollo y Contexto</h4>
                                 <div class="mb-3 text-start">
                                     <label for="historiaDesarrollo" class="form-label">Historia de Desarrollo:</label>
-                                    <textarea class="form-control" id="historiaDesarrollo" name="historiaDesarrollo" rows="3" ></textarea>
+                                    <textarea class="form-control" id="historiaDesarrollo" name="historiaDesarrollo" rows="3" >{{ $saved->historia_desarrollo }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="eventosSignificativos" class="form-label">Eventos Significativos:</label>
-                                    <textarea class="form-control" id="eventosSignificativos" name="eventosSignificativos" rows="3" ></textarea>
+                                    <textarea class="form-control" id="eventosSignificativos" name="eventosSignificativos" rows="3">{{ $saved->eventos_significativos }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="relacionesFamiliares" class="form-label">Relaciones Familiares:</label>
-                                    <textarea class="form-control" id="relacionesFamiliares" name="relacionesFamiliares" rows="3" ></textarea>
+                                    <textarea class="form-control" id="relacionesFamiliares" name="relacionesFamiliares" rows="3">{{ $saved->relaciones_familiares }}</textarea>
                                 </div>
 
                                 <!-- 4. Evaluación del Estado Actual -->
                                 <h4 class="mb-4 font-alt text-start">4. Evaluación del Estado Actual</h4>
                                 <div class="mb-3 text-start">
                                     <label for="estadoEmocional" class="form-label">Estado Emocional del Niño/a:</label>
-                                    <textarea class="form-control" id="estadoEmocional" name="estadoEmocional" rows="3" ></textarea>
+                                    <textarea class="form-control" id="estadoEmocional" name="estadoEmocional" rows="3"></textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="comportamientosObservados" class="form-label">Comportamientos Observados:</label>
-                                    <textarea class="form-control" id="comportamientosObservados" name="comportamientosObservados" rows="3" ></textarea>
+                                    <textarea class="form-control" id="comportamientosObservados" name="comportamientosObservados" rows="3">{{ $saved->observaciones_terapeuta }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="sintomasReportados" class="form-label">Síntomas Reportados:</label>
-                                    <textarea class="form-control" id="sintomasReportados" name="sintomasReportados" rows="3" ></textarea>
+                                    <textarea class="form-control" id="sintomasReportados" name="sintomasReportados" rows="3" >{{ $saved->sintomas_reportados }}</textarea>
                                 </div>
 
                                 <!-- 5. Contenido de la Sesión -->
                                 <h4 class="mb-4 font-alt text-start">5. Contenido de la Sesión</h4>
                                 <div class="mb-3 text-start">
                                     <label for="actividadesRealizadas" class="form-label">Actividades Realizadas:</label>
-                                    <textarea class="form-control" id="actividadesRealizadas" name="actividadesRealizadas" rows="3" ></textarea>
+                                    <textarea class="form-control" id="actividadesRealizadas" name="actividadesRealizadas" rows="3">{{ $saved->intervenciones_especificas }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="tecnicasEstrategias" class="form-label">Técnicas y Estrategias Utilizadas:</label>
-                                    <textarea class="form-control" id="tecnicasEstrategias" name="tecnicasEstrategias" rows="3" ></textarea>
+                                    <textarea class="form-control" id="tecnicasEstrategias" name="tecnicasEstrategias" rows="3">{{ $saved->tecnicas_utilizadas }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="temasTratados" class="form-label">Temas Tratados:</label>
-                                    <textarea class="form-control" id="temasTratados" name="temasTratados" rows="3" ></textarea>
+                                    <textarea class="form-control" id="temasTratados" name="temasTratados" rows="3">{{ $saved->temas_tratados }}</textarea>
                                 </div>
 
                                 <!-- 6. Actividades y Tareas Asignadas -->
                                 <h4 class="mb-4 font-alt text-start">6. Actividades y Tareas Asignadas</h4>
                                 <div class="mb-3 text-start">
                                     <label for="tareasNino" class="form-label">Tareas para el Niño/a (si aplica):</label>
-                                    <textarea class="form-control" id="tareasNino" name="tareasNino" rows="3"></textarea>
+                                    <textarea class="form-control" id="tareasNino" name="tareasNino" rows="3">{{ $saved->tareas_paciente }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="fechaEntrega" class="form-label">Fecha de Entrega:</label>
-                                    <input type="date" class="form-control" id="fechaEntrega" name="fechaEntrega">
+                                    <input type="date" class="form-control" id="fechaEntrega" name="fechaEntrega" value="{{ $saved->fecha_entrega }}">
                                 </div>
 
                                 <!-- 7. Progreso y Evaluación -->
                                 <h4 class="mb-4 font-alt text-start">7. Progreso y Evaluación</h4>
                                 <div class="mb-3 text-start">
                                     <label for="progresoObjetivos" class="form-label">Progreso en Objetivos Terapéuticos:</label>
-                                    <textarea class="form-control" id="progresoObjetivos" name="progresoObjetivos" rows="3" ></textarea>
+                                    <textarea class="form-control" id="progresoObjetivos" name="progresoObjetivos" rows="3">{{ $saved->progreso_objetivos }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="cambiosNotables" class="form-label">Cambios Notables desde la Última Sesión:</label>
-                                    <textarea class="form-control" id="cambiosNotables" name="cambiosNotables" rows="3" ></textarea>
+                                    <textarea class="form-control" id="cambiosNotables" name="cambiosNotables" rows="3">{{ $saved->cambios_notables }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="retroalimentacion" class="form-label">Retroalimentación del Niño/a (si corresponde):</label>
-                                    <textarea class="form-control" id="retroalimentacion" name="retroalimentacion" rows="3"></textarea>
+                                    <textarea class="form-control" id="retroalimentacion" name="retroalimentacion" rows="3">{{ $saved->retroalimentacion_paciente }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="observacionesPadres2" class="form-label">Observaciones de los Padres/Tutores:</label>
-                                    <textarea class="form-control" id="observacionesPadres2" name="observacionesPadres2" rows="3" ></textarea>
+                                    <textarea class="form-control" id="observacionesPadres2" name="observacionesPadres2" rows="3">{{ $saved->observacion_padres }}</textarea>
                                 </div>
 
                                 <!-- 8. Plan para la Próxima Sesión -->
                                 <h4 class="mb-4 font-alt text-start">8. Plan para la Próxima Sesión</h4>
                                 <div class="mb-3 text-start">
                                     <label for="objetivosProximaSesion" class="form-label">Objetivos para la Próxima Sesión:</label>
-                                    <textarea class="form-control" id="objetivosProximaSesion" name="objetivosProximaSesion" rows="3" ></textarea>
+                                    <textarea class="form-control" id="objetivosProximaSesion" name="objetivosProximaSesion" rows="3">{{ $saved->objetivos_proxima_sesion }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="areasEnfoque" class="form-label">Áreas de Enfoque:</label>
-                                    <textarea class="form-control" id="areasEnfoque" name="areasEnfoque" rows="3" ></textarea>
+                                    <textarea class="form-control" id="areasEnfoque" name="areasEnfoque" rows="3">{{ $saved->areas_enfoque }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="preparacionNino" class="form-label">Preparación Necesaria para el Niño/a (si corresponde):</label>
-                                    <textarea class="form-control" id="preparacionNino" name="preparacionNino" rows="3"></textarea>
+                                    <textarea class="form-control" id="preparacionNino" name="preparacionNino" rows="3">{{ $saved->preparacion_necesaria }}</textarea>
                                 </div>
                                 <!-- 9. Notas Adicionales -->
                                 <h4 class="mb-4 font-alt text-start">9. Notas Adicionales</h4>
                                 <div class="mb-3 text-start">
                                     <label for="notasAdicionales" class="form-label">Notas Adicionales:</label>
-                                    <textarea class="form-control" id="notasAdicionales" name="notasAdicionales" rows="3"></textarea>
+                                    <textarea class="form-control" id="notasAdicionales" name="notasAdicionales" rows="3">{{ $saved->notas_adicionales }}</textarea>
                                 </div>
 
                                 <!-- 10. Firma del Terapeuta -->
-                                <h4 class="mb-4 font-alt text-start">10. Firma del Terapeuta</h4>
+                                <!-- <h4 class="mb-4 font-alt text-start">10. Firma del Terapeuta</h4>
                                 <div class="mb-3 text-start">
                                     <label for="nombreTerapeutaFirma" class="form-label">Nombre:</label>
                                     <input type="text" class="form-control" id="nombreTerapeutaFirma" name="nombreTerapeutaFirma" >
@@ -602,12 +609,16 @@
                                 <div class="mb-3 text-start">
                                     <label for="firmaTerapeuta" class="form-label">Firma:</label>
                                     <input type="text" class="form-control" id="firmaTerapeuta" name="firmaTerapeuta" >
-                                </div>
+                                </div> -->
 
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <div class="mt-3 text-end">
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                    <button type="button" onclick="finalizarSesion(2)" id="btn-sesion-fin" value="{{ $results->sesion_id }}" class="btn btn-primary">Terminar sesión</button>
+                                </div>
                             </div>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </section>
@@ -663,10 +674,11 @@
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        function finalizarSesion (){
+        function finalizarSesion (tipo){
             var sesion_id = document.getElementById('btn-sesion-fin').value;
+            const form = tipo == 1? document.querySelector('#formAdultos'):document.querySelector('#formNinos'); 
 
-            const form = document.querySelector('#formAdultos');
+            //const form = document.querySelector('#formAdultos');
             const inputs = form.querySelectorAll('input[type="text"], input[type="number"], input[type="date"], textarea');
             let allFieldsFilled = true;
 
@@ -681,7 +693,7 @@
             });
 
             if (allFieldsFilled) {
-                console.log("Todos los campos estan llenos finalizando sesion");
+                //onsole.log("Todos los campos estan llenos finalizando sesion");
                 Swal.fire({
                     title: "Estas seguro?",
                     text: "No podra revertir este cambio.",
@@ -704,7 +716,11 @@
                                 'success'
                             )
                             setTimeout(function() {
-                            document.getElementById('formAdultos').submit();
+                                if(tipo == 1){
+                                    document.getElementById('formAdultos').submit();
+                                }else {
+                                    document.getElementById('formNinos').submit();
+                                }
 
                             setTimeout(function() {
                                 window.location.href = "{{ route('psicologo.sesiones') }}";
@@ -722,7 +738,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Campos vacios",
+                    text: "Debe de llenar todos los campos vacios para concluir la sesión.",
                 });
             }
 

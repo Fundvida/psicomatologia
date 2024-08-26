@@ -20,14 +20,22 @@ return new class extends Migration
             // Motivo de la Consulta
             $table->text('descripcion_problema')->nullable();
             $table->text('objetivos_terapeuticos')->nullable();
+            
+            $table->text('observacion_padres_motivo')->nullable(); // ninos
+            
+            // Informacion de desarrollo y contexto
+            $table->text('historia_desarrollo')->nullable(); // ninos
+            $table->text('eventos_significativos')->nullable(); // ninos
+            $table->text('relaciones_familiares')->nullable(); // ninos
 
             // Evaluación del Estado Actual
             $table->tinyInteger('estado_emocional')->nullable();
             $table->tinyInteger('numero_sesion')->nullable();
             $table->text('sintomas_reportados')->nullable();
             $table->tinyInteger('nivel_estres')->nullable();
-            $table->text('observaciones_terapeuta')->nullable();
-
+            $table->text('observaciones_terapeuta')->nullable(); // Observaciones del Terapeuta o Comportamientos Observados
+            
+            $table->text('estado_emocional_nino')->nullable(); // Observaciones del Terapeuta o Comportamientos Observados
             // Contenido de la Sesión
             $table->text('temas_tratados')->nullable();
             $table->text('tecnicas_utilizadas')->nullable();
@@ -42,6 +50,7 @@ return new class extends Migration
             $table->text('progreso_objetivos')->nullable();
             $table->text('cambios_notables')->nullable();
             $table->text('retroalimentacion_paciente')->nullable();
+            $table->text('observacion_padres')->nullable();// ninos
 
             // Plan para la Próxima Sesión
             $table->text('objetivos_proxima_sesion')->nullable();
