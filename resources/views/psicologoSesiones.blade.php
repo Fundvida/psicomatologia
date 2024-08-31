@@ -969,7 +969,6 @@
                             horaFin, ci, nombre, apellidos, 
                             descripcion, diagnostico, isTerminado){
 
-            console.log(isTerminado)
             if (isTerminado) {
                 //document.getElementById('btn-sesion-fin').disabled = false;
             }else {
@@ -985,8 +984,8 @@
             document.getElementById('editarCIPaciente').value = ciForm;
             document.getElementById('editarNombrePaciente').value = nombre;
             document.getElementById('editarApellidosPaciente').value = apellidos;
-            document.getElementById('editarDescripcionSesion').value = descripcion;
-            document.getElementById('editarDiagnostico').value = diagnostico;
+            document.getElementById('editarDescripcionSesion').value = descripcion!='null'? descripcion:'';
+            document.getElementById('editarDiagnostico').value = diagnostico!='null'? diagnostico:'';
             
             // Abrir el modal
             var modal = new bootstrap.Modal(document.getElementById('editarSesionModal'));
