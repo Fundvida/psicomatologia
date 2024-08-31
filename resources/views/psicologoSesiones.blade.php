@@ -743,11 +743,11 @@
                 .then(data => {
                     console.log(data);
                     if (data.url) {
-                        //onsole.log(data.isTerminado + "fasdflkjsfl")
                         var imagenComprobante = document.getElementById("imagenComprobante");
                         imagenComprobante.src = data.url;
 
                         document.getElementById("mensajeError").style.display = "none";
+                        //document.getElementById("imagenComprobante").style.display = "block";
                         document.getElementById("imagenComprobante").style.display = "block; max-width: 100%;";
                         if(data.isTerminado === 0){
                             document.getElementById("btn-confirm-comprobante").style.display = "block"
@@ -756,7 +756,6 @@
                             document.getElementById("btn-confirm-comprobante").style.display = "none"
                             document.getElementById("mensajeValidado").style.display = "block"
                         }
-                        //document.getElementById("btnDescargar").setAttribute("type", "button");
 
                         document.querySelector('#sesion_id').value = sesion_id;
 
@@ -768,8 +767,6 @@
                         document.getElementById("btn-confirm-comprobante").style.display = "none"
                         document.getElementById("mensajeError").style.display = "block";
                         document.getElementById("imagenComprobante").style.display = "none";
-                        //document.getElementById("btn-confirm-comprobante").style.display = "hidden"
-                        //document.getElementById("btnDescargar").setAttribute("type", "hidden");
 
                         document.querySelector('#sesion_id').value = '';
 
@@ -883,7 +880,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data)
+                        //console.log(data)
                         $('#sesiones-body').empty();
                     
                         // Recorrer los datos y agregar filas a la tabla
@@ -894,15 +891,25 @@
                             var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
                             var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
                             var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? '<span class="badge text-bg-success">Realizado</span>': '<span class="badge text-bg-danger">No realizado</span>'; // Si se realizo la sesion o no
+                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? '<span class="badge text-bg-success">Realizado</span>': '<span class="badge text-bg-warning text-white">No realizado</span>'; // Si se realizo la sesion o no
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
                             var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , 
                                                                                                                                             '${horaFin}', '${paciente_ci}', '${sesiones.name}', 
                                                                                                                                             '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', '${sesiones.calificacion_descripcion}', ${sesiones.isTerminado})" title='Editar Sesión'></i>`
-                            :'<i class="fas fa-edit" style="color: ##7B7D7D;"  aria-hidden="true"></i>';
+                            :'<i class="fas fa-edit" style="color: #7B7D7D;"  aria-hidden="true"></i>';
                             var icon_upload = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ? 
                                 `<i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>`: 
-                                `<i class="fa fa-upload" style="color: ##7B7D7D;" aria-hidden="true"></i>`;
+                                `<i class="fa fa-upload" style="color: #7B7D7D;" aria-hidden="true"></i>`;
+
+                            var icon_inf = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ?
+                                `<i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo(  
+                                        '${fechaInicio}',
+                                        '${paciente_ci}', 
+                                        '${sesiones.name} ${sesiones.apellidos}', 
+                                        '${sesiones.descripcion_sesion}', 
+                                        '${horaInicio} - ${horaFin}',
+                                        '${sesiones.modalidad}',
+                                        '${estado_pago}')" title="Ver Información"></i>`: `<i class="fas fa-info-circle" style="color: #7B7D7D;"></i>`;
                             
                             var icon_ficha = ``;
                             if(sesiones.estado=='activo'){
@@ -917,8 +924,10 @@
                             if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
                                 icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
                             } else {
-                                icon_cancel = `<i class="fas fa-times-circle text-secondary" title="Cancelar Sesión"></i>`;
+                                icon_cancel = `<i class="fas fa-times-circle" style="color: #7B7D7D; title="Cancelar Sesión"></i>`;
                             }
+
+                            estado_sesion = sesiones.estado=='Cancelado'? `<span class="badge text-bg-danger">Cancelado</span>`:estado_sesion;
 
                         
                             $('#sesiones-body').append(`
@@ -928,14 +937,7 @@
                                     <td>${sesiones.name} ${sesiones.apellidos}</td>
                                     <td>${estado_sesion}</td>
                                     <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo(  
-                                        '${fechaInicio}',
-                                        '${paciente_ci}', 
-                                        '${sesiones.name} ${sesiones.apellidos}', 
-                                        '${sesiones.descripcion_sesion}', 
-                                        '${horaInicio} - ${horaFin}',
-                                        '${sesiones.modalidad}',
-                                        '${estado_pago}')" title="Ver Información"></i>
+                                        ${icon_inf}
                                     </td>
                                     <td class="action-icons">
                                         ${icon_upload}

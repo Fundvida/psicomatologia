@@ -295,12 +295,10 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
-                                        <th>Hora Inicio/Hora Fin</th>
-                                        <th>CI Paciente</th>
-                                        <th>Nombre(s)</th>
-                                        <th>Apellidos</th>
-                                        <!-- <th>Descripción de la Sesión</th>
-                                        <th>Diagnóstico</th> -->
+                                        <th>Duración</th>
+                                        <!-- <th>CI Paciente</th> -->
+                                        <!-- <th>Nombre(s)</th>
+                                        <th>Apellidos</th> -->
                                         <th>Modalidad</th>
                                         <th>Estado de la Sesión</th>
                                         <th>Estado de Pago</th>
@@ -585,28 +583,26 @@
                     var tbody = $('#table-sesiones');
                     tbody.empty();
                     $.each(data.sesiones, function(index, sesion) {
+                        
                         var row = $('<tr>');
-
                         row.append($('<td>').text(sesion.fecha_hora_inicio.split(' ')[0])); //Fecha 
-                        row.append($('<td>').text(sesion.fecha_hora_inicio.split(' ')[1] + '/' + sesion.fecha_hora_fin.split(' ')[1])); //Hora Inicio/Hora Fin
-                        row.append($('<td>').text(data.user.ci));              //CI Paciente
-                        row.append($('<td>').text(data.user.name));            //Nombre(s) 
-                        row.append($('<td>').text(data.user.apellidos));        //Apellidos
-                        // row.append($('<td>').text(sesion.descripcion_sesion)); // Descripción de la Sesión
-                        // row.append($('<td>').text(sesion.calificacion_descripcion)); //Diagnòstico
-                        row.append($('<td>').text(sesion.modalidad));                     // archivos
+                        row.append($('<td>').text(sesion.fecha_hora_inicio.substring(11,16) + ' - ' + sesion.fecha_hora_fin.substring(11,16))); //Hora Inicio/Hora Fin
+                        row.append('<td><span style="font-size:12px">'+ sesion.modalidad +'<span></td>');
+
                         if(sesion.estado == "Cancelado"){
-                            row.append($('<td>').text("Cancelada").css('color', 'red')); 
+                            //row.append($('<td>').text("Cancelada").css('color', 'red')); 
+                            row.append('<td><span class="badge text-bg-danger text-white">Cancelada<span></td>')
                         } else if(sesion.estado == "Terminada"){
-                            row.append($('<td>').text("Terminada").css('color', 'green'));
+                            row.append('<td><span class="badge text-bg-success">Concluida<span></td>')
+                            //row.append($('<td>').text("Terminada").css('color', 'green'));
                         } else{
-                            row.append($('<td>').text("Pendiente").css('color', '#8B4513')); 
+                            row.append('<td><span class="badge text-bg-warning text-white">Pendiente<span></td>')
                         }
 
                         if(sesion.estado == "Cancelado"){
-                            row.append('<td><span class="text-danger">Cancelada</span></td>');
+                            row.append('<td><span class="badge text-bg-info text-white">Sesión cancelada</span></td>');
                         } else if (sesion.pago_confirmado == 0 && sesion.estado != 'Terminada') {
-                            var actionIconsPago = $('<td>Pendiente</td><td class="action-icons">' +
+                            var actionIconsPago = $('<td><span class="badge text-bg-warning text-white">Pendiente</span></td><td class="action-icons">' +
                                 '<i class="fas fa-money-bill text-success" onclick="mostrarModalPago(' + sesion.id + ')" title="Pagar"></i></td>' +
                                 '<td class="action-icons">' +
                                 '<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(' + sesion.id + ')" title="Cancelar"></i>' +
@@ -614,17 +610,11 @@
                             row.append(actionIconsPago);
                             pagosPendientes++;
                         } else {
-                            row.append('<td class="text-success">Realizado</td>');
+                            row.append('<td><span class="badge text-bg-success">Realizado</span></td>');
                             row.append('<td class="text-success"></td>');
                             row.append('<td class="text-success"></td>');
                             row.append('<td class="action-icons"><i class="fas fa-folder-open" onclick="sesionDocs(' + sesion.id + ')"></i></td>');
                         }
-
-                        // if(pagosPendientes > 0){
-                        //     notificationContainer.style.display = 'block';
-                        // }else {
-                        //     notificationContainer.style.display = 'none';
-                        // }
                         
                         $('#table-sesiones').append(row);
                     });

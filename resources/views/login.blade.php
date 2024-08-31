@@ -54,8 +54,9 @@
         <div class="screen">
             <div class="screen__content">
                 <!-- Agrega el logo aquí -->
-                <img src="{{ asset('images/logo gav.png') }}" alt="Logo" class="logo-gav">
-
+                <a href="/">
+                    <img src="{{ asset('images/logo gav.png') }}" alt="Logo" class="logo-gav">
+                </a>
                 <form class="login" method="POST">
                     @csrf
                     <div class="login__field">
