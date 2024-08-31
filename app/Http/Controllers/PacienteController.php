@@ -58,8 +58,8 @@ class PacienteController extends Controller
                     $user_tutor->ci                   = $request->ci_tutor;
                     //$user_tutor->codigo_pais_telefono = $request->codigo_pais;
                     $user_tutor->telefono             = $request->telefono;
-                    $user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
-                    $user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    //$user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    //$user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
                     
                     $user_tutor->assignRole('Tutor');
         
@@ -105,8 +105,8 @@ class PacienteController extends Controller
                     $user_tutor->ci                   = $request->ci_tutor;
                     //$user_tutor->codigo_pais_telefono = $request->codigo_pais;
                     $user_tutor->telefono             = $request->telefono;
-                    $user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
-                    $user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    //$user_tutor->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    //$user_tutor->respuesta_seguridad_a = $request->respuestaSeguridad;
                     $user_tutor->save();
 
                     $paciente = Paciente::findOrFail($request->paciente_id);
@@ -136,8 +136,8 @@ class PacienteController extends Controller
                     $user->ci                   = $request->numeroCI;
                     $user->codigo_pais_telefono = $request->codigo_pais;
                     $user->telefono             = $request->telefono;
-                    $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    //$user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    //$user->respuesta_seguridad_a = $request->respuestaSeguridad;
                     
                     $user->assignRole('Paciente');
         
@@ -171,8 +171,8 @@ class PacienteController extends Controller
                     $user->ci                   = $request->numeroCI;
                     $user->codigo_pais_telefono = $request->codigo_pais;
                     $user->telefono             = $request->telefono;
-                    $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    //$user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                    //$user->respuesta_seguridad_a = $request->respuestaSeguridad;
                     $user->save();
         
                     return redirect()->route('listaPaciente')->with('resultado', "actualizado");

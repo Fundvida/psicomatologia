@@ -376,21 +376,21 @@
                             <label for="telefono" class="form-label">Número de Teléfono <span class="text-danger">*</span></label>
                             <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" style="width: 312px;" required>
                         </div>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="metodoConfirmacion" class="form-label">Método de Confirmación de Cuenta <span class="text-danger">*</span></label>
                             <select id="metodoConfirmacion" name="metodoConfirmacion" class="form-select" required>
                                 <option value="correo">Correo Electrónico</option>
                                 <option value="sms">SMS</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
+                        </div> -->
+                        <!-- <div class="mb-3">
                             <label for="preguntaSeguridad" class="form-label">Pregunta de Seguridad <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="preguntaSeguridad" name="preguntaSeguridad" required>
                         </div>
                         <div class="mb-3">
                             <label for="respuestaSeguridad" class="form-label">Respuesta de pregunta <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="respuestaSeguridad" name="respuestaSeguridad" required>
-                        </div>
+                        </div> -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" id="btnAddOrEdit" class="btn btn-primary">Registrar Paciente</button>

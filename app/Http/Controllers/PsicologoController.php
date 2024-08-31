@@ -62,7 +62,6 @@ class PsicologoController extends Controller
 
     public function store(Request $request)
     {
-        //return response()->json($request);
         try{
             if ($request->psicologo_id == "") {
                     $user = new User();
@@ -76,8 +75,8 @@ class PsicologoController extends Controller
                     $user->ci                    = $request->ci;
                     $user->codigo_pais_telefono  = $request->codigo_pais;
                     $user->telefono              = $request->telefono;
-                    $user->pregunta_seguridad_a  = $request->preguntaSeguridad;
-                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    //$user->pregunta_seguridad_a  = $request->preguntaSeguridad;
+                    //$user->respuesta_seguridad_a = $request->respuestaSeguridad;
                     $user->assignRole('psicologo');
 
                     $user->save();
@@ -136,8 +135,8 @@ class PsicologoController extends Controller
                 $user->ci                   = $request->ci;
                 $user->codigo_pais_telefono = $request->codigo_pais;
                 $user->telefono             = $request->telefono;
-                $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-                $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                //$user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                //$user->respuesta_seguridad_a = $request->respuestaSeguridad;
                 $user->save();
 
                 // Eliminar las especialidades existentes
