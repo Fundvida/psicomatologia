@@ -298,6 +298,8 @@ Route::post('/psicologo/ficha', [FichaAtencionController::class, 'index'])->name
 Route::post('/psicologo/ficha/adultos', [FichaAtencionController::class, 'saveFichaAdults'])->name('ficha.adultos.save');
 Route::post('/psicologo/ficha/ninos', [FichaAtencionController::class, 'saveFichaChildren'])->name('ficha.ninos.save');
 
+Route::post('/paciente/ficha/pdf', [FichaAtencionController::class, 'getPdf'])->name('ficha.pdf');
+
 //  Route::get('/test', function () {
 //          return view('test');
 //      });

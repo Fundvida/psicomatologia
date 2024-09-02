@@ -915,7 +915,9 @@
                             if(sesiones.estado=='activo'){
                                 icon_ficha = `<a href="#" onclick="redirectFichaAtencion(${sesiones.sesion_id})"><i class="fa-solid fa-file-signature" style="color: #d86464;"></i></a>`;
                             } else  if(sesiones.estado=='Terminada'){
-                                icon_ficha = `<a href="{{ asset('documents/Ficha_atención_terapeútica_adulto.pdf') }}" target="_blank"><i class="fa-solid fa-file-signature" style="color: #1bff00;"></i></a>`;
+                                //icon_ficha = `<a href="{{ asset('documents/Ficha_atención_terapeútica_adulto.pdf') }}" target="_blank"><i class="fa-solid fa-file-signature" style="color: #1bff00;"></i></a>`;
+                                icon_ficha = `<a href="#" onclick="fichaAtencionPdf(${sesiones.sesion_id})"><i class="fa-solid fa-file-signature" style="color: #1bff00;"></i></a>`;
+
                             } 
                             else {
                                 icon_ficha = ``;
@@ -1522,6 +1524,28 @@
             let form = document.createElement('form');
             form.method = 'POST';
             form.action = '/psicologo/ficha'; 
+
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            let tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
+
+            let sesionInput = document.createElement('input');
+            sesionInput.type = 'hidden';
+            sesionInput.name = 'sesion_id';
+            sesionInput.value = sesion_id;
+            form.appendChild(sesionInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function fichaAtencionPdf(sesion_id){
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/paciente/ficha/pdf'; 
 
             let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             let tokenInput = document.createElement('input');

@@ -523,7 +523,7 @@
                                 <h4 class="mb-4 font-alt text-start">4. Evaluación del Estado Actual</h4>
                                 <div class="mb-3 text-start">
                                     <label for="estadoEmocional" class="form-label">Estado Emocional del Niño/a:</label>
-                                    <textarea class="form-control" id="estadoEmocional" name="estadoEmocional" rows="3"></textarea>
+                                    <textarea class="form-control" id="estadoEmocional" name="estadoEmocional" rows="3">{{ $saved->estado_emocional_nino }}</textarea>
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="comportamientosObservados" class="form-label">Comportamientos Observados:</label>
