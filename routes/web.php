@@ -300,6 +300,14 @@ Route::post('/psicologo/ficha/ninos', [FichaAtencionController::class, 'saveFich
 
 Route::post('/paciente/ficha/pdf', [FichaAtencionController::class, 'getPdf'])->name('ficha.pdf');
 
+
+Route::get('/tutor/getSesiones', [TutorController::class, 'getSesiones'])
+    //->middleware('can:paciente.listar')
+    ->name('tutor.listar.sesiones');
+
+Route::get('/tutor/sesion', [TutorController::class, 'programarSesionView'])
+    ->name('tutor.sesion');
+
 //  Route::get('/test', function () {
 //          return view('test');
 //      });

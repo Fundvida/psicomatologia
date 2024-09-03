@@ -742,10 +742,14 @@ class SesionController extends Controller
         $horaInicio = $request->horaInicio;
         $horaFin = $request->horaFin;
 
-        $paciente = Paciente::where('user_id', $request->user_id)->first();
-        $sesion_anterior = Sesion::where('paciente_id', $paciente->id)
-                            ->where('estado', 'activo')->first();
+        if($request->has('tipo') && $request->tipo == 'menor'){
+            $paciente = Paciente::where('id', $request->user_id)->first();
+        } else {
+            $paciente = Paciente::where('user_id', $request->user_id)->first();
+        }
 
+        $sesion_anterior = Sesion::where('paciente_id', $paciente->id)
+            ->where('estado', 'activo')->first();
         
         if(!$sesion_anterior){
             //return response()->json(["message"=> "sesion programada"]);

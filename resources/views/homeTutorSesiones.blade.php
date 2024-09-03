@@ -9,10 +9,12 @@
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
-    <link rel="stylesheet" href="{{asset('./css/style.css')}}">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="stylesheet" href="{{asset('vendors/ti-icons/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/base/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/favicon.ico')}}" />
+
 
     <!-- Google fonts-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -28,7 +30,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <!-- <link href="css/styles.css" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -288,6 +292,11 @@
                     <!-- Título -->
                     <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones</h2>
                     <p class="lead fw-normal text-muted mb-5 ttNorms">Consulta tus sesiones programadas para estar al tanto de tus citas y seguir tu progreso.</p>
+                    <div class="text-end mb-3">
+                        <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="window.location.href='{{ route('tutor.sesion') }}'">
+                            <i class="bi bi-person-plus-fill me-2"></i> Programar nueva Sesión
+                        </button>
+                    </div>
                     <!-- Tabla de pacientes -->
                     <div class="custom-table-container shadow" style="height: 500px;">
                         <div class="table-responsive">
@@ -295,14 +304,10 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
-                                        <th>Hora Inicio/Hora Fin</th>
-                                        <th>CI Paciente</th>
+                                        <th>Duración</th>
                                         <th>Nombre(s)</th>
-                                        <th>Apellidos</th>
-                                        <!-- <th>Descripción de la Sesión</th>
-                                        <th>Diagnóstico</th> -->
                                         <th>Modalidad</th>
-                                        <th>Estado de la Sesión</th>
+                                        <th>Estado</th>
                                         <th>Estado de Pago</th>
                                         <th>Pagar Sesión</th>
                                         <th>Cancelar Sesión</th>
@@ -573,7 +578,56 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
      <script>
-        
+        $(document).ready(function() {
+            $.ajax({
+                url: '/tutor/getSesiones',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var pagosPendientes = 0;
+
+                    var tbody = $('#table-sesiones');
+                    tbody.empty();
+                    $.each(data, function(index, sesion) {
+                        
+                        var row = $('<tr>');
+                        row.append($('<td>').text(sesion.fecha_hora_inicio.split(' ')[0])); //Fecha 
+                        row.append($('<td>').text(sesion.fecha_hora_inicio.substring(11,16) + ' - ' + sesion.fecha_hora_fin.substring(11,16))); //Hora Inicio/Hora Fin
+                        row.append('<td><span style="font-size:12px">'+ sesion.name + ' ' + sesion.apellidos +'<span></td>');
+                        row.append('<td><span style="font-size:12px">'+ sesion.modalidad +'<span></td>');
+
+                        if(sesion.estado == "Cancelado"){
+                            //row.append($('<td>').text("Cancelada").css('color', 'red')); 
+                            row.append('<td><span class="badge text-bg-danger text-white">Cancelada<span></td>')
+                        } else if(sesion.estado == "Terminada"){
+                            row.append('<td><span class="badge text-bg-success">Concluida<span></td>')
+                            //row.append($('<td>').text("Terminada").css('color', 'green'));
+                        } else{
+                            row.append('<td><span class="badge text-bg-warning text-white">Pendiente<span></td>')
+                        }
+
+                        if(sesion.estado == "Cancelado"){
+                            row.append('<td><span class="badge text-bg-info text-white">Sesión cancelada</span></td>');
+                        } else if (sesion.pago_confirmado == 0 && sesion.estado != 'Terminada') {
+                            var actionIconsPago = $('<td><span class="badge text-bg-warning text-white">Pendiente</span></td><td class="action-icons">' +
+                                '<i class="fas fa-money-bill text-success" onclick="mostrarModalPago(' + sesion.id + ')" title="Pagar"></i></td>' +
+                                '<td class="action-icons">' +
+                                '<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(' + sesion.id + ')" title="Cancelar"></i>' +
+                                '</td>');
+                            row.append(actionIconsPago);
+                            pagosPendientes++;
+                        } else {
+                            row.append('<td><span class="badge text-bg-success">Realizado</span></td>');
+                            row.append('<td class="text-success"></td>');
+                            row.append('<td class="text-success"></td>');
+                            row.append('<td class="action-icons"><i class="fas fa-folder-open" onclick="sesionDocs(' + sesion.id + ')"></i></td>');
+                        }
+                        
+                        $('#table-sesiones').append(row);
+                    });
+                }
+            });
+        });
     </script>
 </body>
 
