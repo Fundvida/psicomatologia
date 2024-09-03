@@ -48,10 +48,17 @@
             </ul>
             @endcan
             @can('paciente.sesion')
+            @if(auth()->user()->hasRole('Paciente'))
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('paciente.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
             </ul>
+            @else
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('tutor.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
+            </ul>
+            @endif
             @endcan
+
             @can('psicologo.sesion')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('psicologo.sesion') }}" style="color: #fff;">Programar Sesión</a></li>

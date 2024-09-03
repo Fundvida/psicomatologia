@@ -43,7 +43,7 @@ class NotificacionController extends Controller
 
         $routes = [
             'admin' => route('listadoAllSesiones'),
-            'Tutor' => route('tutor.seesiones'),
+            'tutor' => route('tutor.seesiones'),
             'paciente' => route('homePacienteSesiones'),
             'psicologo' => route('psicologo.sesiones'),
         ];

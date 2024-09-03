@@ -476,7 +476,7 @@
         });
 
         function showPreviousMessage() {
-            console.log('hola');
+            //console.log('hola');
             console.log(userRole);
             if (!userRole || !routes) {
                 console.error('UserRole or routes is undefined');
@@ -486,9 +486,6 @@
                 case 'Administrador':
                     window.location.href = routes.admin;
                     break;
-                // case 'Tutor':
-                //     window.location.href = ;
-                //     break;
                 case 'Paciente':
                     window.location.href = routes.paciente;
                     break;
@@ -496,7 +493,7 @@
                     window.location.href = routes.psicologo;
                     break;
                 case 'Tutor':
-                    //window.location.href = routes.psicologo;
+                    window.location.href = routes.tutor;
                     break;
             }
         }
