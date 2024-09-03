@@ -495,7 +495,7 @@
             }).then((result) => {
                 console.log('Redirigiendo');
                 setTimeout(() => {
-                window.location.href = '{{ route('homePacienteSesiones') }}';
+                window.location.href = '{{ route('tutor.seesiones') }}';
                 }, 3000);
             });
         }
@@ -628,6 +628,90 @@
                 }
             });
         });
+
+        function sesionDocs(sesion_id){
+            $.ajax({
+                url: '/sesion/estado/' + sesion_id,
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    if(data.estado == "activo"){
+                        Swal.fire({
+                            icon: "info",
+                            title: "Oops...",
+                            text: "No podrá ver los documentos hasta que la sesión este terminada.",
+                        });
+                    } else if (data.estado == "Terminada"){
+                        var modal = new bootstrap.Modal(document.getElementById('verDoc'));
+                        loadDocuments(sesion_id);
+                        getDiagnostico(sesion_id);
+                        modal.show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                    reject(error);
+                }
+            });
+        }
+
+        function loadDocuments (sesion_id){
+            fetch(`/sesion/${sesion_id}/documents`)
+                .then(response => response.json())
+                .then(data => {
+                    const documentList = document.getElementById('document-list');
+                    if (!documentList) {
+                        console.error('Elemento document-list no encontrado');
+                        return;
+                    }
+
+                    let htmlContent = '';
+                    data.forEach(document => {
+                        const extension = document.url.split('.').pop().toLowerCase();
+
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                            htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                            <a href="${document.url}" target="_blank"><img src="${document.url}" alt="${document.url}" width="100" height="75"></a>
+                                            <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                            </form>
+                                            </div>`;
+                        } else {
+                            htmlContent += `<div class="notification-item rounded bg-primary py-2 px-3 m-2 border-0 d-flex justify-content-between align-items-center">
+                                            <a href="${document.url}" target="_blank" width="100">documento</a>
+                                            <form action="{{route('sesion.documents.delete')}}" class="d-inline" method="POST">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="file_id" id="file_id" value="${document.id}"></input>
+                                            </form>
+                                            </div>`;
+                        }
+                    });
+
+                    // Insertar el HTML en el elemento document-list
+                    documentList.innerHTML = htmlContent;
+                })
+                .catch(error => console.error('Error al cargar los documentos:', error));
+        }
+
+        function getDiagnostico (sesion_id){
+            $.ajax({
+                url: '/sesion/diagnostico/' + sesion_id,
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    if (data && data.calificacion_descripcion) {
+                        document.getElementById('diagnostico').innerText = data.calificacion_descripcion;
+                    } else {
+                        console.error('No se encontró la descripción de la calificación para la sesión.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                    reject(error);
+                }
+            });
+        }
     </script>
 </body>
 

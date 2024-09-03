@@ -737,7 +737,6 @@
         }
 
         function verComprobante(sesion_id) {
-
             fetch(`/comprobante/${sesion_id}`)
                 .then(response => response.json())
                 .then(data => {

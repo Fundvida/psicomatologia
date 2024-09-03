@@ -180,7 +180,7 @@ Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])
     ->name('paciente.listar');
 
 Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')
-    ->middleware('can:paciente.files')
+    //->middleware('can:paciente.files')
     ->names('paciente.files');
 
 Route::post('/admin/files', [FileController::class, 'uploadComprobanteAdmin'])
