@@ -137,9 +137,9 @@
                     <div class="col-md-4 mb-5 mr-3 ml-3 d-flex justify-content-center align-items-end">
                         <!-- Feature item-->
                         <div class="text-center img-feature">
-                            <img src="{{ asset('images/taller-de-charlas-y-foros.png') }}" class="img-feature d-block mx-auto mb-4" alt="Imagen 6" style="max-width: 200px;">
-                            <h3 class="font-alt" style="color: #727FAB;">Taller de Charlas y Foros</h3>
-                            <p class="text-muted mb-0 description description-left">"En nuestra fundación, entendemos la importancia de la comunicación y el intercambio de conocimientos en el campo de la psicología. Por ello, ofrecemos una serie de talleres, charlas y foros diseñados para abordar una variedad de temas relevantes y actuales en la salud mental y el bienestar emocional."</p>
+                            <img src="{{ asset('images/terapiaNutricionista.png') }}" class="img-feature d-block mx-auto mb-4" alt="Imagen 6" style="max-width: 200px;">
+                            <h3 class="font-alt" style="color: #727FAB;">Terápia Nutricionista</h3>
+                            <p class="text-muted mb-0 description description-left">"En nuestra fundación, entendemos la importancia de una alimentación saludable. Por eso, ofrecemos terapia nutricionista personalizada para ayudar a nuestros pacientes a mejorar sus hábitos alimenticios y su bienestar general."</p>
                         </div>
                     </div>
 

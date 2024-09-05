@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <!-- Meta etiquetas requeridas -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SISTEMA DE PSICOLOGIA</title>
     <!-- Enlaces a los estilos CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
     <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('./css/style.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
     <!-- Google fonts-->
@@ -27,7 +28,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -220,53 +221,16 @@
 
 
     <!-- Contenido principal -->
-    <main class="main-content ">
-        <section class="py-5 d-flex" style="min-height: calc(100vh - 100px);">
-            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
-                <h2 class="display-3 lh-1 mb-4 font-alt">Cuenta de Usuario</h2>
 
-                <ul class="nav nav-tabs justify-content-center mb-4">
-                    
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Seguridad</a>
-                    </li>
-                </ul>
-                <form action="" id="passwordForm" method="POST">
-                    @csrf
-                    <div class="p-4 rounded shadow-lg">
-                        <h3 class="mb-4 font-alt">Cambiar contraseña</h3>
-                        <div class="mb-3 text-start">
-                            <label for="currentPassword" class="form-label">Contraseña Actual</label>
-                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                        </div>
-                        <div class="mb-3 text-start">
-                            <label for="newPassword" class="form-label">Nueva contraseña</label>
-                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                        </div>
-                        <div class="mb-3 text-start">
-                            <label for="confirmPassword" class="form-label">Confirmar Nueva contraseña</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold">Cambiar contraseña</button>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <!-- <main class="main-content">
+    <main class="main-content">
         <section class="py-1 d-flex" style="min-height: calc(100vh - 100px);">
             <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                 
                 <h2 class="display-3 lh-1 mb-2 font-alt">Cuenta de Usuario</h2>
-
                
                 <ul class="nav nav-tabs justify-content-center mb-4">
                     <li class="nav-item">
                         <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab">General</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="security-tab" data-bs-toggle="tab" href="#security" role="tab">Seguridad</a>
                     </li>
                 </ul>
 
@@ -276,58 +240,43 @@
                             <h3 class="mb-4 font-alt">Información del Usuario</h3>
                             <form id="userInfoForm">
                                 <div class="mb-3 text-start">
-                                    <label for="fullName" class="form-label">Nombre Completo</label>
-                                    <input type="text" class="form-control" id="fullName" value="Nombre del Usuario" disabled>
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" value="{{ $user->name }}">
                                 </div>
                                 <div class="mb-3 text-start">
-                                    <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
-                                    <input type="date" class="form-control" id="birthDate" value="1990-01-01" disabled>
+                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="apellidos" value="{{ $user->apellidos }}">
                                 </div>
                                 <div class="mb-3 text-start">
-                                    <label for="idCard" class="form-label">Carnet de Identidad</label>
-                                    <input type="text" class="form-control" id="idCard" value="123456789" disabled>
+                                    <label for="fecha_nac" class="form-label">Fecha de Nacimiento</label>
+                                    <input type="date" class="form-control" id="fecha_nac" value="{{ $user->fecha_nacimiento }}">
                                 </div>
+                                <div class="mb-3 text-start">
+                                    <label for="ci" class="form-label">Carnet de Identidad</label>
+                                    <input type="text" class="form-control" id="ci" value="{{ $user->ci }}">
+                                </div>
+                                @if(auth()->user()->hasRole('Paciente') || auth()->user()->hasRole('Tutor'))
+                                <div class="mb-3 text-start">
+                                    <label for="ocupacion" class="form-label">Ocupacion</label>
+                                    <input type="text" class="form-control" id="ocupacion" value="{{ $user->ocupacion }}">
+                                </div>
+                                @endif
                                 <div class="mb-3 text-start">
                                     <label for="email" class="form-label">Correo Electrónico</label>
-                                    <input type="email" class="form-control" id="email" value="usuario@ejemplo.com" disabled>
+                                    <input type="email" class="form-control" id="email" value="{{ $user->email }}">
                                 </div>
                                 <div class="mb-3 text-start">
-                                    <label for="phone" class="form-label">Número de Teléfono</label>
-                                    <input type="tel" class="form-control" id="phone" value="+591 12345678" disabled>
+                                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                                    <input type="tel" class="form-control" id="telefono" value="{{ $user->telefono }}">
                                 </div>
-                                <button type="button" id="editButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">EDITAR</button>
-                                <button type="submit" id="saveButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt" style="display: none;">GUARDAR CAMBIOS</button>
+                                <button type="submit" id="saveButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">ACTUALIZAR CAMBIOS</button>
                             </form>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="security" role="tabpanel">
-                        <form action="" id="passwordForm" method="POST">
-                            @csrf
-                            
-                            <div class="p-4 rounded shadow-lg">
-                                
-                                <h3 class="mb-4 font-alt">Cambiar contraseña</h3>
-
-                                <div class="mb-3 text-start">
-                                    <label for="currentPassword" class="form-label">Contraseña Actual</label>
-                                    <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                                </div>
-                                <div class="mb-3 text-start">
-                                    <label for="newPassword" class="form-label">Nueva contraseña</label>
-                                    <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                                </div>
-                                <div class="mb-3 text-start">
-                                    <label for="confirmPassword" class="form-label">Confirmar Nueva contraseña</label>
-                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                </div>
-                                <button type="submit" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">CAMBIAR CONTRASEÑA</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </section>
-    </main> -->
+    </main>
 
     <!-- Enlaces a los scripts JS -->
     <script src="{{asset('./vendors/base/vendor.bundle.base.js')}}"></script>

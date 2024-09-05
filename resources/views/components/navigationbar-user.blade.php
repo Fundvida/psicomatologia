@@ -10,12 +10,12 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profileDropdown" style="display: none; right: 0; left: auto;">
 
-                        <form method="POST" action="" class="dropdown-item">
-                            <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">
+                        <button method="POST" class="dropdown-item">
+                            <a href="{{ route('user.edit.view') }}" class="btn btn-link text-dark" style="text-decoration: none;">
                                 <i class="fas fa-cog text-primary"></i> <!-- Cambié la clase para el ícono de cierre de sesión -->
                                 Configuración
-                            </button>
-                        </form>
+                            </a>
+                        </button>
                         <form method="POST" action="{{ route('cerrar_sesion') }}" class="dropdown-item">
                             @csrf
                             <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">

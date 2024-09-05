@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\FichaAtencionController;
 use App\Http\Controllers\Files\FileController;
 use App\Http\Controllers\HorarioController;
@@ -307,6 +308,9 @@ Route::get('/tutor/getSesiones', [TutorController::class, 'getSesiones'])
 
 Route::get('/tutor/sesion', [TutorController::class, 'programarSesionView'])
     ->name('tutor.sesion');
+
+Route::get('/user/edit/profile', [UserController::class, 'editView'])
+    ->name('user.edit.view');
 
 //  Route::get('/test', function () {
 //          return view('test');

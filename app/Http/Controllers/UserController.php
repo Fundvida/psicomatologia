@@ -85,4 +85,10 @@ class UserController extends Controller
     {
         return view('notificaciones');
     }
+
+    public function editView(){
+        $user = Auth::user();
+
+        return view('userEdit', compact('user'));
+    }
 }

@@ -67,7 +67,7 @@
         </li>
         <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                <li><a href="#" style="color: #fff;">Datos Personales</a></li>
+                <li><a href="{{ route('user.edit.view') }}" style="color: #fff;">Datos Personales</a></li>
             </ul>
         </li>
         <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA

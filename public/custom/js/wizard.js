@@ -250,6 +250,14 @@ const infoPsicologyst = (e, psicologo_id) => {
         })
         .then(data => {
             console.log(data);
+            var especialidadText = '<ul>';
+            document.getElementById('nombrePsicologo').textContent = data.psicologo.name + ' ' + data.psicologo.apellidos;
+            data.especialidades.forEach(e => {
+                especialidadText += `<li>` + e.especialidad + `</li>`;
+            });
+
+            document.getElementById('especialidadesPsicologo').innerHTML = especialidadText + '</ul>';
+            document.getElementById('desc_cv').textContent = data.psicologo.descripcion_cv;
         })
         .catch(error => {
             console.error('Error fetching psychologists:', error.message);
