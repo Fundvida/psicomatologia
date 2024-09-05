@@ -270,6 +270,19 @@
                                     <label for="telefono" class="form-label">Número de Teléfono</label>
                                     <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ $user->telefono }}">
                                 </div>
+
+                                @if(auth()->user()->hasRole('Psicologo'))
+                                    <fieldset class="border p-2">
+                                        <legend class="w-auto">Especialidades</legend>
+                                        @foreach($especialidades as $especialidad)
+                                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                                            <label class="form-label mb-0">{{ $especialidad->especialidad }}</label>
+                                            <input type="number"  name="tarifas[{{ $especialidad->espec_id }}]" class="form-control" style="width: 300px;">
+                                        </div>
+                                        @endforeach
+                                    </fieldset>
+                                @endif
+
                                 <button type="submit" id="saveButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">ACTUALIZAR CAMBIOS</button>
                             </form>
                         </div>

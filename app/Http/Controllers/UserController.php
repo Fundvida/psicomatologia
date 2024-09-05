@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Especialidad;
+use App\Models\Psicologo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -88,8 +90,14 @@ class UserController extends Controller
 
     public function editView(){
         $user = Auth::user();
+        $especialidades = null;
 
-        return view('userEdit', compact('user'));
+        if($user->hasRole('Psicologo')){
+            $psicologo = Psicologo::where('user_id', $user->id)->first();
+            $especialidades = Especialidad::where('psico_id', $psicologo->id)->get();
+        }
+
+        return view('userEdit', compact('user', 'especialidades'));
     }
 
     public function edit(Request $request){
@@ -107,6 +115,12 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->telefono = $request->telefono;
             $user->save();
+
+            if($user->hasRole('Psicologo')){
+                foreach ($request->input('tarifas') as $espec_id => $tarifa) {
+                    Especialidad::where('espec_id', $espec_id)->update(['tarifa' => $tarifa]);
+                }
+            }
             return redirect()->route('user.edit.view')->with('resultado', "actualizado");
         }
 
