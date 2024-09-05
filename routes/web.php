@@ -310,7 +310,12 @@ Route::get('/tutor/sesion', [TutorController::class, 'programarSesionView'])
     ->name('tutor.sesion');
 
 Route::get('/user/edit/profile', [UserController::class, 'editView'])
+    ->middleware('can:user.edit.view')
     ->name('user.edit.view');
+
+Route::post('/user/edit', [UserController::class, 'edit'])
+    ->middleware('can:user.edit.view')
+    ->name('user.edit');
 
 //  Route::get('/test', function () {
 //          return view('test');

@@ -61,7 +61,8 @@ class roles_seeder extends Seeder
             'paciente.psicologo.id' => [$role_2],
             'psicologo.sesion' => [$role_1],
             'pacientesTutor' => [$role_3],
-            'tutorSesiones' => [$role_3]
+            'tutorSesiones' => [$role_3],
+            'user.edit.view' => [$role_3, $role_2, $role_1, $role_4]
         ];
 
         foreach ($permissions as $permission => $roles) {

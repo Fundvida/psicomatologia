@@ -91,4 +91,25 @@ class UserController extends Controller
 
         return view('userEdit', compact('user'));
     }
+
+    public function edit(Request $request){
+        $user = User::where('id', Auth::user()->id)->first();
+        $checkEmail = null;
+
+        if($user->email != $request->email){
+            $checkEmail = User::where('email', $request->email)->first();
+        }
+
+        if(!$checkEmail){
+            $user->name = $request->nombre;
+            $user->apellidos = $request->apellidos;
+            $user->fecha_nacimiento = $request->fecha_nac;
+            $user->email = $request->email;
+            $user->telefono = $request->telefono;
+            $user->save();
+            return redirect()->route('user.edit.view')->with('resultado', "actualizado");
+        }
+
+        return redirect()->route('user.edit.view')->with('resultado', "error");
+    }
 }

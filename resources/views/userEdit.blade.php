@@ -238,18 +238,19 @@
                     <div class="tab-pane fade show active" id="general" role="tabpanel">
                         <div class="p-4 rounded shadow-lg">
                             <h3 class="mb-4 font-alt">Información del Usuario</h3>
-                            <form id="userInfoForm">
+                            <form action="{{ route('user.edit') }}" method="POST">
+                            @csrf
                                 <div class="mb-3 text-start">
                                     <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombre" value="{{ $user->name }}">
+                                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ $user->name }}">
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="apellidos" class="form-label">Apellidos</label>
-                                    <input type="text" class="form-control" id="apellidos" value="{{ $user->apellidos }}">
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos" value="{{ $user->apellidos }}">
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="fecha_nac" class="form-label">Fecha de Nacimiento</label>
-                                    <input type="date" class="form-control" id="fecha_nac" value="{{ $user->fecha_nacimiento }}">
+                                    <input type="date" class="form-control" id="fecha_nac" name="fecha_nac" value="{{ $user->fecha_nacimiento }}">
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="ci" class="form-label">Carnet de Identidad</label>
@@ -258,16 +259,16 @@
                                 @if(auth()->user()->hasRole('Paciente') || auth()->user()->hasRole('Tutor'))
                                 <div class="mb-3 text-start">
                                     <label for="ocupacion" class="form-label">Ocupacion</label>
-                                    <input type="text" class="form-control" id="ocupacion" value="{{ $user->ocupacion }}">
+                                    <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="{{ $user->ocupacion }}">
                                 </div>
                                 @endif
                                 <div class="mb-3 text-start">
                                     <label for="email" class="form-label">Correo Electrónico</label>
-                                    <input type="email" class="form-control" id="email" value="{{ $user->email }}">
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="telefono" class="form-label">Número de Teléfono</label>
-                                    <input type="tel" class="form-control" id="telefono" value="{{ $user->telefono }}">
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ $user->telefono }}">
                                 </div>
                                 <button type="submit" id="saveButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">ACTUALIZAR CAMBIOS</button>
                             </form>
@@ -397,6 +398,28 @@
         setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
     });
 </script>
+    @if(session('resultado') === 'actualizado')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: "Éxito!",
+                text: "Perfil actualizado exitosamente.",
+                icon: "success"
+            });
+        });
+    </script>
+    @endif
+    @if(session('resultado') === 'error')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: "Oops.",
+                text: "El correo proporcionado ya existe.",
+                icon: "error"
+            });
+        });
+    </script>
+    @endif
 </body>
 
 </html>
