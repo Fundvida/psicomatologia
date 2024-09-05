@@ -72,6 +72,9 @@
                                     <div>
                                     <span style="font-weight: bold;">Forma de Pago: </span><span id='pagoR'></span>
                                     </div>
+                                    <div>
+                                    <span style="font-weight: bold;">Monto a cancelar: </span><span id='montoR'></span> Bs.
+                                    </div>
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
                                     <div>

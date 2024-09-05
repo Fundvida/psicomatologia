@@ -210,7 +210,7 @@ class PsicologoController extends Controller
         $psicologo = Psicologo::join('especialidades', 'especialidades.psico_id', '=', 'psicologos.id')
             ->join('users', 'users.id', '=', 'psicologos.user_id')
             ->where('especialidades.especialidad', '=', $especialidad)
-            ->select('psicologos.*', 'users.name', 'users.apellidos', 'users.profile_photo_path', 'especialidades.especialidad')
+            ->select('psicologos.*', 'users.name', 'users.apellidos', 'users.profile_photo_path', 'especialidades.especialidad', 'especialidades.tarifa')
             ->get();
 
         if (!$psicologo) {
