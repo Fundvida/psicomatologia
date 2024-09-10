@@ -262,14 +262,12 @@
         <section class="py-0 d-flex justify-content-center align-items-center" id="">
             <div class="container px-4 text-center shadow-lg p-5 rounded-lg welcome-container">
                 <!-- Título -->
-                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido/a Psicólogo/a!</h2>
+                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido al Gabinete de sanación de la conducta!</h2>
                 <div class="welcome-message">
-                    <p class="lead mb-5 text-dark">¡Bienvenidos al Gabinete de Atención Psicológica!</p>
-                    <p class="welcome-text">Estamos encantados de darles la bienvenida a nuestro equipo de profesionales dedicados al cuidado de la salud mental. Sabemos que han elegido una profesión noble y desafiante, y estamos emocionados de tenerlos aquí para contribuir con su experiencia y pasión al servicio de nuestros pacientes.</p>
-                    <p class="welcome-text">En este gabinete, valoramos la diversidad de enfoques y perspectivas que cada uno de ustedes trae consigo. Creemos firmemente en el poder del trabajo en equipo y en el intercambio de conocimientos para ofrecer la mejor atención posible a quienes confían en nosotros para su bienestar emocional.</p>
-                    <p class="welcome-text">Queremos que se sientan apoyados y empoderados en su trabajo aquí. Estamos comprometidos a proporcionarles el ambiente y los recursos que necesitan para crecer tanto personal como profesionalmente, y a fomentar una cultura de cuidado mutuo y desarrollo continuo.</p>
-                    <p class="welcome-text">Siempre estaremos disponibles para escuchar sus ideas, preocupaciones o necesidades, así que no duden en comunicarse con nosotros en cualquier momento.</p>
-                    <p class="welcome-text font-weight-bold">¡Bienvenidos de nuevo y esperamos que su tiempo aquí sea inspirador, gratificante y lleno de oportunidades para hacer una diferencia significativa en la vida de quienes atendemos!</p>
+                    <p class="welcome-text">Nos complace darles la bienvenida a nuestro equipo de profesionales comprometidos con el bienestar integral de nuestros pacientes. Ustedes han elegido una profesión noble y desafiante, y estamos emocionados de contar con su experiencia y dedicación para contribuir al cuidado de la salud mental y emocional de quienes confían en nosotros.</p>
+                    <p class="welcome-text">En nuestro gabinete, valoramos la riqueza que aporta la diversidad de enfoques y perspectivas de cada uno de ustedes. Creemos firmemente en el poder del trabajo en equipo, la colaboración interdisciplinaria y el intercambio constante de conocimientos para ofrecer una atención de calidad. Esto incluye, no solo el apoyo emocional y psicológico, sino también un enfoque holístico que incorpore la terapia nutricional, reconociendo la profunda conexión entre la alimentación y la salud mental.</p>
+                    <p class="welcome-text">La terapia nutricional es una parte fundamental de nuestro enfoque integral, ya que entendemos que los hábitos alimenticios juegan un papel clave en el bienestar emocional, la regulación del estado de ánimo y el manejo del estrés. Queremos fomentar un entorno en el que se integren tanto las6 intervenciones psicológicas como las nutricionales, las técnicas de relajación y autocuidado, y el ejercicio físico, promoviendo así la salud de nuestros pacientes desde una perspectiva integral.</p>
+                    <p class="welcome-text">Nuestro compromiso es brindarles a ustedes un entorno de apoyo donde puedan desarrollarse profesionalmente, intercambiar ideas y seguir creciendo en su práctica. Creemos en una cultura de cuidado mutuo, aprendizaje continuo y crecimiento tanto personal como profesional, para que puedan sentirse plenos y empoderados en su labor diaria.</p>
                 </div>
             </div>
         </section>

@@ -310,6 +310,9 @@
                                 <option value="Terapia Adolecentes/Jóvenes">Terapia Adolecentes/Jóvenes</option>
                                 <option value="Terapia Adultos Mayores">Terapia Adultos Mayores</option>
                                 <option value="Terapia Pareja">Terapia Pareja</option>
+                                <option value="Psicologia Infantil">Psicologia Infantil</option>
+                                <option value="Taller Cuerdas Bajas">Taller Cuerdas Bajas</option>
+                                <option value="Terapia nutricionista">Terapia nutricionista</option>
                             </select>
                         </div>
                         <div class="row mb-3">

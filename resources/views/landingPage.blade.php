@@ -56,7 +56,7 @@
                     <div class="col-lg-6">
                         <!-- Mashead text and app badges-->
                         <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                            <h1 class="display-3 lh-1 mb-3 font-alt" style="color: #505B80;">No Existe Salud Sin Salud Mental</h1>
+                        <h1 class="display-3 lh-1 mb-3 font-alt" style="color: #505B80;">No Existe Salud, Sin Salud Mental, Nutricional y Física</h1>
                             <p class="lead fw-normal text-muted mb-5 ttNorms">Acceso directo a terapias personalizadas y atención especializada que comprende y atiende sus necesidades.</p>
 
                         </div>
@@ -93,7 +93,25 @@
                         <div class="text-center img-feature">
                             <img src="{{ asset('images/psicologia-infantil.png') }}" class="img-feature d-block mx-auto mb-4" alt="Imagen 1" style="max-width: 200px;">
                             <h3 class="font-alt" style="color: #727FAB">Psicología Infantil</h3>
-                            <p class="text-muted mb-0 description">"Nuestro enfoque en la psicología infantil se centra en comprender y atender las necesidades emocionales y mentales de los niños en su etapa de desarrollo. Desde el cuidado psicológico especializado hasta el apoyo en el crecimiento y la resolución de conflictos, trabajamos para promover un entorno saludable y feliz para los más pequeños."</p>
+                            <p class="text-muted mb-0 description">
+                                ● Trastornos del desarrollo (autismo, TDAH, trastornos del lenguaje)
+                                <br>
+                                ● Problemas de conducta (agresividad, desobediencia, problemas de control de impulsos)
+                                <br>
+                                ● Ansiedad por separación o miedo escolar
+                                <br>
+                                ● Problemas emocionales derivados de situaciones familiares conflictivas (divorcio, violencia intrafamiliar)
+                                <br>
+                                ● Abuso sexual o físico
+                                <br>
+                                ● Dificultades en el aprendizaje
+                                <br>
+                                ● Desarrollo de habilidades sociales
+                                <br>
+                                ● Intervención en casos de duelo y pérdida
+                                <br>
+                                ● Problemas relacionados con la autoestima
+                            </p>
                         </div>
                     </div>
 
@@ -102,7 +120,25 @@
                         <div class="text-center img-feature">
                             <img src="{{ asset('images/jovenes-adolescentes.png') }}" class="img-feature d-block mx-auto mb-4" alt="Imagen 2" style="max-width: 200px;">
                             <h3 class="font-alt" style="color: #727FAB;">Adolescentes y Jóvenes</h3>
-                            <p class="text-muted mb-0 description">"En nuestra fundación, nos dedicamos a ofrecer apoyo psicológico especializado para adolescentes y jóvenes en su camino hacia la madurez emocional y el bienestar mental. Reconocemos los desafíos únicos que enfrentan en esta etapa de la vida y trabajamos para proporcionar un espacio seguro donde puedan explorar sus emociones, enfrentar los desafíos y desarrollar habilidades para una vida plena."</p>
+                            <p class="text-muted mb-0 description">
+                                ●  Trastornos de la conducta alimentaria (anorexia, bulimia, atracones)
+                                <br>
+                                ●  Ansiedad social y trastornos de la imagen corporal
+                                <br>
+                                ●  Problemas relacionados con la identidad (sexualidad, orientación sexual)
+                                <br>
+                                ●  Depresión y tendencias suicidas
+                                <br>
+                                ●  Conflictos interpersonales (problemas con amigos, acoso escolar, bullying)
+                                <br>
+                                ●  Rebeldía y problemas de autoridad (conflictos con figuras parentales)
+                                <br>
+                                ●  Uso y abuso de sustancias
+                                <br>
+                                ●  Gestión emocional y regulación del estrés
+                                <br>
+                                ●  Dificultades académicas y orientación vocacional
+                            </p>
                         </div>
                     </div>
 
@@ -111,7 +147,25 @@
                         <div class="text-center img-feature">
                             <img src="{{ asset('images/adulto.png') }}" class="img-feature d-block mx-auto mb-4" alt="Imagen 3" style="max-width: 200px;">
                             <h3 class="font-alt" style="color: #727FAB;">Adultos</h3>
-                            <p class="text-muted mb-0 description description-left">"En nuestra fundación, ofrecemos un espacio acogedor y de apoyo para adultos que buscan cuidar su salud mental y emocional. Entendemos que la vida adulta puede presentar una variedad de desafíos, desde el manejo del estrés y la ansiedad hasta la resolución de conflictos y la búsqueda de un mayor bienestar."</p>
+                            <p class="text-muted mb-0 description description-left">
+                                ● Trastornos de ansiedad, depresión y estrés
+                                <br>
+                                ● Problemas de relación de pareja y familia (conflictos maritales, violencia de género)
+                                <br>
+                                ● Problemas laborales (estrés ocupacional, agotamiento o "burnout")
+                                <br>
+                                ● Manejo de crisis vitales (pérdida de empleo, separaciones, enfermedades)
+                                <br>
+                                ● Problemas de autoestima y autoconcepto
+                                <br>
+                                ● Trastornos relacionados con el sueño
+                                <br>
+                                ● Adicciones (alcohol, drogas, juego)
+                                <br>
+                                ● Trastornos de la personalidad
+                                <br>
+                                ● Dificultades en la conciliación entre vida personal y profesional
+                            </p>
                         </div>
                     </div>
 
@@ -120,7 +174,25 @@
                         <div class="text-center img-feature">
                             <img src="{{ asset('images/adulto-mayor.png') }}" class="img-feature d-block mx-auto mb-4" alt="Imagen 4" style="max-width: 200px;">
                             <h3 class="font-alt" style="color: #727FAB;">Adulto Mayor</h3>
-                            <p class="text-muted mb-0 description">"En nuestra fundación, nos dedicamos a proporcionar un apoyo especializado y compasivo para los adultos mayores que buscan mantener su bienestar emocional y mental en esta etapa de la vida. Reconocemos los desafíos únicos que enfrentan los adultos mayores, desde ajustes en la vida después de la jubilación hasta enfrentar la soledad y la pérdida."</p>
+                            <p class="text-muted mb-0 description">
+                                ● Trastornos neurocognitivos (demencia, Alzheimer, pérdida de memoria)
+                                <br>
+                                ● Ansiedad y depresión asociadas al envejecimiento
+                                <br>
+                                ● Aislamiento social y sentimientos de soledad
+                                <br>
+                                ● Manejo de enfermedades crónicas y deterioro físico
+                                <br>
+                                ● Problemas de adaptación a cambios en la vida (jubilación, pérdida de seres queridos)
+                                <br>
+                                ● Pérdida de autonomía e independencia
+                                <br>
+                                ● Intervenciones relacionadas con la calidad de vida y bienestar emocional
+                                <br>
+                                ● Duelos complicados
+                                <br>
+                                ● Prevención del maltrato y abuso hacia el adulto mayor
+                            </p>
                         </div>
                     </div>
 
