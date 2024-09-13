@@ -415,7 +415,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <h5>Diagnóstico de la Sesión:</h5>
+                        <h5 id="title-diagnostico">Diagnóstico de la Sesión:</h5>
                         <p id="diagnostico">
                             
                         </p>
@@ -748,6 +748,7 @@
                     if (data && data.calificacion_descripcion) {
                         document.getElementById('diagnostico').innerText = data.calificacion_descripcion;
                     } else {
+                        document.getElementById('title-diagnostico').style.display = 'none';
                         console.error('No se encontró la descripción de la calificación para la sesión.');
                     }
                 },
