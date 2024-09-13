@@ -54,7 +54,7 @@
             <div class="col-md-6 mb-3">
                 <button type="button"
                     class="btn btn-servicio btn-outline-primary btn-lg btn-servicio rounded-pill w-100 fw-bold"
-                    onclick="handleButtonServicioClick(this,'Taller de Charlas y Foros')" id='btnServicio6'>
+                    onclick="handleButtonServicioClick(this,'Terapia Nutricionista')" id='btnServicio6'>
                     <i class="bi bi-grid servicio-icon"></i> Terapia Nutricionista
                 </button>
             </div>
