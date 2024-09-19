@@ -254,12 +254,12 @@
                                 </div>
                                 <div class="mb-3 text-start">
                                     <label for="ci" class="form-label">Carnet de Identidad</label>
-                                    <input type="text" class="form-control" id="ci" value="{{ $user->ci }}">
+                                    <input type="text" class="form-control" id="ci" name="ci" value="{{ $user->ci }}">
                                 </div>
-                                @if(auth()->user()->hasRole('Paciente') || auth()->user()->hasRole('Tutor'))
+                                @if(auth()->user()->hasRole('Paciente'))
                                 <div class="mb-3 text-start">
                                     <label for="ocupacion" class="form-label">Ocupacion</label>
-                                    <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="{{ $user->ocupacion }}">
+                                    <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="{{ $datos_paciente->ocupacion }}">
                                 </div>
                                 @endif
                                 <div class="mb-3 text-start">
