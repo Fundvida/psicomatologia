@@ -311,8 +311,15 @@
                                 <option value="Terapia Adultos Mayores">Terapia Adultos Mayores</option>
                                 <option value="Terapia Pareja">Terapia Pareja</option>
                                 <option value="Psicologia Infantil">Psicologia Infantil</option>
-                                <option value="Taller Cuerdas Bajas">Taller Cuerdas Bajas</option>
-                                <option value="Terapia nutricionista">Terapia nutricionista</option>
+                                <option value="Talleres">Talleres</option>
+                                <option value="Terapia Nutricional">Terapia Nutricional</option>
+                                <option value="Terapia de Estimulación Temprana y Cognitivo Conductual para Niños TEA">Terapia de Estimulación Temprana y Cognitivo Conductual para Niños TEA</option>
+                                <option value="Terapia Indivisual Especificamente para Mujeres">Terapia Indivisual Especificamente para Mujeres</option>
+                                <option value="Evaluación Diagnóstica para Niños con Sospecha de TEA">Evaluación Diagnóstica para Niños con Sospecha de TEA</option>
+                                <option value="Valoraciones psicológicas">Valoraciones psicológicas</option>
+                                <option value="Valoraciones psicoeducativas">Valoraciones psicoeducativas</option>
+                                <option value="Orientación Vocacional">Orientación Vocacional</option>
+                                <option value="Atención de Emergencias">Atención de Emergencias</option>
                             </select>
                         </div>
                         <div class="row mb-3">

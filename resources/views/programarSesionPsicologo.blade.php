@@ -10,9 +10,9 @@
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
-    <link rel="stylesheet" href="{{asset('./css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('vendors/ti-icons/css/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/base/vendor.bundle.base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}">
 
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
@@ -288,8 +288,8 @@
         <section class="py-0 d-flex justify-content-center align-items-center" id="">
             <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
                 <!-- Título "Agende su cita inicial" -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">Programar sesión</h2>
-                <p class="lead fw-normal text-muted mb-5 ttNorms">Por favor, Seleccione un horario disponible para agendar cita con su paciente.</p>
+                <h2 class="display-3 lh-1 mb-5 font-alt">Programación</h2>
+                <p class="lead fw-normal text-muted mb-5 ttNorms">Por favor programe su agenda de sesiones o eventos.</p>
                 <div class="text-end mb-3">
                     <div>
                         <span class="error-form" id="horarioSeleccionError"></span>

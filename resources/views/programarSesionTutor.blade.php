@@ -337,11 +337,11 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="00:00" max="11:59" step="3600" readonly>
+                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="00:00" max="11:01" step="3600" readonly>
                                         <div class="input-group-append">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="00:00" max="11:59" step="3600" readonly>
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="01:00" max="12:01" step="3600" readonly>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -545,8 +545,8 @@
             let calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'es', // Establecer el idioma español
                 initialView: 'timeGridWeek',
-                slotMinTime: '08:00:00', // Start time (6:00 AM)
-                slotMaxTime: '22:00:00', // End time (10:00 PM)
+                slotMinTime: '05:00:00', // Start time (6:00 AM)
+                slotMaxTime: '23:00:00', // End time (10:00 PM)
                 headerToolbar: false,
                 allDaySlot: false,
                 headerToolbar: {

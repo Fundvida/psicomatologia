@@ -8,9 +8,9 @@
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
-    <link rel="stylesheet" href="{{asset('./css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/ti-icons/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/base/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
     <!-- Google fonts-->
@@ -28,7 +28,7 @@
 
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>

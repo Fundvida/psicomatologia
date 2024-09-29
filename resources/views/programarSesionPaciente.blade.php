@@ -518,8 +518,8 @@
             let calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'es', // Establecer el idioma español
                 initialView: 'timeGridWeek',
-                slotMinTime: '08:00:00', // Start time (6:00 AM)
-                slotMaxTime: '22:00:00', // End time (10:00 PM)
+                slotMinTime: '05:00:00', // Start time (6:00 AM)
+                slotMaxTime: '23:00:00', // End time (10:00 PM)
                 headerToolbar: false,
                 allDaySlot: false,
                 headerToolbar: {
