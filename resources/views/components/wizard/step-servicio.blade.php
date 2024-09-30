@@ -14,7 +14,7 @@
             <div class="col-md-6 mb-3">
                 <button type="button"
                     class="btn btn-servicio btn-outline-primary btn-lg btn-servicio rounded-pill w-100 fw-bold"
-                    onclick="handleButtonServicioClick(this,'Psicología Infantil')" id='btnServicio1'>
+                    onclick="handleButtonServicioClick(this,'Psicologia Infantil')" id='btnServicio1'>
                     >
                     <i class="bi bi-person servicio-icon"></i> Psicología Infantil
                     
@@ -54,14 +54,14 @@
             <div class="col-md-6 mb-3">
                 <button type="button"
                     class="btn btn-servicio btn-outline-primary btn-lg btn-servicio rounded-pill w-100 fw-bold"
-                    onclick="handleButtonServicioClick(this,'Terapia Nutricionista')" id='btnServicio6'>
+                    onclick="handleButtonServicioClick(this,'Terapia Nutricional')" id='btnServicio6'>
                     <i class="bi bi-grid servicio-icon"></i> Terapia Nutricionista
                 </button>
             </div>
             <div class="col-md-6 mb-3">
                 <button type="button"
                     class="btn btn-servicio btn-outline-primary btn-lg btn-servicio rounded-pill w-100 fw-bold"
-                    onclick="handleButtonServicioClick(this,'Taller de Cuerdas Bajas')" id='btnServicio7'>
+                    onclick="handleButtonServicioClick(this,'Talleres')" id='btnServicio7'>
                     <i class="bi bi-grid servicio-icon"></i> Taller de Cuerdas Bajas
                 </button>
             </div>
