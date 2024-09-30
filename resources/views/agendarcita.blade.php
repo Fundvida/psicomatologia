@@ -475,37 +475,37 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const buttons = document.querySelectorAll('.btn-servicio');
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const buttons = document.querySelectorAll('.btn-servicio');
 
-            const descriptions = {
-                btnServicio1: 'Descripción detallada sobre Psicología Infantil.',
-                btnServicio2: 'Descripción detallada sobre Terapia Adolescentes/Jóvenes.',
-                btnServicio3: 'Descripción detallada sobre Terapia Adultos.',
-                btnServicio4: 'Descripción detallada sobre Terapia Adultos Mayores.',
-                btnServicio5: 'Descripción detallada sobre Terapia de Pareja.',
-                btnServicio6: 'Descripción detallada sobre Talleres, Seminarios y/o Foros.',
-                btnServicio7: 'Descripción detallada sobre Taller de Cuerdas Bajas.'
-            };
+        //     const descriptions = {
+        //         btnServicio1: 'Descripción detallada sobre Psicología Infantil.',
+        //         btnServicio2: 'Descripción detallada sobre Terapia Adolescentes/Jóvenes.',
+        //         btnServicio3: 'Descripción detallada sobre Terapia Adultos.',
+        //         btnServicio4: 'Descripción detallada sobre Terapia Adultos Mayores.',
+        //         btnServicio5: 'Descripción detallada sobre Terapia de Pareja.',
+        //         btnServicio6: 'Descripción detallada sobre Talleres, Seminarios y/o Foros.',
+        //         btnServicio7: 'Descripción detallada sobre Taller de Cuerdas Bajas.'
+        //     };
 
-            buttons.forEach(button => {
-                const descriptionBox = document.createElement('div');
-                descriptionBox.className = 'description-box';
-                descriptionBox.textContent = descriptions[button.id] || 'Descripción no disponible';
-                document.body.appendChild(descriptionBox);
+        //     buttons.forEach(button => {
+        //         const descriptionBox = document.createElement('div');
+        //         descriptionBox.className = 'description-box';
+        //         descriptionBox.textContent = descriptions[button.id] || 'Descripción no disponible';
+        //         document.body.appendChild(descriptionBox);
 
-                button.addEventListener('mouseover', function (e) {
-                    const rect = button.getBoundingClientRect();
-                    descriptionBox.style.left = `${rect.left + window.scrollX}px`;
-                    descriptionBox.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
-                    descriptionBox.style.display = 'block';
-                });
+        //         button.addEventListener('mouseover', function (e) {
+        //             const rect = button.getBoundingClientRect();
+        //             descriptionBox.style.left = `${rect.left + window.scrollX}px`;
+        //             descriptionBox.style.top = `${rect.top + window.scrollY + rect.height + 10}px`;
+        //             descriptionBox.style.display = 'block';
+        //         });
 
-                button.addEventListener('mouseout', function () {
-                    descriptionBox.style.display = 'none';
-                });
-            });
-        });
+        //         button.addEventListener('mouseout', function () {
+        //             descriptionBox.style.display = 'none';
+        //         });
+        //     });
+        // });
 
 
     </script>
