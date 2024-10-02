@@ -197,6 +197,54 @@
         .show {
             display: block !important;
         }
+        /* Estilos para el parrafo*/
+
+        .welcome-container {
+            background: linear-gradient(to bottom right, #ffffff, #f0f8ff);
+            max-width: 1000px;
+            border-radius: 2rem;
+            box-shadow: 0 1rem 3rem rgba(0,0,0,0.1);
+        }
+        .welcome-message {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #333;
+        }
+        .welcome-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: justify;
+            padding: 0 1rem;
+            line-height: 1.8;
+        }
+        .font-alt {
+            font-family: 'Newsreader', serif;
+            color: #e17777;
+        }
+        .lead {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #e17777;
+        }
+        .font-weight-bold {
+            font-weight: 700!important;
+            color: #000000;
+        }
+        .text-primary {
+            color: #e17777!important;
+        }
+        .display-4 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (min-width: 768px) {
+            .welcome-container {
+                padding: 3rem!important;
+            }
+            .display-4 {
+                font-size: 3rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -212,10 +260,15 @@
     <!-- Contenido principal -->
     <main class="main-content ">
         <section class="py-0 d-flex justify-content-center align-items-center" id="">
-            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
+            <div class="container px-4 text-center shadow-lg p-5 rounded-lg welcome-container">
                 <!-- Título -->
-                <h2 class="display-3 lh-1 mb-5 font-alt">¡Bienvenido/a Psicólogo/a!</h2>
-                <p class="lead fw-normal text-muted mb-5 ttNorms">¡Gracias por acceder al Sistema de Psicología!</p>
+                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido al Gabinete de sanación de la conducta!</h2>
+                <div class="welcome-message">
+                    <p class="welcome-text">Nos complace darles la bienvenida a nuestro equipo de profesionales comprometidos con el bienestar integral de nuestros pacientes. Ustedes han elegido una profesión noble y desafiante, y estamos emocionados de contar con su experiencia y dedicación para contribuir al cuidado de la salud mental y emocional de quienes confían en nosotros.</p>
+                    <p class="welcome-text">En nuestro gabinete, valoramos la riqueza que aporta la diversidad de enfoques y perspectivas de cada uno de ustedes. Creemos firmemente en el poder del trabajo en equipo, la colaboración interdisciplinaria y el intercambio constante de conocimientos para ofrecer una atención de calidad. Esto incluye, no solo el apoyo emocional y psicológico, sino también un enfoque holístico que incorpore la terapia nutricional, reconociendo la profunda conexión entre la alimentación y la salud mental.</p>
+                    <p class="welcome-text">La terapia nutricional es una parte fundamental de nuestro enfoque integral, ya que entendemos que los hábitos alimenticios juegan un papel clave en el bienestar emocional, la regulación del estado de ánimo y el manejo del estrés. Queremos fomentar un entorno en el que se integren tanto las6 intervenciones psicológicas como las nutricionales, las técnicas de relajación y autocuidado, y el ejercicio físico, promoviendo así la salud de nuestros pacientes desde una perspectiva integral.</p>
+                    <p class="welcome-text">Nuestro compromiso es brindarles a ustedes un entorno de apoyo donde puedan desarrollarse profesionalmente, intercambiar ideas y seguir creciendo en su práctica. Creemos en una cultura de cuidado mutuo, aprendizaje continuo y crecimiento tanto personal como profesional, para que puedan sentirse plenos y empoderados en su labor diaria.</p>
+                </div>
             </div>
         </section>
     </main>

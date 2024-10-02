@@ -72,6 +72,9 @@
                                     <div>
                                     <span style="font-weight: bold;">Forma de Pago: </span><span id='pagoR'></span>
                                     </div>
+                                    <div>
+                                    <span style="font-weight: bold;">Monto a cancelar: </span><span id='montoR'></span> Bs.
+                                    </div>
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
                                     <div>
@@ -86,6 +89,12 @@
             </div>
         </div>
     </div>
+
+    <!-- HTML: Alerta de éxito -->
+    <div id="myAlert" class="alert alert-success" role="alert" style="display: none;">
+        Registro exitoso!
+    </div>
+
 
     <!-- Descripción -->
     <p class="lead fw-normal text-muted mb-2 ttNorms fs-6">Por favor revise toda la información

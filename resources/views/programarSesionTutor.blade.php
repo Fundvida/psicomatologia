@@ -314,7 +314,9 @@
                             <form id="sesion-programar" action="{{route('paciente.programar.sesion')}}" method="POST">
                                 @csrf
 
-                                <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}">
+                                <!-- <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}"> -->
+                                <input type="hidden" id="user_id" name="user_id" value="">
+                                <input type="hidden" id="tipo" name="tipo" value="menor">
                                 <input type="hidden" name="id_horario_dia" value="1"><!-- 1: mañana, 2: tarde -->
                                 
                                 <!-- Campos del formulario para horario de la mañana -->
@@ -335,11 +337,11 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Desde</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="00:00" max="11:59" step="3600" readonly>
+                                        <input type="time" class="form-control" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-right: 10px;" id="horaInicio" name="horaInicio" min="00:00" max="11:01" step="3600" readonly>
                                         <div class="input-group-append">
                                             <span class="input-group-text" style="color: #ffffffff; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">Hasta</span>
                                         </div>
-                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="00:00" max="11:59" step="3600" readonly>
+                                        <input type="time" class="form-control" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" id="horaFin" name="horaFin" min="01:00" max="12:01" step="3600" readonly>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -352,6 +354,31 @@
                                     <button type="submit" class="btn btn-primary" id="submit-button">Programar Sesión</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para seleccionar psicologo -->
+    <div class="modal fade" id="modalPsicologos" tabindex="-1" aria-labelledby="modalPsicologosLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-alt" id="crearHorarioModalLabel">Programar sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label for="paciente_id" class="form-label">Seleccione un paciente <span class="text-danger"></span></label>
+                            <select id="paciente_id" name="paciente_id" class="form-select" required>
+                                <option value="">Seleccionar</option>
+                                @foreach($pacientes as $paciente)
+                                    <option value="{{ $paciente->psicologo_id }} {{ $paciente->id }}">{{ $paciente->name }} {{ $paciente->apellidos }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -392,17 +419,17 @@
         });
         
         $(document).ready(function() {
-            $.ajax({
-                url: '/paciente/getPsicologoId',
-                type: 'GET',
-                success: function(data) {
-                    listHorario(data.psicologo_id);
-                },
+            $('#modalPsicologos').modal('show');
 
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
+            $('#paciente_id').on('change', function() {
+                var psicologo_id = $(this).val().split(' ')[0]; 
+                var paciente_id = $(this).val().split(' ')[1]; 
+
+                document.getElementById('user_id').value = paciente_id;
+
+                listHorario(psicologo_id); 
+                $('#modalPsicologos').modal('hide');
+            });                
         });
     </script>
 
@@ -778,7 +805,7 @@
                     method: form.attr('method'),
                     data: formData,
                     success: function(response) {
-                        console.log(response);
+                        //console.log(response);
                         if(response.message==="sesion pendiente"){
                             Swal.fire({
                                 icon: "error",
@@ -792,7 +819,7 @@
                                 'success'
                             )
                             setTimeout(function() {
-                                window.location.reload();
+                                window.location.href = '/tutor/sesiones';
                             }, 3000);
                         }
                     },

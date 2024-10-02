@@ -36,14 +36,16 @@ class NotificacionController extends Controller
             $userRole='Psicologo'; 
         } else if ($user->hasRole('Paciente')) {
             $userRole='Paciente'; 
+        } else if ($user->hasRole('Tutor')){
+            $userRole='Tutor'; 
         }
         //dd($userRole);
 
         $routes = [
             'admin' => route('listadoAllSesiones'),
-            //'Tutor' => route('editor.dashboard'),
+            'tutor' => route('tutor.seesiones'),
             'paciente' => route('homePacienteSesiones'),
-            'psicologo' => route('psicologo.sesiones')
+            'psicologo' => route('psicologo.sesiones'),
         ];
 
         $notifications = Notificacion::where('user_id', $user->id)->get();

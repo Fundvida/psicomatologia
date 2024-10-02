@@ -7,6 +7,13 @@
             </ul>
         </li>
         @endcan
+        @can('pacientesTutor')
+        <li class="custom-menu-item custom-font-alt">Lista de menores de edad
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('tutor.pacientes') }}" style="color: #fff;">Lista de menores de edad</a></li>
+            </ul>
+        </li>
+        @endcan
         @can('listaPsicologo')
             <li class="custom-menu-item custom-font-alt">PSICÓLOGOS
                 <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
@@ -18,6 +25,11 @@
             @can('homePacienteSesiones')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('homePacienteSesiones') }}" style="color: #fff;">Mis Sesiones</a></li>
+            </ul>
+            @endcan
+            @can('tutorSesiones')
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('tutor.seesiones') }}" style="color: #fff;">Mis Sesiones</a></li>
             </ul>
             @endcan
             @can('listadoAllSesiones')
@@ -36,10 +48,17 @@
             </ul>
             @endcan
             @can('paciente.sesion')
+            @if(auth()->user()->hasRole('Paciente'))
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('paciente.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
             </ul>
+            @else
+            <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
+                <li><a href="{{ route('tutor.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
+            </ul>
+            @endif
             @endcan
+
             @can('psicologo.sesion')
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
                 <li><a href="{{ route('psicologo.sesion') }}" style="color: #fff;">Programar Sesión</a></li>
@@ -48,7 +67,7 @@
         </li>
         <li class="custom-menu-item custom-font-alt">CAMBIAR DATOS PERSONALES
             <ul class="custom-sub-menu lead fw-normal text-muted ttNorms">
-                <li><a href="#" style="color: #fff;">Datos Personales</a></li>
+                <li><a href="{{ route('user.edit.view') }}" style="color: #fff;">Datos Personales</a></li>
             </ul>
         </li>
         <li class="custom-menu-item custom-font-alt">CAMBIAR CONTRASEÑA

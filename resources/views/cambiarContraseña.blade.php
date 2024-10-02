@@ -223,25 +223,18 @@
     <main class="main-content ">
         <section class="py-5 d-flex" style="min-height: calc(100vh - 100px);">
             <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
-                <!-- Título -->
                 <h2 class="display-3 lh-1 mb-4 font-alt">Cuenta de Usuario</h2>
 
-                <!-- Pestañas -->
                 <ul class="nav nav-tabs justify-content-center mb-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">General</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Seguridad</a>
                     </li>
                 </ul>
                 <form action="" id="passwordForm" method="POST">
                     @csrf
-                    <!-- Recuadro  -->
                     <div class="p-4 rounded shadow-lg">
-                        <!-- Título "Cambiar contraseña" -->
                         <h3 class="mb-4 font-alt">Cambiar contraseña</h3>
-                        <!-- Campos para la contraseña -->
                         <div class="mb-3 text-start">
                             <label for="currentPassword" class="form-label">Contraseña Actual</label>
                             <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
@@ -254,15 +247,87 @@
                             <label for="confirmPassword" class="form-label">Confirmar Nueva contraseña</label>
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                         </div>
-
-
-                        <!-- Botón "Cambiar contraseña" -->
                         <button type="submit" class="btn btn-outline-primary btn-lg btn-paso1 rounded-pill fw-bold">Cambiar contraseña</button>
                     </div>
                 </form>
             </div>
         </section>
     </main>
+
+    <!-- <main class="main-content">
+        <section class="py-1 d-flex" style="min-height: calc(100vh - 100px);">
+            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
+                
+                <h2 class="display-3 lh-1 mb-2 font-alt">Cuenta de Usuario</h2>
+
+               
+                <ul class="nav nav-tabs justify-content-center mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab">General</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="security-tab" data-bs-toggle="tab" href="#security" role="tab">Seguridad</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="general" role="tabpanel">
+                        <div class="p-4 rounded shadow-lg">
+                            <h3 class="mb-4 font-alt">Información del Usuario</h3>
+                            <form id="userInfoForm">
+                                <div class="mb-3 text-start">
+                                    <label for="fullName" class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="fullName" value="Nombre del Usuario" disabled>
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
+                                    <input type="date" class="form-control" id="birthDate" value="1990-01-01" disabled>
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="idCard" class="form-label">Carnet de Identidad</label>
+                                    <input type="text" class="form-control" id="idCard" value="123456789" disabled>
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" value="usuario@ejemplo.com" disabled>
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="phone" class="form-label">Número de Teléfono</label>
+                                    <input type="tel" class="form-control" id="phone" value="+591 12345678" disabled>
+                                </div>
+                                <button type="button" id="editButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">EDITAR</button>
+                                <button type="submit" id="saveButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt" style="display: none;">GUARDAR CAMBIOS</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="security" role="tabpanel">
+                        <form action="" id="passwordForm" method="POST">
+                            @csrf
+                            
+                            <div class="p-4 rounded shadow-lg">
+                                
+                                <h3 class="mb-4 font-alt">Cambiar contraseña</h3>
+
+                                <div class="mb-3 text-start">
+                                    <label for="currentPassword" class="form-label">Contraseña Actual</label>
+                                    <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="newPassword" class="form-label">Nueva contraseña</label>
+                                    <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="confirmPassword" class="form-label">Confirmar Nueva contraseña</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">CAMBIAR CONTRASEÑA</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main> -->
 
     <!-- Enlaces a los scripts JS -->
     <script src="{{asset('./vendors/base/vendor.bundle.base.js')}}"></script>

@@ -65,6 +65,7 @@ class SesionController extends Controller
 
     public function saveSesion(Request $request)
     {
+        //return response()->json($request);
         return DB::transaction(function () use ($request) {
             try {
                 $validatedData = $request->validate([
@@ -85,7 +86,7 @@ class SesionController extends Controller
                     'adicional_info'=>'string',
                 ]);
             } catch (ValidationException $exception) {
-                return $this->convertValidationExceptionToResponse($exception, $request);
+                //return $this->convertValidationExceptionToResponse($exception, $request);
             }
 
             $user = User::create([
@@ -317,27 +318,9 @@ class SesionController extends Controller
         $user = Auth::user();
         $psicologo_id = Psicologo::where('user_id', $user->id)->value('id');
 
-        // estado= ACTIVO, isAlta = 0
-        // $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
-        //                     ->join('users', 'pacientes.user_id', '=', 'users.id')
-        //                     ->where('pacientes.psicologo_id', $psicologo_id)
-        //                     ->where('pacientes.estado', '=', 'ACTIVO')
-        //                     ->where('pacientes.isAlta', '=', '0')
-        //                     ->get();
-        
-        // $pacientes_menor = Paciente::select('u.ci','u.name', 'u.apellidos','u.id as user_id', 'pacientes.id as paciente_id')
-        //                     ->join('pacienteMenor u', 'pacientes.usermenor_id', '=', 'u.id')
-        //                     ->where('pacientes.psicologo_id', $psicologo_id)
-        //                     ->where('pacientes.estado', '=', 'ACTIVO')
-        //                     ->where('pacientes.isAlta', '=', '0')
-        //                     ->get();
-
         DB::listen(function ($query) {
             Log::info($query->sql, $query->bindings);
         });
-
-        // return view('psicologoSesiones', compact('pacientes_menor'));
-        // Primera consulta
         $pacientes_mayor = DB::table('pacientes')
                             ->select('users.ci', 'users.name', 'users.apellidos', 'users.id as user_id', 'pacientes.id as paciente_id')
                             ->join('users', 'pacientes.user_id', '=', 'users.id')
@@ -759,10 +742,14 @@ class SesionController extends Controller
         $horaInicio = $request->horaInicio;
         $horaFin = $request->horaFin;
 
-        $paciente = Paciente::where('user_id', $request->user_id)->first();
-        $sesion_anterior = Sesion::where('paciente_id', $paciente->id)
-                            ->where('estado', 'activo')->first();
+        if($request->has('tipo') && $request->tipo == 'menor'){
+            $paciente = Paciente::where('id', $request->user_id)->first();
+        } else {
+            $paciente = Paciente::where('user_id', $request->user_id)->first();
+        }
 
+        $sesion_anterior = Sesion::where('paciente_id', $paciente->id)
+            ->where('estado', 'activo')->first();
         
         if(!$sesion_anterior){
             //return response()->json(["message"=> "sesion programada"]);

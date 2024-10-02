@@ -1,4 +1,5 @@
 let currentTab = 0;
+let monto = 0;
 const buttonServicio = {
     id: '',
     text: ''
@@ -20,6 +21,7 @@ let dataToSend = {
     turno: '',
     dia: '',
     adicional_info: '',
+    tarifa: '',
     pago_tipo: '',
 }
 tabShow(currentTab);
@@ -56,6 +58,7 @@ function tabShow(n) {
         servicioR = document.getElementById('servicioR');
         psicologoR = document.getElementById('psicologoR');
         horarioR = document.getElementById('horarioR');
+        montoR = document.getElementById('montoR');
         pagoR = document.getElementById('pagoR');
         descripcionR = document.getElementById('descripcionR');
         nombreR.textContent = dataToSend.name;
@@ -69,6 +72,7 @@ function tabShow(n) {
             dataToSend.fecha_hora_fin);
         pagoR.textContent = dataToSend.pago_tipo;
         descripcionR.textContent = dataToSend.adicional_info;
+        montoR.textContent = dataToSend.tarifa;
     }
     if (n == (x.length - 1)) {
         document.getElementById("nextBtn").innerHTML = "Enviar";
@@ -166,8 +170,9 @@ function nextPrev(n) {
                 break;
             case 4:
                 console.log(currentTab);
+                console.log(monto)
                 const infoAdicional = document.getElementById('info_adicional').value;
-                dataToSend = { ...dataToSend, adicional_info: infoAdicional }
+                dataToSend = { ...dataToSend, adicional_info: infoAdicional, tarifa: monto }
                 break;
             case 5:
                 error = validatePagoSelection(tipoPago);
@@ -200,7 +205,7 @@ function nextPrev(n) {
     tabShow(currentTab);
 }
 
-const handleSelectPsychologist = (e, psychologistId) => {
+const handleSelectPsychologist = (e, psychologistId, tarifa) => {
     e.preventDefault();
     const rows = document.querySelectorAll('tbody tr');
     rows.forEach(row => {
@@ -209,6 +214,7 @@ const handleSelectPsychologist = (e, psychologistId) => {
         if (row.dataset.name == psychologistId) {
             row.classList.add('selected');
             row.style.backgroundColor = '#EDB1B5';
+            monto = tarifa;
         }
     });
     selectedPsicologo = psicologos.find((item) => {
@@ -219,12 +225,55 @@ const updateListPsicologysts = () => {
     bodyPsicologos = document.getElementById('body_psicologos');
     const generatePsychologistRow = psychologist => `<tr data-name=${psychologist.id}>
             <td>${psychologist.name} ${psychologist.apellidos}</td>
-            <td>${psychologist.available ? 'Sí' : 'No'}</td>
+            <td><button class="btn btn-primary" onClick="infoPsicologyst(event,${psychologist.id})">Ver mas</button><td>
             <td>
-            <button class="btn btn-primary btn-paso1 fw-bold btn-select-psicologo" onClick='handleSelectPsychologist(event,${psychologist.id})'>Seleccionar</button>
+            <button class="btn btn-primary btn-paso1 fw-bold btn-select-psicologo" onClick='handleSelectPsychologist(event,${psychologist.id},${psychologist.tarifa})'>Seleccionar</button>
             </td></tr>`;
     const psychologistHTML = psicologos.map(generatePsychologistRow).join('');
     bodyPsicologos.innerHTML = psychologistHTML;
+}
+
+const infoPsicologyst = (e, psicologo_id) => {
+    e.preventDefault();
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log(psicologo_id, ' id de psicologo a mostrar');
+
+    fetch('/psicologo/'+psicologo_id, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+    })
+        .then(response => {
+
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(error
+                        .message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            var especialidadText = '<ul>';
+            document.getElementById('nombrePsicologo').textContent = data.psicologo.name + ' ' + data.psicologo.apellidos;
+            data.especialidades.forEach(e => {
+                especialidadText += `<li>` + e.especialidad + `</li>`;
+            });
+
+            document.getElementById('especialidadesPsicologo').innerHTML = especialidadText + '</ul>';
+            document.getElementById('desc_cv').textContent = data.psicologo.descripcion_cv;
+        })
+        .catch(error => {
+            console.error('Error fetching psychologists:', error.message);
+            showNotification('Error fetching psychologists');
+        });
+
+    var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
+        keyboard: false
+    });
+    myModal.show();
 }
 
 function showTabAfterAsync() {
@@ -376,8 +425,11 @@ function sendDataSesion() {
             return response.json();
         })
         .then(data => {
-            window.location.href = redirectUrl;
-            console.log(data);
+            //console.log(data);
+            document.getElementById('myAlert').style.display = 'block';
+            setTimeout(function(){
+                window.location.href = redirectUrl;
+            }, 5000);
         })
         .catch(error => {
             console.error('Error saving Session:', error.message);

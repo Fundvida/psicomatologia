@@ -269,6 +269,12 @@
             max-width: 300px;
         }
 
+        .disabled-link {
+            pointer-events: none;
+            color: gray;
+            cursor: default;
+            text-decoration: none;
+        }
         .notification-header {
             display: flex;
             justify-content: space-between;
@@ -305,6 +311,10 @@
             display: block !important;
         }
 
+        .icon-legend span {
+            margin-right: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -465,11 +475,18 @@
                             <i class="bi bi-person-plus-fill me-2"></i> Programar nueva Sesión
                         </button>
                     </div>
-                    <div class="row mb-3">
-                    <div class="col-md-12">
-                        <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                    <div class="icon-legend">
+                        <span><i class="fas fa-edit text-primary"></i> Editar Sesión</span>
+                        <span><i class="fas fa-times-circle text-danger"></i> Cancelar Sesión</span>
+                        <span><i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;"></i>Ver comprobante de pago</span>
+                        <span><i class="fas fa-info-circle" style="color: #7c87e4;"></i> Detalle de Sesión</span>
+                        <span><i class="fa fa-upload" style="color: #27FF00;"></i> Subir documentos</span>
                     </div>
-                </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <h4 class="text-start font-alt">Filtros de Búsqueda</h4>
+                        </div>
+                    </div>
                 <!-- Filtros y barra de búsqueda -->
                 <div class="row mb-4">
                     <div class="col-md-3 mb-3 mb-md-0">
@@ -497,19 +514,13 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
-                                        <th>Hora Inicio/Hora Fin</th>
                                         <th>CI Paciente</th>
-                                        <th>Nombre(s)</th>
-                                        <th>Apellidos</th>
-                                        <th>Descripción de la Sesión</th>
-                                        <th>Estado de la Sesión</th>
-                                        <th>Estado de Pago</th>
-                                        <th>Modalidad</th>
-                                        <th>Editar Sesión</th>
-                                        <th>Cancelar Sesión</th>
-                                        <th>Ver Comprobante</th>
-                                        <th>Detalle de la sesión</th>
+                                        <th>Nombre y apellido</th>
+                                        <th>Estado</th>
+                                        <th>Información</th>
                                         <th>Documentos</th>
+                                        <th>Operaciones</th>
+                                        <th>Ficha de atención</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sesiones-body">
@@ -562,17 +573,17 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Información del Paciente</h5>
+                    <h5 class="modal-title font-alt" id="infoPacienteModalLabel">Detalle de Sesión</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Fecha:</strong> <span id="fecha"></span></p>
-                    <p><strong>Hora:</strong> <span id="hora"></span></p>
-                    <p><strong>CI:</strong> <span id="ci"></span></p>
-                    <p><strong>Paciente:</strong> <span id="paciente"></span></p>
-                    <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
-                    <!-- <p><strong>Diagnóstico:</strong> <span id="diagnostico"></span></p>
-                    <p><strong>Archivo Adjunto:</strong> <span id="archivoAdjunto"></span></p> -->
+                    <p><strong>Fecha de la Sesión:</strong> <span id="fecha"></span></p>
+                    <p><strong>CI paciente:</strong> <span id="ci"></span></p>
+                    <p><strong>Nombre paciente:</strong> <span id="paciente"></span></p>
+                    <p><strong>Descripción de la sesión:</strong> <span id="descripcion"></span></p>
+                    <p><strong>Duración:</strong> <span id="hora"></span></p>
+                    <p><strong>Modalidad:</strong> <span id="modalidad"></span></p>
+                    <p><strong>Estado de pago:</strong> <span id="pago"></span></p>
                 </div>
 
             </div>
@@ -658,7 +669,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary" id="btn-sesion-edit">Editar Sesión</button>
-                            <button type="button" class="btn btn-primary" onclick="finalizarSesion()" id="btn-sesion-fin" value="">Marcar como finalizada</button>
+                            <!-- <button type="button" class="btn btn-primary" onclick="finalizarSesion()" id="btn-sesion-fin" value="">Marcar como finalizada</button> -->
                         </div>
                     </form>
                 </div>
@@ -726,17 +737,16 @@
         }
 
         function verComprobante(sesion_id) {
-
             fetch(`/comprobante/${sesion_id}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
                     if (data.url) {
-                        //onsole.log(data.isTerminado + "fasdflkjsfl")
                         var imagenComprobante = document.getElementById("imagenComprobante");
                         imagenComprobante.src = data.url;
 
                         document.getElementById("mensajeError").style.display = "none";
+                        //document.getElementById("imagenComprobante").style.display = "block";
                         document.getElementById("imagenComprobante").style.display = "block; max-width: 100%;";
                         if(data.isTerminado === 0){
                             document.getElementById("btn-confirm-comprobante").style.display = "block"
@@ -745,7 +755,6 @@
                             document.getElementById("btn-confirm-comprobante").style.display = "none"
                             document.getElementById("mensajeValidado").style.display = "block"
                         }
-                        //document.getElementById("btnDescargar").setAttribute("type", "button");
 
                         document.querySelector('#sesion_id').value = sesion_id;
 
@@ -757,8 +766,6 @@
                         document.getElementById("btn-confirm-comprobante").style.display = "none"
                         document.getElementById("mensajeError").style.display = "block";
                         document.getElementById("imagenComprobante").style.display = "none";
-                        //document.getElementById("btn-confirm-comprobante").style.display = "hidden"
-                        //document.getElementById("btnDescargar").setAttribute("type", "hidden");
 
                         document.querySelector('#sesion_id').value = '';
 
@@ -772,15 +779,14 @@
         }
 
 
-        function mostrarInfo(fecha, hora, ci, paciente, descripcion, diagnostico, archivoAdjunto) {
-            // Inserta los datos del paciente en el modal
+        function mostrarInfo(fecha, ci, paciente, descripcion, hora, modalidad, pago) {
             document.getElementById('fecha').innerText = fecha;
             document.getElementById('hora').innerText = hora;
             document.getElementById('ci').innerText = ci;
             document.getElementById('paciente').innerText = paciente;
             document.getElementById('descripcion').innerText = descripcion;
-            //document.getElementById('diagnostico').innerText = diagnostico;
-            //document.getElementById('archivoAdjunto').innerText = archivoAdjunto;
+            document.getElementById('modalidad').innerText = modalidad;
+            document.getElementById('pago').innerText = pago;
 
             // Muestra el modal
             $('#infoPacienteModal').modal('show');
@@ -873,60 +879,77 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+                        //console.log(data)
                         $('#sesiones-body').empty();
                     
                         // Recorrer los datos y agregar filas a la tabla
                         $.each(data, function(index,sesiones) {
-                            console.log(sesiones);
-                            console.log('.....');
                             // TODO estado de las sesiones: Terminado, Cancelado , activo
                             var fechaInicio = sesiones.fecha_hora_inicio.split(' ')[0]; // Obtenemos solo la parte de la fecha
                             var horaInicio = sesiones.fecha_hora_inicio.split(' ')[1].slice(0, 5); // Obtenemos solo la parte de la hora y la cortamos para obtener HH:MM
                             var horaFin = sesiones.fecha_hora_fin.split(' ')[1].slice(0, 5);
                             var estado_pago = sesiones.isTerminado == 0? 'Pendiente': 'Realizado';
                             var paciente_ci = sesiones.ci == null? 'No especificado': sesiones.ci;
-                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? 'Realizado': 'No realizado'; // Si se realizo la sesion o no
+                            var estado_sesion = sesiones.calificacion || sesiones.estado=='Terminada' ? '<span class="badge text-bg-success">Realizado</span>': '<span class="badge text-bg-warning text-white">No realizado</span>'; // Si se realizo la sesion o no
                             var icon_cancel = sesiones.estado == 'activo'? `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`: `<p class="text-danger">Cancelado</p>`;
                             var icon_edit_sesion = sesiones.estado == 'activo'? `<i class='fas fa-edit text-primary' onclick="editarSesion(${sesiones.sesion_id},'${fechaInicio}', '${horaInicio}' , 
                                                                                                                                             '${horaFin}', '${paciente_ci}', '${sesiones.name}', 
                                                                                                                                             '${sesiones.apellidos}', '${sesiones.descripcion_sesion}', '${sesiones.calificacion_descripcion}', ${sesiones.isTerminado})" title='Editar Sesión'></i>`
-                            :'<i class="fas fa-edit" style="color: ##7B7D7D;"  aria-hidden="true"></i>';
+                            :'<i class="fas fa-edit" style="color: #7B7D7D;"  aria-hidden="true"></i>';
                             var icon_upload = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ? 
                                 `<i class="fa fa-upload" style="color: #27FF00;" onclick="subir(${sesiones.sesion_id})" aria-hidden="true"></i>`: 
-                                `<i class="fa fa-upload" style="color: ##7B7D7D;" aria-hidden="true"></i>`;
+                                `<i class="fa fa-upload" style="color: #7B7D7D;" aria-hidden="true"></i>`;
+
+                            var icon_inf = sesiones.estado == 'activo' || sesiones.estado == 'Terminada' ?
+                                `<i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo(  
+                                        '${fechaInicio}',
+                                        '${paciente_ci}', 
+                                        '${sesiones.name} ${sesiones.apellidos}', 
+                                        '${sesiones.descripcion_sesion}', 
+                                        '${horaInicio} - ${horaFin}',
+                                        '${sesiones.modalidad}',
+                                        '${estado_pago}')" title="Ver Información"></i>`: `<i class="fas fa-info-circle" style="color: #7B7D7D;"></i>`;
+                            
+                            var icon_ficha = ``;
+                            if(sesiones.estado=='activo'){
+                                icon_ficha = `<a href="#" onclick="redirectFichaAtencion(${sesiones.sesion_id})"><i class="fa-solid fa-file-signature" style="color: #d86464;"></i></a>`;
+                            } else  if(sesiones.estado=='Terminada'){
+                                //icon_ficha = `<a href="{{ asset('documents/Ficha_atención_terapeútica_adulto.pdf') }}" target="_blank"><i class="fa-solid fa-file-signature" style="color: #1bff00;"></i></a>`;
+                                icon_ficha = `<a href="#" onclick="fichaAtencionPdf(${sesiones.sesion_id})"><i class="fa-solid fa-file-signature" style="color: #1bff00;"></i></a>`;
+
+                            } 
+                            else {
+                                icon_ficha = ``;
+                            }
                             
                             if(sesiones.estado == 'activo' && sesiones.isTerminado!=1){
                                 icon_cancel = `<i class="fas fa-times-circle text-danger" onclick="confirmarCancelar(${sesiones.sesion_id})" title="Cancelar Sesión"></i>`;
                             } else {
-                                icon_cancel = `<i class="fas fa-times-circle text-secondary" title="Cancelar Sesión"></i>`;
+                                icon_cancel = `<i class="fas fa-times-circle" style="color: #7B7D7D; title="Cancelar Sesión"></i>`;
                             }
+
+                            estado_sesion = sesiones.estado=='Cancelado'? `<span class="badge text-bg-danger">Cancelado</span>`:estado_sesion;
 
                         
                             $('#sesiones-body').append(`
                                 <tr>
                                     <td>${fechaInicio}</td>
-                                    <td>${horaInicio} - ${horaFin}</td>
                                     <td>${paciente_ci}</td>
-                                    <td>${sesiones.name}</td>
-                                    <td>${sesiones.apellidos}</td>
-                                    <td>${sesiones.descripcion_sesion}</td>
+                                    <td>${sesiones.name} ${sesiones.apellidos}</td>
                                     <td>${estado_sesion}</td>
-                                    <td>${estado_pago}</td>
-                                    <td>${sesiones.modalidad}</td>
                                     <td class="action-icons">
-                                        ${icon_edit_sesion}   
-                                    </td>
-                                    <td class="action-icons">
-                                        ${icon_cancel}
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
-                                    </td>
-                                    <td class="action-icons">
-                                        <i class="fas fa-info-circle" style="color: #7c87e4;" onclick="mostrarInfo('${fechaInicio}', '${horaInicio} - ${horaFin}', '${paciente_ci}', '${sesiones.name} ${sesiones.apellidos}', '${sesiones.descripcion_sesion}', 'None', 'None')" title="Ver Información"></i>
+                                        ${icon_inf}
                                     </td>
                                     <td class="action-icons">
                                         ${icon_upload}
+                                    </td>
+                                    <td class="action-icons">
+                                        ${icon_edit_sesion}   
+                                        ${icon_cancel}
+                                        <i class="fa-solid fa-file-invoice-dollar" style="color: #d86464;" onclick="verComprobante(${sesiones.sesion_id})" title="Ver Comprobante"></i>
+                                    </td>
+                                    <td>
+                                        ${icon_ficha}
                                     </td>
                                 </tr>
                             `);
@@ -949,24 +972,23 @@
                             horaFin, ci, nombre, apellidos, 
                             descripcion, diagnostico, isTerminado){
 
-            console.log(isTerminado)
             if (isTerminado) {
-                document.getElementById('btn-sesion-fin').disabled = false;
+                //document.getElementById('btn-sesion-fin').disabled = false;
             }else {
-                document.getElementById('btn-sesion-fin').disabled = true;
+                //document.getElementById('btn-sesion-fin').disabled = true;
             }
             ciForm = ci == 'No especificado'? '': ci;
 
             document.getElementById('sesion_id_').value = sesion_id;
-            document.getElementById('btn-sesion-fin').value = sesion_id;
+            //document.getElementById('btn-sesion-fin').value = sesion_id;
             document.getElementById('editarFechaSesion').value = fecha;
             document.getElementById('editarHoraInicio').value = horaInicio;
             document.getElementById('editarHoraFin').value = horaFin;
             document.getElementById('editarCIPaciente').value = ciForm;
             document.getElementById('editarNombrePaciente').value = nombre;
             document.getElementById('editarApellidosPaciente').value = apellidos;
-            document.getElementById('editarDescripcionSesion').value = descripcion;
-            document.getElementById('editarDiagnostico').value = diagnostico;
+            document.getElementById('editarDescripcionSesion').value = descripcion!='null'? descripcion:'';
+            document.getElementById('editarDiagnostico').value = diagnostico!='null'? diagnostico:'';
             
             // Abrir el modal
             var modal = new bootstrap.Modal(document.getElementById('editarSesionModal'));
@@ -1103,16 +1125,6 @@
             $('#formularioRegistroModal').modal('show');
         }
 
-        // function subir (sesion_id){
-        //     //console.log("subir imagen");
-        //     var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
-        //     document.getElementById('sesion_ids').value = sesion_id;
-
-        //     var isTerminada = estadoSesion(sesion_id);
-        //     loadDocuments(sesion_id, isTerminada);
-
-        //     modal.show();
-        // }
         async function subir(sesion_id) {
             var modal = new bootstrap.Modal(document.getElementById('subirDoc'));
             document.getElementById('sesion_ids').value = sesion_id;
@@ -1127,32 +1139,6 @@
             modal.show();
         }
 
-        // function estadoSesion (sesion_id){
-        //     var isTerminada = true;
-        //     $.ajax({
-        //         url: '/sesion/estado/'+sesion_id,
-        //         type: 'GET',
-        //         success: function(data) {
-        //             var form = document.getElementById('my-awesome-dropzone');
-        //             if(data.estado == 'Terminada'){
-        //                 isTerminada = true;
-        //                 console.log('esta terminada true');
-        //                 form.style.display = 'none'; 
-        //                 document.getElementById('subirDocLabel').textContent = 'Documentos subidos';
-        //             }else {
-        //                 isTerminada = false;
-        //                 console.log('no esta terminada false');
-        //                 form.style.display = 'block'; 
-        //                 document.getElementById('subirDocLabel').textContent = 'Subir Documentos';
-        //             }
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error(error);
-        //         }
-        //     }); 
-
-        //     return isTerminada;
-        // }
         function estadoSesion(sesion_id) {
             return new Promise((resolve, reject) => {
                 $.ajax({
@@ -1491,42 +1477,41 @@
             document.getElementById("horaFin").value = nuevaHora;
         }
 
-        function finalizarSesion (){
-            var sesion_id = document.getElementById('btn-sesion-fin').value;
-            //console.log(sesion_id);
+        // function finalizarSesion (){
+        //     var sesion_id = document.getElementById('btn-sesion-fin').value;
 
-            Swal.fire({
-                title: "Estas seguro?",
-                text: "No podra revertir este cambio.",
-                icon: "info",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Si, estoy seguro"
-            }).then((result) => {
-            if (result.isConfirmed) {
-                // Terminada = sesion.estado
-                $.ajax({
-                    url: '/sesion/terminada/'+sesion_id,
-                    type: 'GET',
-                    success: function(data) {
-                        console.log(data);
-                        Swal.fire(
-                            '<h2 class="text-center mb-4 font-alt">Exito!</h2>',
-                            `Sesión marcada como finalizada.`,
-                            'success'
-                        )
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 3000);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                }); 
-            }
-            });
-        }
+        //     Swal.fire({
+        //         title: "Estas seguro?",
+        //         text: "No podra revertir este cambio.",
+        //         icon: "info",
+        //         showCancelButton: true,
+        //         confirmButtonColor: "#3085d6",
+        //         cancelButtonColor: "#d33",
+        //         confirmButtonText: "Si, estoy seguro"
+        //     }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         // Terminada = sesion.estado
+        //         $.ajax({
+        //             url: '/sesion/terminada/'+sesion_id,
+        //             type: 'GET',
+        //             success: function(data) {
+        //                 console.log(data);
+        //                 Swal.fire(
+        //                     '<h2 class="text-center mb-4 font-alt">Exito!</h2>',
+        //                     `Sesión marcada como finalizada.`,
+        //                     'success'
+        //                 )
+        //                 setTimeout(function() {
+        //                     window.location.reload();
+        //                 }, 3000);
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error(error);
+        //             }
+        //         }); 
+        //     }
+        //     });
+        // }
 
         document.getElementById("horaInicio").addEventListener("change", actualizarHoraFin);
 
@@ -1534,7 +1519,71 @@
 
         document.getElementById("horaInicioT").addEventListener("change", actualizarHoraFin3);
 
+        function redirectFichaAtencion(sesion_id){
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/psicologo/ficha'; 
+
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            let tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
+
+            let sesionInput = document.createElement('input');
+            sesionInput.type = 'hidden';
+            sesionInput.name = 'sesion_id';
+            sesionInput.value = sesion_id;
+            form.appendChild(sesionInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function fichaAtencionPdf(sesion_id){
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/paciente/ficha/pdf'; 
+
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            let tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
+
+            let sesionInput = document.createElement('input');
+            sesionInput.type = 'hidden';
+            sesionInput.name = 'sesion_id';
+            sesionInput.value = sesion_id;
+            form.appendChild(sesionInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
+
+@if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Éxito',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'Éxito',
+                text: '{{ session('error') }}',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </script>
+    @endif
 </body>
 </html>
 

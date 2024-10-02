@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Especialidad;
+use App\Models\Paciente;
+use App\Models\Psicologo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -84,5 +87,56 @@ class UserController extends Controller
     public function notificaciones()
     {
         return view('notificaciones');
+    }
+
+    public function editView(){
+        $user = Auth::user();
+        $especialidades = null;
+        $datos_paciente = null;
+
+        if($user->hasRole('Psicologo')){
+            $psicologo = Psicologo::where('user_id', $user->id)->first();
+            $especialidades = Especialidad::where('psico_id', $psicologo->id)->get();
+        }
+
+        if($user->hasRole('Paciente')){
+            $datos_paciente = Paciente::where('user_id', $user->id)->first();
+        }
+
+        return view('userEdit', compact('user', 'especialidades', 'datos_paciente'));
+    }
+
+    public function edit(Request $request){
+        $user = User::where('id', Auth::user()->id)->first();
+        $checkEmail = null;
+
+        if($user->email != $request->email){
+            $checkEmail = User::where('email', $request->email)->first();
+        }
+
+        if(!$checkEmail){
+            $user->name = $request->nombre;
+            $user->apellidos = $request->apellidos;
+            $user->fecha_nacimiento = $request->fecha_nac;
+            $user->email = $request->email;
+            $user->telefono = $request->telefono;
+            $user->ci = $request->ci;
+            $user->save();
+
+            if($user->hasRole('Psicologo')){
+                foreach ($request->input('tarifas') as $espec_id => $tarifa) {
+                    Especialidad::where('espec_id', $espec_id)->update(['tarifa' => $tarifa]);
+                }
+            }
+
+            if($user->hasRole('Paciente')){
+                $paciente = Paciente::where('user_id', $user->id)->first();
+                $paciente->ocupacion = $request->ocupacion;
+                $paciente->save();
+            }
+            return redirect()->route('user.edit.view')->with('resultado', "actualizado");
+        }
+
+        return redirect()->route('user.edit.view')->with('resultado', "error");
     }
 }

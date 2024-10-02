@@ -9,10 +9,12 @@
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
-    <link rel="stylesheet" href="{{asset('./css/style.css')}}">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="stylesheet" href="{{asset('vendors/ti-icons/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/base/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/favicon.ico')}}" />
+
 
     <!-- Google fonts-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -28,7 +30,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <!-- <link href="css/styles.css" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -288,6 +292,11 @@
                     <!-- Título -->
                     <h2 class="display-3 lh-1 mb-5 font-alt">Lista de Sesiones</h2>
                     <p class="lead fw-normal text-muted mb-5 ttNorms">Consulta tus sesiones programadas para estar al tanto de tus citas y seguir tu progreso.</p>
+                    <div class="text-end mb-3">
+                        <button class="btn btn-outline-primary btn-lg btn-paso1 fw-bold" onclick="window.location.href='{{ route('tutor.sesion') }}'">
+                            <i class="bi bi-person-plus-fill me-2"></i> Programar nueva Sesión
+                        </button>
+                    </div>
                     <!-- Tabla de pacientes -->
                     <div class="custom-table-container shadow" style="height: 500px;">
                         <div class="table-responsive">
@@ -296,11 +305,9 @@
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Duración</th>
-                                        <!-- <th>CI Paciente</th> -->
-                                        <!-- <th>Nombre(s)</th>
-                                        <th>Apellidos</th> -->
+                                        <th>Nombre(s)</th>
                                         <th>Modalidad</th>
-                                        <th>Estado de la Sesión</th>
+                                        <th>Estado</th>
                                         <th>Estado de Pago</th>
                                         <th>Pagar Sesión</th>
                                         <th>Cancelar Sesión</th>
@@ -415,7 +422,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <h5 id="title-diagnostico">Diagnóstico de la Sesión:</h5>
+                        <h5>Diagnóstico de la Sesión:</h5>
                         <p id="diagnostico">
                             
                         </p>
@@ -488,7 +495,7 @@
             }).then((result) => {
                 console.log('Redirigiendo');
                 setTimeout(() => {
-                window.location.href = '{{ route('homePacienteSesiones') }}';
+                window.location.href = '{{ route('tutor.seesiones') }}';
                 }, 3000);
             });
         }
@@ -573,20 +580,20 @@
      <script>
         $(document).ready(function() {
             $.ajax({
-                url: '/paciente/getSesiones',
+                url: '/tutor/getSesiones',
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    //const notificationContainer = document.getElementById('notification-container');
                     var pagosPendientes = 0;
 
                     var tbody = $('#table-sesiones');
                     tbody.empty();
-                    $.each(data.sesiones, function(index, sesion) {
+                    $.each(data, function(index, sesion) {
                         
                         var row = $('<tr>');
                         row.append($('<td>').text(sesion.fecha_hora_inicio.split(' ')[0])); //Fecha 
                         row.append($('<td>').text(sesion.fecha_hora_inicio.substring(11,16) + ' - ' + sesion.fecha_hora_fin.substring(11,16))); //Hora Inicio/Hora Fin
+                        row.append('<td><span style="font-size:12px">'+ sesion.name + ' ' + sesion.apellidos +'<span></td>');
                         row.append('<td><span style="font-size:12px">'+ sesion.modalidad +'<span></td>');
 
                         if(sesion.estado == "Cancelado"){
@@ -620,58 +627,6 @@
                     });
                 }
             });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const notificationIcon = document.getElementById('notificationIcon');
-            const notificationContainer = document.getElementById('notificationContainer');
-            const markReadBtn = document.getElementById('markReadBtn');
-            const notificationItems = document.querySelectorAll('.notification-item');
-
-            notificationIcon.addEventListener('click', function() {
-                notificationContainer.classList.toggle('show');
-            });
-
-            markReadBtn.addEventListener('click', function() {
-                notificationItems.forEach(item => {
-                    item.classList.remove('bg-light');
-                });
-            });
-
-            // Agregar evento clic a cada notificación
-            notificationItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    item.classList.remove('bg-light');
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Función para cargar las notificaciones
-            function loadNotifications() {
-                fetch('/notificaciones')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        const notificationBody = document.getElementById('notificationBody');
-                        notificationBody.innerHTML = '';
-
-                        data.forEach(notification => {
-                            const notificationItem = document.createElement('div');
-                            notificationItem.className = 'notification-item-container mb-2';
-                            notificationItem.innerHTML = `
-                                <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                                    ${notification.descripcion}
-                                </button>
-                            `;
-                            notificationBody.appendChild(notificationItem);
-                        });
-                    });
-            }
-
-            loadNotifications();
-
-            setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
         });
 
         function sesionDocs(sesion_id){
@@ -748,7 +703,6 @@
                     if (data && data.calificacion_descripcion) {
                         document.getElementById('diagnostico').innerText = data.calificacion_descripcion;
                     } else {
-                        document.getElementById('title-diagnostico').style.display = 'none';
                         console.error('No se encontró la descripción de la calificación para la sesión.');
                     }
                 },

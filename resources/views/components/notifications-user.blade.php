@@ -6,18 +6,6 @@
             </div>
             <hr class="my-2">
             <div class="notification-body" id="notificationBody">
-                <!-- Contenedor adicional para cada notificación -->
-                <!-- <div class="notification-item-container mb-2">
-                    TODO PENDIENTE
-                    <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Usted ha registrado una nueva sesión. 
-                    </button>
-                </div>
-                <div class="notification-item-container mb-2">
-                    <button class="notification-item rounded bg-light py-2 px-3 border-0">
-                        Usted ha cancelado una sesión.
-                    </button>
-                </div> -->
             </div>
         </div>
     </div>
@@ -39,7 +27,7 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Notificaciones marcadas como leídas');
+                        //console.log('Notificaciones marcadas como leídas');
                         notificationBody.innerHTML = '';
                     })
                     .catch(error => console.error('Error:', error));

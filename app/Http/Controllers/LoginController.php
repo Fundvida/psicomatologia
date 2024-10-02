@@ -6,6 +6,7 @@ use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Psicologo;
+use App\Models\Tutor;
 
 class LoginController extends Controller
 {
@@ -49,6 +50,12 @@ class LoginController extends Controller
                     'email' => 'Usuario inactivo. Contacte al administrador.',
                 ]);
             }
+            //return redirect()->route('homePaciente');
+        } else if ($user->hasRole('Tutor')) {
+            $tutor = Tutor::where('user_id', $user->id)->first();
+            if ($tutor) {
+                return redirect()->route('homeTutor');
+            } 
             //return redirect()->route('homePaciente');
         }
     }

@@ -116,11 +116,6 @@ class HorarioController extends Controller
                         ];
                         $i++;
                     }
-                    // if ($i == 2)
-                    // return response()->json([
-                    //     'periods' => $periods,
-                    //     'horarios' => $horarios,
-                    // ]);
                 }
             }
             if ($isDisponibleTarde) {
@@ -136,12 +131,8 @@ class HorarioController extends Controller
                             'isDisponibleTarde' => 1,
                             'isDisponibleManiana' => 0,
                         ];
+                        $i++;
                     }
-                    // if ($i == 2)
-                    // return response()->json([
-                    //     'periods' => $periods,
-                    //     'horarios' => $horarios,
-                    // ]);
                 }
             }
 

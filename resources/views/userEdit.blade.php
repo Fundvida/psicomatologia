@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <!-- Meta etiquetas requeridas -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SISTEMA DE PSICOLOGIA</title>
     <!-- Enlaces a los estilos CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
     <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('./css/style.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
     <!-- Google fonts-->
@@ -28,7 +28,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -199,53 +199,11 @@
             display: block !important;
         }
 
-        /* Estilos para el parrafo*/
-
-        .welcome-container {
-            background: linear-gradient(to bottom right, #ffffff, #f0f8ff);
-            max-width: 1000px;
-            border-radius: 2rem;
-            box-shadow: 0 1rem 3rem rgba(0,0,0,0.1);
-        }
-        .welcome-message {
-            font-size: 1.2rem;
-            line-height: 2;
-            color: #333;
-        }
-        .welcome-text {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            text-align: justify;
-            padding: 0 1rem;
-            line-height: 1.8;
-        }
-        .font-alt {
-            font-family: 'Newsreader', serif;
-            color: #e17777;
-        }
-        .lead {
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: #e17777;
-        }
-        .font-weight-bold {
-            font-weight: 700!important;
-            color: #000000;
-        }
-        .text-primary {
-            color: #e17777!important;
-        }
-        .display-4 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
-        @media (min-width: 768px) {
-            .welcome-container {
-                padding: 3rem!important;
-            }
-            .display-4 {
-                font-size: 3rem;
-            }
+        .custom-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
         }
     </style>
 </head>
@@ -260,16 +218,75 @@
     <!-- Menú lateral -->
     @include('components.sidebar-user')
 
+
+
     <!-- Contenido principal -->
-    <main class="main-content ">
-        <section class="py-0 d-flex justify-content-center align-items-center" id="">
-            <div class="container px-4 text-center shadow-lg p-5 rounded-lg welcome-container">
-                <!-- Título -->
-                <h2 class="display-4 lh-1 mb-5 font-alt text-primary">¡Bienvenido Administrador!</h2>
-                <div class="welcome-message">
-                    <p class="lead mb-5 text-dark">¡Bienvenido al equipo de administración de nuestra aplicación web!</p>
-                    <p class="welcome-text">Estamos encantados de tenerte aquí y queremos agradecerte por unirte a nuestro equipo. Tu experiencia y habilidades serán invaluables para el éxito continuo de nuestra plataforma.</p>
-                    <p class="welcome-text">Como administrador, desempeñarás un papel crucial en el mantenimiento y la mejora de nuestra aplicación web. Estamos comprometidos a proporcionarte el apoyo y los recursos que necesitas para llevar a cabo tus responsabilidades de manera efectiva.</p>
+
+    <main class="main-content">
+        <section class="py-1 d-flex" style="min-height: calc(100vh - 100px);">
+            <div class="container px-5 text-center shadow-lg p-5 rounded mt-2">
+                
+                <h2 class="display-3 lh-1 mb-2 font-alt">Cuenta de Usuario</h2>
+               
+                <ul class="nav nav-tabs justify-content-center mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab">General</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="general" role="tabpanel">
+                        <div class="p-4 rounded shadow-lg">
+                            <h3 class="mb-4 font-alt">Información del Usuario</h3>
+                            <form action="{{ route('user.edit') }}" method="POST">
+                            @csrf
+                                <div class="mb-3 text-start">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ $user->name }}">
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos" value="{{ $user->apellidos }}">
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="fecha_nac" class="form-label">Fecha de Nacimiento</label>
+                                    <input type="date" class="form-control" id="fecha_nac" name="fecha_nac" value="{{ $user->fecha_nacimiento }}">
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="ci" class="form-label">Carnet de Identidad</label>
+                                    <input type="text" class="form-control" id="ci" name="ci" value="{{ $user->ci }}">
+                                </div>
+                                @if(auth()->user()->hasRole('Paciente'))
+                                <div class="mb-3 text-start">
+                                    <label for="ocupacion" class="form-label">Ocupacion</label>
+                                    <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="{{ $datos_paciente->ocupacion }}">
+                                </div>
+                                @endif
+                                <div class="mb-3 text-start">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ $user->telefono }}">
+                                </div>
+
+                                @if(auth()->user()->hasRole('Psicologo'))
+                                    <fieldset class="border p-2">
+                                        <legend class="w-auto">Especialidades</legend>
+                                        @foreach($especialidades as $especialidad)
+                                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                                            <label class="form-label mb-0">{{ $especialidad->especialidad }}</label>
+                                            <input type="number"  name="tarifas[{{ $especialidad->espec_id }}]" class="form-control" style="width: 300px;">
+                                        </div>
+                                        @endforeach
+                                    </fieldset>
+                                @endif
+
+                                <button type="submit" id="saveButton" class="btn btn-outline-primary btn-paso1 rounded-pill fw-bold font-alt">ACTUALIZAR CAMBIOS</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -295,20 +312,59 @@
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-
     <script>
+        document.getElementById('passwordForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+
+            const formData = new FormData(event.target); 
+
+            try {
+                const response = await fetch('{{ route("user.password") }}', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const responseData = await response.json();
+
+                if (response.ok) {
+                    console.log("contraseña actualizada")
+                    //alert(responseData.message);
+                    Swal.fire({
+                        title: "Éxito!",
+                        text: responseData.message,
+                        icon: "success"
+                    });
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    console.log("error")
+                    //alert(responseData.error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: responseData.error
+                    });
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('Error al enviar la solicitud:', error);
+            }
+        });
+
+    </script>
+
+<script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Obtener referencias a elementos DOM
             const notificationIcon = document.getElementById('notificationIcon');
             const notificationContainer = document.getElementById('notificationContainer');
             const markReadBtn = document.getElementById('markReadBtn');
             const notificationItems = document.querySelectorAll('.notification-item');
-            const pagarIcon = document.querySelector('.fas.fa-money-bill');
-            var profileDropdown = document.getElementById('profileDropdown');
 
             notificationIcon.addEventListener('click', function() {
                 notificationContainer.classList.toggle('show');
-                profileDropdown.style.display = 'none';
             });
 
             markReadBtn.addEventListener('click', function() {
@@ -323,14 +379,60 @@
                     item.classList.remove('bg-light');
                 });
             });
+        });
+    </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Función para cargar las notificaciones
+        function loadNotifications() {
+            fetch('/notificaciones')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const notificationBody = document.getElementById('notificationBody');
+                    notificationBody.innerHTML = '';
 
-            // Evento para abrir el modal al hacer clic en el icono de pagar
-            pagarIcon.addEventListener('click', function() {
-                $('#pagoModal').modal('show'); // Bootstrap Modal
+                    data.forEach(notification => {
+                        const notificationItem = document.createElement('div');
+                        notificationItem.className = 'notification-item-container mb-2';
+                        notificationItem.innerHTML = `
+                            <button class="notification-item rounded bg-light py-2 px-3 border-0">
+                                ${notification.descripcion}
+                            </button>
+                        `;
+                        notificationBody.appendChild(notificationItem);
+                    });
+                });
+        }
+
+        loadNotifications();
+
+        setInterval(loadNotifications, 60000); // Recargar cada 60 segundos
+    });
+</script>
+    @if(session('resultado') === 'actualizado')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: "Éxito!",
+                text: "Perfil actualizado exitosamente.",
+                icon: "success"
             });
         });
     </script>
+    @endif
+    @if(session('resultado') === 'error')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: "Oops.",
+                text: "El correo proporcionado ya existe.",
+                icon: "error"
+            });
+        });
+    </script>
+    @endif
 </body>
 
 </html>

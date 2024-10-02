@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('espec_id');
             $table->foreignId('psico_id')->nullable();
             $table->string('especialidad')->nullable();
+            $table->decimal('tarifa')->nullable();
             $table->timestamps();
         });
     }

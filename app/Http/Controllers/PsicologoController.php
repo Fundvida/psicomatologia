@@ -35,13 +35,6 @@ class PsicologoController extends Controller
         $user = Auth::user();
         $psicologo_id = Psicologo::where('user_id', $user->id)->value('id');
 
-        // estado= ACTIVO, isAlta = 0
-        // $pacientes = Paciente::select('users.ci','users.name', 'users.apellidos','users.id as user_id', 'pacientes.id as paciente_id')
-        //                     ->join('users', 'pacientes.user_id', '=', 'users.id')
-        //                     ->where('pacientes.psicologo_id', $psicologo_id)
-        //                     ->where('pacientes.estado', '=', 'ACTIVO')
-        //                     ->where('pacientes.isAlta', '=', '0')
-        //                     ->get();
         $pacientes_mayor = DB::table('pacientes')
         ->select('users.ci', 'users.name', 'users.apellidos', 'users.id as user_id', 'pacientes.id as paciente_id')
         ->join('users', 'pacientes.user_id', '=', 'users.id')
@@ -69,7 +62,6 @@ class PsicologoController extends Controller
 
     public function store(Request $request)
     {
-        //return response()->json($request);
         try{
             if ($request->psicologo_id == "") {
                     $user = new User();
@@ -83,8 +75,8 @@ class PsicologoController extends Controller
                     $user->ci                    = $request->ci;
                     $user->codigo_pais_telefono  = $request->codigo_pais;
                     $user->telefono              = $request->telefono;
-                    $user->pregunta_seguridad_a  = $request->preguntaSeguridad;
-                    $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                    //$user->pregunta_seguridad_a  = $request->preguntaSeguridad;
+                    //$user->respuesta_seguridad_a = $request->respuestaSeguridad;
                     $user->assignRole('psicologo');
 
                     $user->save();
@@ -143,8 +135,8 @@ class PsicologoController extends Controller
                 $user->ci                   = $request->ci;
                 $user->codigo_pais_telefono = $request->codigo_pais;
                 $user->telefono             = $request->telefono;
-                $user->pregunta_seguridad_a = $request->preguntaSeguridad;
-                $user->respuesta_seguridad_a = $request->respuestaSeguridad;
+                //$user->pregunta_seguridad_a = $request->preguntaSeguridad;
+                //$user->respuesta_seguridad_a = $request->respuestaSeguridad;
                 $user->save();
 
                 // Eliminar las especialidades existentes
@@ -218,7 +210,7 @@ class PsicologoController extends Controller
         $psicologo = Psicologo::join('especialidades', 'especialidades.psico_id', '=', 'psicologos.id')
             ->join('users', 'users.id', '=', 'psicologos.user_id')
             ->where('especialidades.especialidad', '=', $especialidad)
-            ->select('psicologos.*', 'users.name', 'users.apellidos', 'users.profile_photo_path', 'especialidades.especialidad')
+            ->select('psicologos.*', 'users.name', 'users.apellidos', 'users.profile_photo_path', 'especialidades.especialidad', 'especialidades.tarifa')
             ->get();
 
         if (!$psicologo) {
@@ -409,17 +401,6 @@ class PsicologoController extends Controller
     }
 
     public function getAllSesiones(){
-
-        // $resultados = DB::table('sesions')
-        //     ->join('pacientes as pas', 'sesions.paciente_id', '=' , 'pas.id')
-        //     ->join('psicologos as psi', 'sesions.psicologo_id', '=' , 'psi.id')
-        //     ->join('users as pu', 'pas.user_id', '=', 'pu.id')
-        //     ->join('users as ps', 'psi.user_id', '=', 'ps.id')
-        //     ->select('pu.name as nombre_paciente', 'pu.apellidos as apellido_paciente',
-        //     'ps.name as nombre_psicologo', 'ps.apellidos as apellido_psicologo',
-        //     'sesions.estado', 'sesions.pago_confirmado', 'sesions.modalidad', 'sesions.id as sesion_id',
-        //     'pu.id as paciente_user_id')
-        //     ->get();
             
         // return response()->json($resultados);
         $sesiones_mayores = DB::table('sesions')
@@ -527,5 +508,26 @@ class PsicologoController extends Controller
             $paciente->psicologo_id = $psicologo_id;
             $paciente->save();
         }
+    }
+
+    public function getPsicologoXId(Request $request){
+        $psicologo_id = $request->id;
+
+        $psicologo = DB::table('psicologos as p')
+        	->join('users as u', 'u.id', '=', 'p.user_id')
+            ->join('especialidades as e', 'e.psico_id', '=', 'p.id')
+            ->select('u.name', 'u.apellidos', 'p.descripcion_cv')
+        	->where('p.id', $psicologo_id)
+        	->first();
+        
+        $especialidades = DB::table('especialidades as e')
+            ->where('e.psico_id', $psicologo_id)
+            ->select('e.especialidad')
+            ->get();
+
+        return response()->json([
+            'psicologo'=> $psicologo,
+            'especialidades' => $especialidades
+        ]);
     }
 }

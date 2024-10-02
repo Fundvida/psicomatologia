@@ -54,8 +54,9 @@
         <div class="screen">
             <div class="screen__content">
                 <!-- Agrega el logo aquí -->
-                <img src="{{ asset('images/logo gav.png') }}" alt="Logo" class="logo-gav">
-
+                <a href="/">
+                    <img src="{{ asset('images/logo gav.png') }}" alt="Logo" class="logo-gav">
+                </a>
                 <form class="login" method="POST">
                     @csrf
                     <div class="login__field">
@@ -66,11 +67,14 @@
                         <i class="login__icon fas fa-lock"></i>
                         <input type="password" class="login__input font-alt" placeholder="Password" name="password">
                     </div>
+                    @error('email')
+                        <span class="text-danger" style="font-size:12px;">{{ $message }}</span>
+                    @enderror
                     <input type="submit" class="button login__submit font-alt" value="Iniciar Sesión"></input>
                 </form>
-                <div class="forgot-password">
+                <!-- <div class="forgot-password">
                     <a href="">¿Has olvidado tu contraseña?</a>
-                </div>
+                </div> -->
                 <div class="social-login">
                     <img src="{{ asset('images/logof.png') }}" alt="Logo" class="logo-fun">
                     <div class="social-icons">

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\FichaAtencionController;
 use App\Http\Controllers\Files\FileController;
 use App\Http\Controllers\HorarioController;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +11,7 @@ use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\PsicologoController;
+use App\Http\Controllers\TutorController;
 use Illuminate\Support\Facades\Auth;
 
 // Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -25,6 +28,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/paciente/home', function () {
         return view('homePaciente');
     })->name('homePaciente');
+
+    Route::get('/tutor/home', function () {
+        return view('homeTutor');
+    })->name('homeTutor');
 });
 
 Route::get('/check-auth', function () {
@@ -53,6 +60,7 @@ Route::get('/homePacienteSesiones', [PacienteController::class, 'homePacienteSes
     ->middleware('can:homePacienteSesiones')
     ->name('homePacienteSesiones');
 
+
 Route::get('/listadoAllSesiones', [SesionController::class, 'listadoAllSesiones'])
     ->middleware('can:listadoAllSesiones')
     ->name('listadoAllSesiones');
@@ -79,6 +87,10 @@ Route::get('/cambiarContraseña', [UserController::class, 'cambiarContraseña'])
 Route::get('psicologo/listaPaciente', [PacienteController::class, 'listaPacienteXpsicologo_'])
     ->middleware('can:listaPaciente')
     ->name('psicologo.pacientes');
+
+Route::get('tutor/listaPaciente', [PacienteController::class, 'listaPacienteXtutor'])
+    ->middleware('can:pacientesTutor')
+    ->name('tutor.pacientes');
 
 Route::get('/listaPaciente', [PacienteController::class, 'listaPaciente'])
     ->middleware('can:listaPaciente')
@@ -138,8 +150,11 @@ Route::post('/storePaciente', [PacienteController::class, 'store'])
     ->middleware('can:paciente.store')
     ->name('paciente.store');  // crear paciente
 
+Route::post('/paciente/menor/store', [PacienteController::class, 'storePacientemenor'])
+    ->name('paciente.menor.store');  // crear paciente menor
+
 Route::get('/paciente/{id}/edit', [PacienteController::class, 'edit'])
-    ->middleware('can:paciente.edit')
+    //->middleware('can:paciente.edit')
     ->name('paciente.edit'); // get paciente x id
 
 Route::post('/paciente/del', [PacienteController::class, 'delete'])
@@ -154,6 +169,8 @@ Route::get('/paciente/getSesiones', [PacienteController::class, 'listarSesiones'
 Route::get('/psicologo/getPacientes', [PacienteController::class, 'listaPacienteXRol2']);
 //->name('psicologo.pacientes');
 
+Route::get('/tutor/getPacientes', [PacienteController::class, 'listaPacienteTutor']);
+
 Route::post('/paciente/cancelarSesion', [PacienteController::class, 'cancelarSesion'])
     ->middleware('can:paciente.delSesion')
     ->name('paciente.delSesion');
@@ -164,7 +181,7 @@ Route::get('/admin/getSesiones', [PsicologoController::class, 'getAllSesiones'])
     ->name('paciente.listar');
 
 Route::resource('/paciente/files', 'App\Http\Controllers\Files\FileController')
-    ->middleware('can:paciente.files')
+    //->middleware('can:paciente.files')
     ->names('paciente.files');
 
 Route::post('/admin/files', [FileController::class, 'uploadComprobanteAdmin'])
@@ -271,3 +288,35 @@ Route::post('/psicologo/disponibilidad', [HorarioController::class, 'verificarDi
 Route::get('/user/notificaciones', [NotificacionController::class, 'getAllNotifications'])
     //->middleware('can:cambiarContraseña')
     ->name('user.view.notificaciones');
+
+Route::get('/tutor/sesiones', [TutorController::class, 'getViewSesionList'])
+    ->middleware('can:tutorSesiones')
+    ->name('tutor.seesiones');
+
+Route::get('/psicologo/{id}', [PsicologoController::class, 'getPsicologoXId']);
+
+Route::post('/psicologo/ficha', [FichaAtencionController::class, 'index'])->name('ficha.index');
+Route::post('/psicologo/ficha/adultos', [FichaAtencionController::class, 'saveFichaAdults'])->name('ficha.adultos.save');
+Route::post('/psicologo/ficha/ninos', [FichaAtencionController::class, 'saveFichaChildren'])->name('ficha.ninos.save');
+
+Route::post('/paciente/ficha/pdf', [FichaAtencionController::class, 'getPdf'])->name('ficha.pdf');
+
+
+Route::get('/tutor/getSesiones', [TutorController::class, 'getSesiones'])
+    //->middleware('can:paciente.listar')
+    ->name('tutor.listar.sesiones');
+
+Route::get('/tutor/sesion', [TutorController::class, 'programarSesionView'])
+    ->name('tutor.sesion');
+
+Route::get('/user/edit/profile', [UserController::class, 'editView'])
+    ->middleware('can:user.edit.view')
+    ->name('user.edit.view');
+
+Route::post('/user/edit', [UserController::class, 'edit'])
+    ->middleware('can:user.edit.view')
+    ->name('user.edit');
+
+//  Route::get('/test', function () {
+//          return view('test');
+//      }); 

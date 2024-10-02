@@ -8,9 +8,9 @@
 
     <!-- Enlaces a los estilos CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{asset('./vendors/ti-icons/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('./vendors/base/vendor.bundle.base.css')}}">
-    <link rel="stylesheet" href="{{asset('./css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/ti-icons/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/base/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
     <!-- Google fonts-->
@@ -28,7 +28,7 @@
 
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
 
     <!-- Enlaces a los scripts JS del plugin de Calendario -->
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.js"></script>
@@ -394,13 +394,13 @@
                                 <button onclick="showPreviousMessage()">Ir al enlace</button>
                             </div>
                         </div>
-                        <div class="notification-item2" data-id="1">
+                        <!-- <div class="notification-item2" data-id="1">
                             <span class="notification-icon"><i class="fas fa-clipboard-list"></i></span>
                             <div class="notification-content">
                                 <p class="notification-title">Usted ha registrado una nueva sesión.</p>
                                 <p class="notification-time">hace 13 horas 26 minutos</p>
                             </div>
-                        </div>
+                        </div> -->
                         @foreach($notifications as $notification)
                             <div class="notification-item2" data-id="{{ $notification->id }}">
                                 <span class="notification-icon"><i class="fas fa-clipboard-list"></i></span>
@@ -410,20 +410,6 @@
                                 </div>
                             </div>
                         @endforeach
-                        <!-- <div class="notification-item2">
-                            <span class="notification-icon"><i class="fas fa-clipboard-list"></i></span>
-                            <div class="notification-content">
-                                <p class="notification-title">Usted tiene una nueva sesión programada.</p>
-                                <p class="notification-time">hace 14 horas 31 minutos</p>
-                            </div>
-                        </div>
-                        <div class="notification-item2">
-                            <span class="notification-icon"><i class="fas fa-clipboard-list"></i></span>
-                            <div class="notification-content">
-                                <p class="notification-title">Un usuario ha realizado el pago de una sesión programada.</p>
-                                <p class="notification-time">hace 15 horas 25 minutos</p>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -490,7 +476,7 @@
         });
 
         function showPreviousMessage() {
-            console.log('hola');
+            //console.log('hola');
             console.log(userRole);
             if (!userRole || !routes) {
                 console.error('UserRole or routes is undefined');
@@ -500,14 +486,14 @@
                 case 'Administrador':
                     window.location.href = routes.admin;
                     break;
-                // case 'Tutor':
-                //     window.location.href = ;
-                //     break;
                 case 'Paciente':
                     window.location.href = routes.paciente;
                     break;
                 case 'Psicologo':
                     window.location.href = routes.psicologo;
+                    break;
+                case 'Tutor':
+                    window.location.href = routes.tutor;
                     break;
             }
         }
